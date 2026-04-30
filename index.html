@@ -1667,10 +1667,11 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
   const title    = document.getElementById('teamTitle');
   if (!section || !content || !trackTop || !trackBot || !title) return;
 
-  const LOCK_AT_SP   = 0.4;
-  const WHEEL_FACTOR = 0.0006;  /* ≈ 17 crans pour tout voir (≈ 2/card) */
-  const TOUCH_FACTOR = 0.0012;
-  const STEP_CAP     = 0.018;   /* fling max 1.8% par évènement         */
+  const LOCK_AT_SP    = 0.4;   /* descente : lock dès que la section est en vue */
+  const LOCK_UP_AT_SP = 0.65;  /* remontée : lock seulement quand la section est bien rentrée */
+  const WHEEL_FACTOR  = 0.0006; /* ≈ 17 crans pour tout voir (≈ 2/card) */
+  const TOUCH_FACTOR  = 0.0012;
+  const STEP_CAP      = 0.018;  /* fling max 1.8% par évènement         */
 
   let xProgress = 0;
   let locked    = false;
@@ -1744,15 +1745,23 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
   }
 
   /* doit-on engager le lock vu où on est et la direction du scroll ?
-     Strict : la section doit être au moins partiellement visible (sp < 1).
-     Pas de lock quand on est au footer (sp == 1) et qu'on remonte. */
+     • descente : sp ∈ [LOCK_AT_SP, 1)
+     • remontée : sp ∈ [LOCK_AT_SP, LOCK_UP_AT_SP] — on laisse remonter
+       librement depuis le footer jusqu'à ce que la section soit bien rentrée. */
   function shouldLock(direction) {
     if (locked) return false;
     const sp = getSP();
-    if (sp < LOCK_AT_SP || sp >= 1) return false;
-    if (direction > 0 && xProgress >= 1) return false;
-    if (direction < 0 && xProgress <= 0) return false;
-    return true;
+    if (sp < LOCK_AT_SP) return false;
+    if (direction > 0) {
+      if (sp >= 1 || xProgress >= 1) return false;
+      return true;
+    }
+    if (direction < 0) {
+      if (sp > LOCK_UP_AT_SP) return false;
+      if (xProgress <= 0)     return false;
+      return true;
+    }
+    return false;
   }
 
   function onWheel(e) {
@@ -1783,9 +1792,9 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
     if (!locked) {
       const sp = getSP();
       const dir = window.scrollY - lastScrollY;
-      if (sp >= LOCK_AT_SP && sp < 1) {
-        if (dir > 0 && xProgress < 1)      engageLock();
-        else if (dir < 0 && xProgress > 0) engageLock();
+      if (sp >= LOCK_AT_SP) {
+        if (dir > 0 && sp < 1 && xProgress < 1)                    engageLock();
+        else if (dir < 0 && sp <= LOCK_UP_AT_SP && xProgress > 0)  engageLock();
       }
     }
     lastScrollY = window.scrollY;
