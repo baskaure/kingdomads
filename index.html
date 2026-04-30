@@ -591,29 +591,64 @@ h3 { font-size: 1.25rem; font-weight: 600; }
 .pillar p { color: var(--muted); font-size: 0.85rem; line-height: 1.6; font-weight: 300; }
 
 /* ══════════════════════════════════
-   TEAM
+   TEAM — scroll-driven horizontal slide
 ══════════════════════════════════ */
-#team { background: var(--bg); }
-.team-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 18px; }
-.team-card { overflow: hidden; transition: transform 0.3s, border-color 0.3s; }
-.team-card:hover { transform: translateY(-6px); border-color: rgba(255,255,255,0.14); }
-.team-photo {
-  aspect-ratio: 3/4;
-  background: repeating-linear-gradient(-45deg, #0A0818 0, #0A0818 8px, #0D0B1E 8px, #0D0B1E 16px);
-  display: flex; align-items: center; justify-content: center;
+#team {
+  background: var(--bg);
+  padding: 0;
   position: relative;
+  overflow: hidden;
 }
-.team-avatar {
-  width: 76px; height: 76px; border-radius: 50%;
-  background: linear-gradient(135deg, rgba(115,92,0,0.3), rgba(112,64,204,0.3));
+.team-content {
+  min-height: 100vh;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 28px;
+  will-change: transform;
+}
+.team-spacer { height: 24rem; }
+.team-row { width: 100%; overflow: hidden; }
+.team-track {
+  display: flex; flex-wrap: nowrap; gap: 16px;
+  padding: 0 16px;
+  will-change: transform;
+}
+.team-title-anim {
+  text-align: center;
+  font-size: clamp(1.8rem, 4.5vw, 3.4rem);
+  font-weight: 700;
+  margin: 0;
+  will-change: transform;
+  transform-origin: center;
+  text-wrap: balance;
+  max-width: 80vw;
+}
+
+/* horizontal team card */
+.thc {
+  flex: 0 0 auto;
+  width: 24vw;
+  background: var(--bg-card);
   border: 1px solid var(--border);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 1.5rem; font-weight: 700; color: var(--gold-lt);
+  border-radius: 16px;
+  overflow: hidden;
+  backdrop-filter: blur(16px);
 }
-.team-photo-lbl { position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%); font-size: 9px; color: rgba(255,255,255,0.15); font-family: monospace; white-space: nowrap; }
-.team-info { padding: 20px 22px 24px; }
-.team-info h4 { font-size: 1rem; font-weight: 700; margin-bottom: 4px; }
-.team-role { font-size: 0.8rem; font-weight: 500; }
+.thc-photo {
+  aspect-ratio: 1 / 1;
+  width: 100%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 4rem; font-weight: 700; letter-spacing: -0.04em;
+  background: linear-gradient(135deg, rgba(115,92,0,0.28), rgba(232,201,106,0.18));
+  color: var(--gold-lt);
+}
+.thc-info { padding: 18px 22px 22px; }
+.thc-info h4 { font-size: 1.05rem; font-weight: 600; margin-bottom: 4px; }
+.thc-role { font-size: 0.8rem; font-weight: 500; }
+@media (max-width: 768px) {
+  .thc { width: 56vw; }
+  .thc-photo { font-size: 3rem; }
+}
 
 /* ══════════════════════════════════
    STATS
@@ -1248,56 +1283,45 @@ body[data-atmosphere="maximal"] .btn-gold { box-shadow: 0 6px 32px rgba(115,92,0
   </div>
 </section>
 
-<!-- ══ TEAM ══ -->
+<!-- ══ TEAM — scroll-driven horizontal slide ══ -->
 <section id="team">
-  <div class="container">
-    <div class="sec-header center fu">
-      <div class="pill" style="margin-bottom:20px;">Notre équipe</div>
-      <h2>Les experts derrière <span class="grad-gold">Kingdom Ads</span></h2>
-    </div>
-    <div class="team-grid">
-      <div class="glass team-card fu d1">
-        <div class="team-photo">
-          <div class="team-avatar">W</div>
-          <div class="team-photo-lbl">portrait photo</div>
-        </div>
-        <div class="team-info">
-          <h4>William</h4>
-          <div class="team-role grad-gold">Fondateur & Stratège Ads</div>
-        </div>
-      </div>
-      <div class="glass team-card fu d2">
-        <div class="team-photo">
-          <div class="team-avatar" style="background:linear-gradient(135deg,rgba(112,64,204,0.3),rgba(58,128,255,0.3));">S</div>
-          <div class="team-photo-lbl">portrait photo</div>
-        </div>
-        <div class="team-info">
-          <h4>Sarah</h4>
-          <div class="team-role grad-violet">Directrice Créative</div>
-        </div>
-      </div>
-      <div class="glass team-card fu d3">
-        <div class="team-photo">
-          <div class="team-avatar" style="background:linear-gradient(135deg,rgba(58,128,255,0.3),rgba(112,64,204,0.3));">A</div>
-          <div class="team-photo-lbl">portrait photo</div>
-        </div>
-        <div class="team-info">
-          <h4>Alex</h4>
-          <div class="team-role" style="background:linear-gradient(90deg,#3A80FF,#60B0FF);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Expert Web & Tunnels</div>
-        </div>
-      </div>
-      <div class="glass team-card fu d4">
-        <div class="team-photo">
-          <div class="team-avatar" style="background:linear-gradient(135deg,rgba(201,168,76,0.25),rgba(232,201,106,0.2));">Sa</div>
-          <div class="team-photo-lbl">portrait photo</div>
-        </div>
-        <div class="team-info">
-          <h4>Satiana</h4>
-          <div class="team-role grad-gold">Content & Vidéo</div>
-        </div>
+  <div class="team-content" id="teamContent">
+
+    <!-- top row : slides from left to right -->
+    <div class="team-row">
+      <div class="team-track" id="teamTrackTop">
+        <div class="thc"><div class="thc-photo" style="background:linear-gradient(135deg,rgba(115,92,0,0.28),rgba(232,201,106,0.18));color:var(--gold-lt);">W</div><div class="thc-info"><h4>William</h4><div class="thc-role grad-gold">Fondateur & Stratège Ads</div></div></div>
+        <div class="thc"><div class="thc-photo" style="background:linear-gradient(135deg,rgba(112,64,204,0.3),rgba(58,128,255,0.3));color:#9060DD;">S</div><div class="thc-info"><h4>Sarah</h4><div class="thc-role grad-violet">Directrice Créative</div></div></div>
+        <div class="thc"><div class="thc-photo" style="background:linear-gradient(135deg,rgba(58,128,255,0.3),rgba(112,64,204,0.3));color:#60B0FF;">A</div><div class="thc-info"><h4>Alex</h4><div class="thc-role" style="background:linear-gradient(90deg,#3A80FF,#60B0FF);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Expert Web & Tunnels</div></div></div>
+        <div class="thc"><div class="thc-photo" style="background:linear-gradient(135deg,rgba(201,168,76,0.25),rgba(232,201,106,0.2));color:var(--gold-pale);">Sa</div><div class="thc-info"><h4>Satiana</h4><div class="thc-role grad-gold">Content & Vidéo</div></div></div>
+        <div class="thc"><div class="thc-photo" style="background:linear-gradient(135deg,rgba(115,92,0,0.28),rgba(232,201,106,0.18));color:var(--gold-lt);">W</div><div class="thc-info"><h4>William</h4><div class="thc-role grad-gold">Fondateur & Stratège Ads</div></div></div>
+        <div class="thc"><div class="thc-photo" style="background:linear-gradient(135deg,rgba(112,64,204,0.3),rgba(58,128,255,0.3));color:#9060DD;">S</div><div class="thc-info"><h4>Sarah</h4><div class="thc-role grad-violet">Directrice Créative</div></div></div>
+        <div class="thc"><div class="thc-photo" style="background:linear-gradient(135deg,rgba(58,128,255,0.3),rgba(112,64,204,0.3));color:#60B0FF;">A</div><div class="thc-info"><h4>Alex</h4><div class="thc-role" style="background:linear-gradient(90deg,#3A80FF,#60B0FF);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Expert Web & Tunnels</div></div></div>
+        <div class="thc"><div class="thc-photo" style="background:linear-gradient(135deg,rgba(201,168,76,0.25),rgba(232,201,106,0.2));color:var(--gold-pale);">Sa</div><div class="thc-info"><h4>Satiana</h4><div class="thc-role grad-gold">Content & Vidéo</div></div></div>
       </div>
     </div>
+
+    <!-- center title : scales 1.4 → 1 -->
+    <h2 class="team-title-anim" id="teamTitle">
+      Une équipe compacte de <span class="grad-gold">stratèges</span>
+    </h2>
+
+    <!-- bottom row : slides from right to left -->
+    <div class="team-row">
+      <div class="team-track" id="teamTrackBot">
+        <div class="thc"><div class="thc-photo" style="background:linear-gradient(135deg,rgba(201,168,76,0.25),rgba(232,201,106,0.2));color:var(--gold-pale);">Sa</div><div class="thc-info"><h4>Satiana</h4><div class="thc-role grad-gold">Content & Vidéo</div></div></div>
+        <div class="thc"><div class="thc-photo" style="background:linear-gradient(135deg,rgba(58,128,255,0.3),rgba(112,64,204,0.3));color:#60B0FF;">A</div><div class="thc-info"><h4>Alex</h4><div class="thc-role" style="background:linear-gradient(90deg,#3A80FF,#60B0FF);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Expert Web & Tunnels</div></div></div>
+        <div class="thc"><div class="thc-photo" style="background:linear-gradient(135deg,rgba(112,64,204,0.3),rgba(58,128,255,0.3));color:#9060DD;">S</div><div class="thc-info"><h4>Sarah</h4><div class="thc-role grad-violet">Directrice Créative</div></div></div>
+        <div class="thc"><div class="thc-photo" style="background:linear-gradient(135deg,rgba(115,92,0,0.28),rgba(232,201,106,0.18));color:var(--gold-lt);">W</div><div class="thc-info"><h4>William</h4><div class="thc-role grad-gold">Fondateur & Stratège Ads</div></div></div>
+        <div class="thc"><div class="thc-photo" style="background:linear-gradient(135deg,rgba(201,168,76,0.25),rgba(232,201,106,0.2));color:var(--gold-pale);">Sa</div><div class="thc-info"><h4>Satiana</h4><div class="thc-role grad-gold">Content & Vidéo</div></div></div>
+        <div class="thc"><div class="thc-photo" style="background:linear-gradient(135deg,rgba(58,128,255,0.3),rgba(112,64,204,0.3));color:#60B0FF;">A</div><div class="thc-info"><h4>Alex</h4><div class="thc-role" style="background:linear-gradient(90deg,#3A80FF,#60B0FF);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Expert Web & Tunnels</div></div></div>
+        <div class="thc"><div class="thc-photo" style="background:linear-gradient(135deg,rgba(112,64,204,0.3),rgba(58,128,255,0.3));color:#9060DD;">S</div><div class="thc-info"><h4>Sarah</h4><div class="thc-role grad-violet">Directrice Créative</div></div></div>
+        <div class="thc"><div class="thc-photo" style="background:linear-gradient(135deg,rgba(115,92,0,0.28),rgba(232,201,106,0.18));color:var(--gold-lt);">W</div><div class="thc-info"><h4>William</h4><div class="thc-role grad-gold">Fondateur & Stratège Ads</div></div></div>
+      </div>
+    </div>
+
   </div>
+  <div class="team-spacer"></div>
 </section>
 
 <!-- ══ STATS ══ -->
@@ -1627,6 +1651,153 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
     requestAnimationFrame(tick);
   }
   tick();
+})();
+
+/* team — scroll-jacking propre : body en overflow:hidden pendant le lock
+   pour bloquer physiquement le scroll, peu importe le device.
+   Phases :
+   1. sp 0 → 0.4 : scroll naturel (le wrapper monte, le titre scale)
+   2. sp = 0.4 : LOCK → body overflow:hidden, la molette drive xProgress
+   3. xProgress = 1 : UNLOCK → body overflow restauré, scroll naturel reprend */
+(function () {
+  const section  = document.getElementById('team');
+  const content  = document.getElementById('teamContent');
+  const trackTop = document.getElementById('teamTrackTop');
+  const trackBot = document.getElementById('teamTrackBot');
+  const title    = document.getElementById('teamTitle');
+  if (!section || !content || !trackTop || !trackBot || !title) return;
+
+  const LOCK_AT_SP   = 0.4;
+  const WHEEL_FACTOR = 0.0006;  /* ≈ 17 crans pour tout voir (≈ 2/card) */
+  const TOUCH_FACTOR = 0.0012;
+  const STEP_CAP     = 0.018;   /* fling max 1.8% par évènement         */
+
+  let xProgress = 0;
+  let locked    = false;
+  let lockedY   = 0;
+  let raf       = 0;
+  let curSp     = 0;
+  let curXp     = 0;
+  let touchStartY = 0;
+  let lastScrollY = window.scrollY;
+
+  /* on évite le saut de layout quand la scrollbar disparaît */
+  document.documentElement.style.scrollbarGutter = 'stable';
+
+  function clamp01(x) { return Math.max(0, Math.min(1, x)); }
+
+  function getSP() {
+    const rect = section.getBoundingClientRect();
+    const vh   = window.innerHeight;
+    return clamp01((vh - rect.top) / (rect.height + vh));
+  }
+
+  function paint(sp, xp) {
+    content.style.transform  = 'translateY(' + (sp * 384).toFixed(2) + 'px)';
+    const tp = clamp01(sp / 0.5);
+    title.style.transform    = 'scale(' + (1.4 - 0.4 * tp).toFixed(3) + ')';
+    trackTop.style.transform = 'translateX(' + (-200 + 200 * xp).toFixed(2) + '%)';
+    trackBot.style.transform = 'translateX(' + ( 100 - 150 * xp).toFixed(2) + '%)';
+  }
+  paint(0, 0);
+
+  function loop() {
+    raf = 0;
+    const targetSp = getSP();
+    const targetXp = xProgress;
+    const nextSp = curSp + (targetSp - curSp) * 0.3;
+    const nextXp = curXp + (targetXp - curXp) * 0.3;
+
+    if (Math.abs(nextSp - curSp) > 0.0005 || Math.abs(nextXp - curXp) > 0.0005) {
+      curSp = nextSp;
+      curXp = nextXp;
+      paint(curSp, curXp);
+      raf = requestAnimationFrame(loop);
+    } else {
+      curSp = targetSp;
+      curXp = targetXp;
+      paint(curSp, curXp);
+    }
+  }
+  function schedule() { if (!raf) raf = requestAnimationFrame(loop); }
+
+  /* hard-lock du scroll via overflow hidden + maintien du scrollY */
+  function engageLock() {
+    if (locked) return;
+    locked = true;
+    lockedY = window.scrollY;
+    document.documentElement.style.overflow = 'hidden';
+    document.body.style.overflow = 'hidden';
+  }
+  function releaseLock() {
+    if (!locked) return;
+    locked = false;
+    document.documentElement.style.overflow = '';
+    document.body.style.overflow = '';
+  }
+
+  function advanceX(rawDelta) {
+    const d = Math.max(-STEP_CAP, Math.min(STEP_CAP, rawDelta));
+    xProgress = clamp01(xProgress + d);
+    if (xProgress >= 1 && d > 0) releaseLock();
+    if (xProgress <= 0 && d < 0) releaseLock();
+  }
+
+  /* doit-on engager le lock vu où on est et la direction du scroll ?
+     Strict : la section doit être au moins partiellement visible (sp < 1).
+     Pas de lock quand on est au footer (sp == 1) et qu'on remonte. */
+  function shouldLock(direction) {
+    if (locked) return false;
+    const sp = getSP();
+    if (sp < LOCK_AT_SP || sp >= 1) return false;
+    if (direction > 0 && xProgress >= 1) return false;
+    if (direction < 0 && xProgress <= 0) return false;
+    return true;
+  }
+
+  function onWheel(e) {
+    if (shouldLock(e.deltaY)) engageLock();
+    if (locked) {
+      e.preventDefault();
+      advanceX(e.deltaY * WHEEL_FACTOR);
+      schedule();
+    }
+  }
+
+  function onTouchStart(e) { touchStartY = e.touches[0].clientY; }
+  function onTouchMove(e) {
+    const dy = touchStartY - e.touches[0].clientY;
+    touchStartY = e.touches[0].clientY;
+    if (shouldLock(dy)) engageLock();
+    if (locked) {
+      e.preventDefault();
+      advanceX(dy * TOUCH_FACTOR);
+      schedule();
+    }
+  }
+
+  /* filet de sécurité : si on franchit le seuil par un autre moyen
+     (clavier, scrollbar, smooth-scroll JS), on engage le lock quand même.
+     On détecte la direction via la variation de scrollY pour gérer les deux sens. */
+  function onScroll() {
+    if (!locked) {
+      const sp = getSP();
+      const dir = window.scrollY - lastScrollY;
+      if (sp >= LOCK_AT_SP && sp < 1) {
+        if (dir > 0 && xProgress < 1)      engageLock();
+        else if (dir < 0 && xProgress > 0) engageLock();
+      }
+    }
+    lastScrollY = window.scrollY;
+    schedule();
+  }
+
+  window.addEventListener('scroll',     onScroll,     { passive: true  });
+  window.addEventListener('resize',     onScroll,     { passive: true  });
+  window.addEventListener('wheel',      onWheel,      { passive: false });
+  window.addEventListener('touchstart', onTouchStart, { passive: true  });
+  window.addEventListener('touchmove',  onTouchMove,  { passive: false });
+  onScroll();
 })();
 </script>
 <!-- ══ TWEAKS PANEL ══ -->
