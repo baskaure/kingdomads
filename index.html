@@ -7,6 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Barlow+Condensed:wght@400;600;700;800;900&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -26,7 +27,7 @@
   --font:      'Space Grotesk', sans-serif;
 }
 
-html { scroll-behavior: smooth; }
+html { scroll-behavior: smooth; overflow-x: hidden; }
 body {
   background: var(--bg);
   color: var(--white);
@@ -128,7 +129,7 @@ h3 { font-size: 1.25rem; font-weight: 600; }
 .btn-flow .flow-bg {
   position: absolute; left: 50%; top: 50%;
   width: 16px; height: 16px; border-radius: 50%;
-  background: var(--gold-lt);
+  background: var(--bg);
   transform: translate(-50%, -50%);
   opacity: 0; pointer-events: none; z-index: 0;
   transition: width   800ms cubic-bezier(0.19,1,0.22,1),
@@ -275,7 +276,7 @@ h3 { font-size: 1.25rem; font-weight: 600; }
 .nav-cta-bg {
   position: absolute; left: 50%; top: 50%;
   width: 16px; height: 16px; border-radius: 50%;
-  background: var(--gold-lt);
+  background: var(--bg);
   transform: translate(-50%, -50%);
   opacity: 0; pointer-events: none; z-index: 0;
   transition: width   800ms cubic-bezier(0.19,1,0.22,1),
@@ -312,14 +313,16 @@ h3 { font-size: 1.25rem; font-weight: 600; }
    HERO
 ══════════════════════════════════ */
 #hero {
-  height: 250vh;
+  /* Le hero ne prend qu'un seul écran. L'animation est pilotée par
+     scroll-jacking (la molette/touch est interceptée tant que p<1). */
+  height: 100vh;
   padding: 0;
-  overflow: visible;
+  overflow: hidden;
 }
 
 /* ── scroll-expand system ── */
 .hero-sticky {
-  position: sticky; top: 0; height: 100vh;
+  position: relative; top: 0; height: 100vh;
   display: flex; align-items: center; justify-content: center;
   overflow: hidden;
 }
@@ -444,6 +447,52 @@ h3 { font-size: 1.25rem; font-weight: 600; }
 .feat-card h3 { margin-bottom: 10px; font-size: 1.1rem; }
 .feat-card p { color: var(--muted); font-size: 0.9rem; line-height: 1.75; font-weight: 300; }
 
+/* ── Gradient Feature Cards ── */
+.feat-gcard {
+  overflow: hidden; padding: 0; cursor: pointer;
+  transition: transform 0.4s cubic-bezier(0.23,1,0.32,1), box-shadow 0.4s, border-color 0.3s;
+}
+.feat-gcard:hover {
+  transform: translateY(-10px) scale(1.02);
+  box-shadow: 0 28px 70px rgba(0,0,0,0.55);
+  border-color: rgba(255,255,255,0.14);
+}
+.fgc-visual {
+  position: relative; height: 200px;
+  display: flex; align-items: flex-end; justify-content: center;
+  padding-bottom: 26px; overflow: hidden;
+}
+.fgc-visual:has(model-viewer) {
+  height: 260px;
+  padding-bottom: 0;
+  align-items: stretch;
+}
+.fgc-grad { position: absolute; inset: 0; }
+.fgc-avatar {
+  position: relative; z-index: 2;
+  width: 86px; height: 86px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 2rem; font-weight: 700;
+  border: 2px solid rgba(255,255,255,0.22);
+  transition: transform 0.4s cubic-bezier(0.23,1,0.32,1);
+}
+.feat-gcard:hover .fgc-avatar { transform: translateY(-8px) scale(1.1); }
+.fgc-ico {
+  position: absolute; z-index: 3; top: 18px; right: 18px;
+  width: 36px; height: 36px; border-radius: 10px;
+  background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.12);
+  display: flex; align-items: center; justify-content: center;
+}
+.fgc-body { padding: 20px 26px 28px; border-top: 1px solid rgba(255,255,255,0.07); }
+.fgc-tag {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 3px 11px; border-radius: 999px;
+  font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+  margin-bottom: 12px;
+}
+.fgc-body h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 8px; }
+.fgc-body p { color: var(--muted); font-size: 0.875rem; line-height: 1.75; font-weight: 300; }
+
 /* ══════════════════════════════════
    SERVICES
 ══════════════════════════════════ */
@@ -452,13 +501,39 @@ h3 { font-size: 1.25rem; font-weight: 600; }
 .srv-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
 .srv-card {
   padding: 46px 42px; display: flex; flex-direction: column; gap: 18px;
-  transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
+  transition: transform 250ms cubic-bezier(0.23,1,0.32,1), border-color 0.3s, box-shadow 0.3s;
   cursor: default;
+  will-change: transform;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  background: rgba(255,255,255,0.05);
 }
 .srv-card:hover {
-  transform: translateY(-4px);
   border-color: rgba(255,255,255,0.13);
   box-shadow: 0 24px 60px rgba(0,0,0,0.4);
+}
+.srv-row .srv-card:hover { transform: translateZ(0) scale(0.96) rotate(-1deg); }
+.srv-wide:hover         { transform: translateZ(0) scale(0.98) rotate(-0.5deg); }
+
+
+.srv-bounce-bg {
+  position: absolute;
+  left: 12px; right: 12px; bottom: 0;
+  height: 52%;
+  border-radius: 14px 14px 0 0;
+  transform: translateY(100%);
+  transition: transform 280ms cubic-bezier(0.23,1,0.32,1);
+  z-index: 0;
+  display: flex; align-items: flex-end;
+  padding: 20px 22px 24px;
+}
+.srv-card:hover .srv-bounce-bg {
+  transform: translateY(58%) rotate(2deg);
+}
+.srv-card > *:not(.srv-bounce-bg) { position: relative; z-index: 1; }
+.srv-bounce-label {
+  font-size: 11px; font-weight: 700; letter-spacing: 0.14em;
+  text-transform: uppercase; color: rgba(255,255,255,0.7);
 }
 .srv-num {
   font-size: 10px; font-weight: 600; letter-spacing: 0.12em;
@@ -914,12 +989,8 @@ body[data-atmosphere="maximal"] .btn-gold { box-shadow: 0 6px 32px rgba(115,92,0
             Experts en publicité sur les réseaux sociaux
           </div>
           <h1 class="hero-title">
-            Améliorez votre <span class="grad-gold">notoriété</span><br>
-            &amp; <span class="grad-violet">rentabilité</span> en ligne
+            Améliorez votre <span class="grad-gold">notoriété</span> et <span class="grad-violet">rentabilité</span><br>grâce à la publicité en ligne
           </h1>
-          <p class="hero-sub">
-            Stratégies publicitaires data-driven qui transforment chaque euro investi en croissance mesurable et durable pour votre entreprise.
-          </p>
           <div class="hero-btns">
             <a href="#services" class="btn btn-flow">
               <span class="flow-arr-l"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
@@ -992,21 +1063,85 @@ body[data-atmosphere="maximal"] .btn-gold { box-shadow: 0 6px 32px rgba(115,92,0
       <p>Des experts passionnés au service de votre croissance, disponibles à chaque étape de votre parcours.</p>
     </div>
     <div class="features-grid">
-      <div class="glass glass-line feat-card fu d1">
-        <div class="feat-icon">⚡</div>
-        <h3>Équipe Expérimentée</h3>
-        <p>Experts certifiés Meta & Google Ads avec des années de track record sur des budgets publicitaires à fort volume.</p>
+
+      <!-- Card 1 — Handshake · Équipe -->
+      <div class="glass glass-line feat-gcard fu d1">
+        <div class="fgc-visual" style="height:260px;padding-bottom:0;align-items:stretch;">
+          <div class="fgc-grad" style="background:linear-gradient(145deg,rgba(115,92,0,0.6) 0%,rgba(232,201,106,0.18) 100%);"></div>
+          <div class="fgc-ico" style="color:var(--gold-lt);">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+          </div>
+          <model-viewer
+            src="input/handshake.glb"
+            camera-controls
+            disable-zoom
+            camera-orbit="90deg 75deg auto"
+            interaction-prompt="none"
+            field-of-view="10deg"
+            exposure="1.4"
+            shadow-intensity="0"
+            style="width:100%;height:100%;background:transparent;position:absolute;inset:0;z-index:2;"
+          ></model-viewer>
+        </div>
+        <div class="fgc-body">
+          <div class="fgc-tag" style="background:rgba(115,92,0,0.18);color:var(--gold-lt);">William · Fondateur</div>
+          <h3>Équipe Expérimentée</h3>
+          <p>Experts certifiés Meta & Google Ads avec des années de track record sur des budgets publicitaires à fort volume.</p>
+        </div>
       </div>
-      <div class="glass glass-line feat-card fu d2">
-        <div class="feat-icon">🎯</div>
-        <h3>Solutions Sur Mesure</h3>
-        <p>Chaque stratégie est construite autour de vos objectifs, votre marché et votre audience cible. Zéro solution générique.</p>
+
+      <!-- Card 2 — Cible 3D · Solutions -->
+      <div class="glass glass-line feat-gcard fu d2">
+        <div class="fgc-visual">
+          <div class="fgc-grad" style="background:linear-gradient(145deg,rgba(112,64,204,0.6) 0%,rgba(58,128,255,0.18) 100%);"></div>
+          <div class="fgc-ico" style="color:#9060DD;">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+          </div>
+          <model-viewer
+            src="input/game_bar_target_arrow.glb"
+            camera-controls
+            disable-zoom
+            camera-orbit="90deg 75deg auto"
+            interaction-prompt="none"
+            field-of-view="10deg"
+            exposure="1.2"
+            shadow-intensity="0"
+            style="width:100%;height:100%;background:transparent;position:absolute;inset:0;z-index:2;"
+          ></model-viewer>
+        </div>
+        <div class="fgc-body">
+          <div class="fgc-tag" style="background:rgba(112,64,204,0.18);color:#9060DD;">Sur mesure · Précision</div>
+          <h3>Solutions Sur Mesure</h3>
+          <p>Chaque stratégie est construite autour de vos objectifs, votre marché et votre audience cible. Zéro solution générique.</p>
+        </div>
       </div>
-      <div class="glass glass-line feat-card fu d3">
-        <div class="feat-icon">🛡️</div>
-        <h3>Support 24/7</h3>
-        <p>Votre compte manager est disponible en permanence pour ajuster, optimiser et garantir des résultats en continu.</p>
+
+      <!-- Card 3 — Headphones · Support 24/7 -->
+      <div class="glass glass-line feat-gcard fu d3">
+        <div class="fgc-visual" style="height:260px;padding-bottom:0;align-items:stretch;">
+          <div class="fgc-grad" style="background:linear-gradient(145deg,rgba(58,128,255,0.6) 0%,rgba(96,176,255,0.18) 100%);"></div>
+          <div class="fgc-ico" style="color:#3A80FF;">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </div>
+          <model-viewer
+            src="input/headphone.glb"
+            camera-controls
+            disable-zoom
+            camera-orbit="90deg 75deg auto"
+            interaction-prompt="none"
+            field-of-view="10deg"
+            exposure="1.2"
+            shadow-intensity="0"
+            style="width:100%;height:100%;background:transparent;position:absolute;inset:0;z-index:2;"
+          ></model-viewer>
+        </div>
+        <div class="fgc-body">
+          <div class="fgc-tag" style="background:rgba(58,128,255,0.15);color:#60B0FF;">Disponible · 24/7</div>
+          <h3>Support 24/7</h3>
+          <p>Votre compte manager est disponible en permanence pour ajuster, optimiser et garantir des résultats en continu.</p>
+        </div>
       </div>
+
     </div>
   </div>
 </section>
@@ -1034,6 +1169,7 @@ body[data-atmosphere="maximal"] .btn-gold { box-shadow: 0 6px 32px rgba(115,92,0
             <li>Retargeting & audiences personnalisées</li>
           </ul>
           <a href="#contact" class="srv-cta">Démarrer une campagne →</a>
+          <div class="srv-bounce-bg" style="background:linear-gradient(135deg,rgba(115,92,0,0.9),rgba(184,146,30,0.82));"><span class="srv-bounce-label">Meta · Google · TikTok</span></div>
         </div>
         <!-- Service 2 -->
         <div class="glass glass-line srv-card fu d1">
@@ -1047,6 +1183,7 @@ body[data-atmosphere="maximal"] .btn-gold { box-shadow: 0 6px 32px rgba(115,92,0
             <li>Intégration CRM & automatisations</li>
           </ul>
           <a href="#contact" class="srv-cta">Créer mon site →</a>
+          <div class="srv-bounce-bg" style="background:linear-gradient(135deg,rgba(112,64,204,0.9),rgba(58,128,255,0.82));"><span class="srv-bounce-label">Web · SEO · Tunnel</span></div>
         </div>
       </div>
       <!-- Service 3 — wide -->
@@ -1066,6 +1203,7 @@ body[data-atmosphere="maximal"] .btn-gold { box-shadow: 0 6px 32px rgba(115,92,0
           </ul>
           <a href="#contact" class="srv-cta" style="margin-top:24px;display:inline-flex;">Créer mon contenu →</a>
         </div>
+        <div class="srv-bounce-bg" style="background:linear-gradient(135deg,rgba(115,92,0,0.85),rgba(112,64,204,0.78));"><span class="srv-bounce-label">Vidéo · Interview · Branding</span></div>
       </div>
     </div>
   </div>
@@ -1085,21 +1223,21 @@ body[data-atmosphere="maximal"] .btn-gold { box-shadow: 0 6px 32px rgba(115,92,0
       </div>
       <div class="pillars fu d2">
         <div class="glass pillar">
-          <div class="pillar-ico" style="background:rgba(201,168,76,0.12);">🔥</div>
+          <div class="pillar-ico" style="background:rgba(201,168,76,0.12);color:var(--gold-lt);"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg></div>
           <div>
             <h4>Passionné</h4>
             <p>Nous vivons et respirons le marketing digital. Chaque projet est traité avec une énergie et un engagement total.</p>
           </div>
         </div>
         <div class="glass pillar">
-          <div class="pillar-ico" style="background:rgba(112,64,204,0.12);">💎</div>
+          <div class="pillar-ico" style="background:rgba(112,64,204,0.12);color:#9060DD;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12l4 6-10 13L2 9z"/><path d="M11 3L8 9l4 13 4-13-3-6"/><path d="M2 9h20"/></svg></div>
           <div>
             <h4>Dévoué</h4>
             <p>Vos objectifs deviennent les nôtres. Nous ne nous arrêtons pas tant que les résultats ne sont pas au rendez-vous.</p>
           </div>
         </div>
         <div class="glass pillar">
-          <div class="pillar-ico" style="background:rgba(58,128,255,0.12);">👑</div>
+          <div class="pillar-ico" style="background:rgba(58,128,255,0.12);color:#3A80FF;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m2 4 3 12h14l3-12-6 5-4-5-4 5-6-5zm3 16h14"/></svg></div>
           <div>
             <h4>Professionnel</h4>
             <p>Processus rigoureux, communication claire et livrables de qualité premium pour chaque client, sans exception.</p>
@@ -1242,15 +1380,15 @@ body[data-atmosphere="maximal"] .btn-gold { box-shadow: 0 6px 32px rgba(115,92,0
         <p>Remplissez le formulaire et notre équipe vous contactera dans les 24h pour discuter de votre projet et établir une stratégie sur mesure.</p>
         <div class="cinfo">
           <div class="cinfo-row">
-            <div class="cinfo-ico">✉</div>
+            <div class="cinfo-ico" style="color:var(--gold-lt);"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg></div>
             <span>contact@kingdomads.fr</span>
           </div>
           <div class="cinfo-row">
-            <div class="cinfo-ico">📍</div>
+            <div class="cinfo-ico" style="color:var(--gold-lt);"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg></div>
             <span>France — Disponible à distance</span>
           </div>
           <div class="cinfo-row">
-            <div class="cinfo-ico">⚡</div>
+            <div class="cinfo-ico" style="color:var(--gold-lt);"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
             <span>Réponse sous 24h garantie</span>
           </div>
         </div>
@@ -1278,7 +1416,7 @@ body[data-atmosphere="maximal"] .btn-gold { box-shadow: 0 6px 32px rgba(115,92,0
           <button type="submit" class="btn btn-gold form-submit">Envoyer ma demande →</button>
         </form>
         <div class="form-ok" id="formOk">
-          <div class="ck">✓</div>
+          <div class="ck" style="color:var(--gold-lt);"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
           <h3>Demande envoyée !</h3>
           <p>Notre équipe vous contactera dans les 24h.</p>
         </div>
@@ -1337,44 +1475,97 @@ document.querySelectorAll('[data-target]').forEach(el => {
   if (!el.closest('#heroMetrics')) cio.observe(el);
 });
 
-/* scroll-expand hero — rAF batched */
+/* scroll-expand hero — scroll-jacking (no empty section, smooth pacing) */
 (function () {
-  const section  = document.getElementById('hero');
   const card     = document.getElementById('heroCard');
   const content  = document.getElementById('heroContent');
   const metrics  = document.getElementById('heroMetrics');
   const hint     = document.getElementById('heroScrollHint');
 
-  let raf = 0, range = 1, metricsShown = false, counted = false;
+  let progress = 0;
+  let locked = true;
+  let metricsShown = false;
+  let counted = false;
+  let rafPending = false;
+  let touchStartY = 0;
 
-  function computeRange() { range = section.offsetHeight - window.innerHeight || 1; }
-  computeRange();
+  function applyProgress() {
+    if (rafPending) return;
+    rafPending = true;
+    requestAnimationFrame(() => {
+      rafPending = false;
+      const p = progress;
 
-  function tick() {
-    raf = 0;
-    const p = Math.max(0, Math.min(1, window.scrollY / range));
+      card.style.width        = (65 + 35 * p) + 'vw';
+      card.style.height       = (60 + 40 * p) + 'vh';
+      card.style.borderRadius = (24 - 24 * p) + 'px';
 
-    card.style.width        = (65 + 35 * p) + 'vw';
-    card.style.height       = (60 + 40 * p) + 'vh';
-    card.style.borderRadius = (24 - 24 * p) + 'px';
+      const shift = -52 * Math.max(0, Math.min(1, (p - 0.55) / 0.45));
+      content.style.transform = 'translateY(' + shift + 'px)';
 
-    const shift = -52 * Math.max(0, Math.min(1, (p - 0.55) / 0.45));
-    content.style.transform = 'translateY(' + shift + 'px)';
+      hint.style.opacity = Math.max(0, 1 - p * 7);
 
-    hint.style.opacity = Math.max(0, 1 - p * 7);
+      const show = p >= 0.75;
+      if (show !== metricsShown) {
+        metricsShown = show;
+        metrics.classList.toggle('visible', show);
+        if (show && !counted) {
+          counted = true;
+          metrics.querySelectorAll('[data-target]').forEach(animateCounter);
+        }
+      }
+    });
+  }
+  applyProgress();
 
-    const show = p >= 0.75;
-    if (show !== metricsShown) {
-      metricsShown = show;
-      metrics.classList.toggle('visible', show);
-      if (show && !counted) { counted = true; metrics.querySelectorAll('[data-target]').forEach(animateCounter); }
+  function setProgress(next) {
+    progress = Math.max(0, Math.min(1, next));
+    applyProgress();
+  }
+
+  function onWheel(e) {
+    if (locked) {
+      e.preventDefault();
+      setProgress(progress + e.deltaY * 0.001);
+      if (progress >= 1) locked = false;
+    } else if (e.deltaY < 0 && window.scrollY <= 1) {
+      e.preventDefault();
+      locked = true;
+      setProgress(progress + e.deltaY * 0.001);
     }
   }
 
-  function onScroll() { if (!raf) raf = requestAnimationFrame(tick); }
-  window.addEventListener('scroll', onScroll, { passive: true });
-  window.addEventListener('resize', () => { computeRange(); onScroll(); }, { passive: true });
-  tick();
+  function onTouchStart(e) { touchStartY = e.touches[0].clientY; }
+
+  function onTouchMove(e) {
+    const dy = touchStartY - e.touches[0].clientY;
+    touchStartY = e.touches[0].clientY;
+    if (locked) {
+      e.preventDefault();
+      setProgress(progress + dy * 0.005);
+      if (progress >= 1) locked = false;
+    } else if (dy < 0 && window.scrollY <= 1) {
+      e.preventDefault();
+      locked = true;
+      setProgress(progress + dy * 0.005);
+    }
+  }
+
+  /* clic sur un lien d'ancre → débloque la hero pour laisser passer le smooth scroll */
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', () => {
+      const href = a.getAttribute('href');
+      if (href && href !== '#hero' && href !== '#') {
+        progress = 1;
+        applyProgress();
+        locked = false;
+      }
+    });
+  });
+
+  window.addEventListener('wheel',      onWheel,      { passive: false });
+  window.addEventListener('touchstart', onTouchStart, { passive: true  });
+  window.addEventListener('touchmove',  onTouchMove,  { passive: false });
 })();
 
 /* form submit */
@@ -1391,9 +1582,55 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
     if (t) { e.preventDefault(); window.scrollTo({ top: t.getBoundingClientRect().top + scrollY - 80, behavior: 'smooth' }); }
   });
 });
+
+/* model-viewer — cursor tracking (axes alignés sur la souris, drag manuel prioritaire) */
+(function () {
+  function lerp(a, b, t) { return a + (b - a) * t; }
+
+  const viewers = [];
+  const state   = [];
+
+  function initViewers() {
+    document.querySelectorAll('model-viewer').forEach(v => {
+      if (viewers.includes(v)) return;
+      viewers.push(v);
+      state.push({ theta: 90, phi: 75, tTheta: 90, tPhi: 75, dragging: false });
+      v.addEventListener('mousedown',  () => state[viewers.indexOf(v)].dragging = true);
+      v.addEventListener('touchstart', () => state[viewers.indexOf(v)].dragging = true, { passive: true });
+    });
+  }
+
+  document.addEventListener('mouseup',  () => state.forEach(s => s.dragging = false));
+  document.addEventListener('touchend', () => state.forEach(s => s.dragging = false));
+
+  document.addEventListener('mousemove', e => {
+    const nx = (e.clientX / window.innerWidth)  * 2 - 1; // -1 → +1
+    const ny = (e.clientY / window.innerHeight) * 2 - 1;
+    state.forEach(s => {
+      if (!s.dragging) {
+        s.tTheta = 90 - nx * 28;
+        s.tPhi   = 72 - ny * 14;
+      }
+    });
+  });
+
+  function tick() {
+    initViewers();
+    viewers.forEach((v, i) => {
+      const s = state[i];
+      if (!s.dragging) {
+        s.theta = lerp(s.theta, s.tTheta, 0.05);
+        s.phi   = lerp(s.phi,   s.tPhi,   0.05);
+        v.cameraOrbit = `${s.theta}deg ${s.phi}deg auto`;
+      }
+    });
+    requestAnimationFrame(tick);
+  }
+  tick();
+})();
 </script>
 <!-- ══ TWEAKS PANEL ══ -->
-<button id="tweaksLauncher" title="Ouvrir les tweaks">✦</button>
+<button id="tweaksLauncher" title="Ouvrir les tweaks"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg></button>
 
 <div id="tweaksPanel">
   <div class="tp-head">
