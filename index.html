@@ -100,6 +100,63 @@ h3 { font-size: 1.25rem; font-weight: 600; }
   transform: translateY(-4px);
   box-shadow: 0 14px 44px rgba(115,92,0,0.65), 0 0 80px rgba(115,92,0,0.2);
 }
+
+/* FlowButton variant — hero primary CTA */
+.btn-flow {
+  position: relative;
+  background: #fff !important;
+  backdrop-filter: none;
+  color: var(--bg) !important;
+  border: 1.5px solid transparent !important;
+  border-radius: 100px !important;
+  box-shadow: none !important;
+  overflow: hidden;
+  gap: 0;
+  transition: border-color 600ms cubic-bezier(0.23,1,0.32,1),
+              border-radius  600ms cubic-bezier(0.23,1,0.32,1),
+              color          600ms cubic-bezier(0.23,1,0.32,1) !important;
+}
+.btn-flow:hover {
+  color: #fff !important;
+  border-color: transparent !important;
+  border-radius: 14px !important;
+  transform: none !important;
+  box-shadow: none !important;
+}
+.btn-flow:active { transform: scale(0.95) !important; }
+
+.btn-flow .flow-bg {
+  position: absolute; left: 50%; top: 50%;
+  width: 16px; height: 16px; border-radius: 50%;
+  background: var(--gold-lt);
+  transform: translate(-50%, -50%);
+  opacity: 0; pointer-events: none; z-index: 0;
+  transition: width   800ms cubic-bezier(0.19,1,0.22,1),
+              height  800ms cubic-bezier(0.19,1,0.22,1),
+              opacity 800ms cubic-bezier(0.19,1,0.22,1);
+}
+.btn-flow:hover .flow-bg { width: 360px; height: 360px; opacity: 1; }
+
+.btn-flow .flow-text {
+  position: relative; z-index: 1;
+  transform: translateX(-12px);
+  transition: transform 800ms ease-out;
+}
+.btn-flow:hover .flow-text { transform: translateX(12px); }
+
+.btn-flow .flow-arr-l {
+  position: absolute; z-index: 9; left: -25%;
+  display: flex; align-items: center; line-height: 1;
+  transition: left 800ms cubic-bezier(0.34,1.56,0.64,1);
+}
+.btn-flow:hover .flow-arr-l { left: 20px; }
+
+.btn-flow .flow-arr-r {
+  position: absolute; z-index: 9; right: 20px;
+  display: flex; align-items: center; line-height: 1;
+  transition: right 800ms cubic-bezier(0.34,1.56,0.64,1);
+}
+.btn-flow:hover .flow-arr-r { right: -25%; }
 .btn-ghost {
   background: rgba(255,255,255,0.05);
   color: rgba(232,230,255,0.8);
@@ -198,14 +255,58 @@ h3 { font-size: 1.25rem; font-weight: 600; }
 }
 .nav-links a:hover { color: var(--white); }
 .nav-cta {
+  position: relative;
   display: inline-flex; align-items: center; justify-content: center;
-  height: 36px; padding: 0 18px; border-radius: 8px;
-  background: var(--white); color: var(--bg);
+  height: 36px; padding: 0 20px; border-radius: 100px;
+  background: #fff;
+  color: var(--bg);
+  border: 1.5px solid transparent;
   font-family: var(--font); font-size: 0.84rem; font-weight: 600;
   text-decoration: none; white-space: nowrap; flex-shrink: 0;
-  transition: opacity 0.2s, transform 0.2s;
+  overflow: hidden; cursor: pointer;
+  transition: border-color 600ms cubic-bezier(0.23,1,0.32,1),
+              border-radius  600ms cubic-bezier(0.23,1,0.32,1),
+              color          600ms cubic-bezier(0.23,1,0.32,1);
 }
-.nav-cta:hover { opacity: 0.88; transform: translateY(-1px); }
+.nav-cta:hover { color: #fff; border-color: transparent; border-radius: 12px; }
+.nav-cta:active { transform: scale(0.95); }
+
+/* expanding circle — 16px → 220px (matches original) */
+.nav-cta-bg {
+  position: absolute; left: 50%; top: 50%;
+  width: 16px; height: 16px; border-radius: 50%;
+  background: var(--gold-lt);
+  transform: translate(-50%, -50%);
+  opacity: 0; pointer-events: none; z-index: 0;
+  transition: width   800ms cubic-bezier(0.19,1,0.22,1),
+              height  800ms cubic-bezier(0.19,1,0.22,1),
+              opacity 800ms cubic-bezier(0.19,1,0.22,1);
+}
+.nav-cta:hover .nav-cta-bg { width: 220px; height: 220px; opacity: 1; }
+
+/* text shifts right on hover */
+.nav-cta-text {
+  position: relative; z-index: 1;
+  transform: translateX(-12px);
+  transition: transform 800ms ease-out;
+}
+.nav-cta:hover .nav-cta-text { transform: translateX(12px); }
+
+/* left arrow — hidden off-left, slides IN on hover */
+.nav-cta-arr-l {
+  position: absolute; z-index: 9;
+  left: -25%; display: flex; align-items: center; line-height: 1;
+  transition: left 800ms cubic-bezier(0.34,1.56,0.64,1);
+}
+.nav-cta:hover .nav-cta-arr-l { left: 14px; }
+
+/* right arrow — visible initially, slides OUT on hover */
+.nav-cta-arr-r {
+  position: absolute; z-index: 9;
+  right: 14px; display: flex; align-items: center; line-height: 1;
+  transition: right 800ms cubic-bezier(0.34,1.56,0.64,1);
+}
+.nav-cta:hover .nav-cta-arr-r { right: -25%; }
 
 /* ══════════════════════════════════
    HERO
@@ -637,6 +738,14 @@ body #blog .blog-grid .blog-card:nth-child(3) .blog-cat { background: linear-gra
 /* contact orb */
 body #contact > .orb { background: radial-gradient(circle, rgba(var(--aux-a-rgb),0.16) 0%, transparent 70%) !important; }
 
+/* ─── FOND HERO ─── */
+body[data-hero-bg="blanc"] #hero .hero-sticky {
+  background: #f5f4f8;
+}
+body[data-hero-bg="blanc"] #hero .hero-orb1,
+body[data-hero-bg="blanc"] #hero .hero-orb2,
+body[data-hero-bg="blanc"] #hero .hero-orb3 { opacity: 0; }
+
 /* For 'royale' (mono gold) — also dim violet text accents to gold */
 body[data-aura="royale"] .grad-violet { background: linear-gradient(135deg, var(--gold-pale), var(--gold-lt)) !important; -webkit-background-clip: text !important; -webkit-text-fill-color: transparent !important; }
 
@@ -776,7 +885,12 @@ body[data-atmosphere="maximal"] .btn-gold { box-shadow: 0 6px 32px rgba(115,92,0
         <li><a href="#team">À propos</a></li>
         <li><a href="#blog">Actualités</a></li>
       </ul>
-      <a href="#contact" class="nav-cta">Demander une interview</a>
+      <a href="#contact" class="nav-cta">
+        <span class="nav-cta-arr nav-cta-arr-l"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
+        <span class="nav-cta-text">Demander une interview</span>
+        <span class="nav-cta-bg"></span>
+        <span class="nav-cta-arr nav-cta-arr-r"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
+      </a>
     </div>
 </nav>
 
@@ -807,7 +921,12 @@ body[data-atmosphere="maximal"] .btn-gold { box-shadow: 0 6px 32px rgba(115,92,0
             Stratégies publicitaires data-driven qui transforment chaque euro investi en croissance mesurable et durable pour votre entreprise.
           </p>
           <div class="hero-btns">
-            <a href="#services" class="btn btn-gold">En savoir plus →</a>
+            <a href="#services" class="btn btn-flow">
+              <span class="flow-arr-l"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
+              <span class="flow-text">En savoir plus</span>
+              <span class="flow-bg"></span>
+              <span class="flow-arr-r"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
+            </a>
             <a href="#contact" class="btn btn-ghost">Faire une interview</a>
           </div>
         </div>
@@ -1314,6 +1433,15 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
     </div>
     <div class="tp-desc">Intensité des halos lumineux et de l'espace.</div>
   </div>
+
+  <div class="tp-section">
+    <div class="tp-label">Fond Hero</div>
+    <div class="tp-radio" data-key="hero-bg" style="grid-template-columns:1fr 1fr;">
+      <button data-val="sombre"><span class="tp-swatch" style="background:#060412;border:1px solid rgba(255,255,255,0.2);"></span>Sombre</button>
+      <button data-val="blanc"><span class="tp-swatch" style="background:#f5f4f8;border:1px solid rgba(0,0,0,0.1);"></span>Blanc</button>
+    </div>
+    <div class="tp-desc">Couleur de fond derrière la hero card.</div>
+  </div>
 </div>
 
 <script>
@@ -1321,7 +1449,8 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
   const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
     "aura": "night",
     "voice": "modern",
-    "atmosphere": "vivid"
+    "atmosphere": "vivid",
+    "hero-bg": "sombre"
   }/*EDITMODE-END*/;
 
   let state = { ...TWEAK_DEFAULTS };
@@ -1330,6 +1459,7 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
     document.body.dataset.aura = state.aura;
     document.body.dataset.voice = state.voice;
     document.body.dataset.atmosphere = state.atmosphere;
+    document.body.dataset.heroBg = state['hero-bg'];
     // sync active button states
     document.querySelectorAll('.tp-radio').forEach(group => {
       const key = group.dataset.key;
