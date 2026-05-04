@@ -861,9 +861,11 @@ footer {
   #navbar { width: calc(100% - 24px); padding: 0 16px; }
   .nav-cta { display: none; }
 
-  /* hero */
-  .hero-expand-card { width: 96vw; height: 78svh; height: 78vh; }
-  .hc-content { padding: 28px 22px 60px; }
+  /* hero — plein écran immédiat sur mobile */
+  #hero { height: 100svh; height: 100vh; }
+  .hero-sticky { height: 100svh; height: 100vh; }
+  .hero-expand-card { width: 100%; height: 100%; border-radius: 0; will-change: auto; }
+  .hc-content { padding: 28px 22px 80px; }
   .hero-title { font-size: clamp(1.85rem, 7.5vw, 2.8rem); margin-bottom: 18px; }
   .hero-sub { font-size: 0.95rem; margin-bottom: 28px; }
   .hero-btns { flex-direction: column; align-items: stretch; gap: 10px; width: 100%; }
@@ -873,6 +875,12 @@ footer {
   .hc-metrics .metric-card .num { font-size: 1.35rem; white-space: nowrap; }
   .hc-metrics .metric-card .lbl { font-size: 8.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .hc-scroll-hint { bottom: 20px; }
+
+  /* hero titre — supprime le <br> forcé, laisse le texte wrapper naturellement */
+  .hero-title br { display: none; }
+
+  /* désactive les 3D (WebGL trop lourd → jank) — gradient de fond reste visible */
+  model-viewer { display: none !important; }
 
   /* pill */
   .pill { font-size: 10px; padding: 5px 14px; }
@@ -884,7 +892,7 @@ footer {
   /* features */
   .feat-gcard:hover { transform: none; box-shadow: none; }
   .feat-gcard:hover .fgc-avatar { transform: none; }
-  .fgc-visual { height: 200px !important; }
+  .fgc-visual { height: 160px !important; }
   .fgc-body { padding: 16px 18px 22px; }
 
   /* services — désactive les effets hover qui restent bloqués au tap */
@@ -899,8 +907,13 @@ footer {
   .values-wrap { gap: 32px; }
   .values-left h2 { font-size: clamp(1.7rem, 7vw, 2.4rem); }
 
-  /* team */
-  .team-title-anim { font-size: clamp(1.3rem, 5.5vw, 1.9rem); max-width: 94vw; }
+  /* team — marquee CSS (scroll-jacking désactivé sur mobile) */
+  #team { padding: 80px 0; }
+  .team-spacer { display: none; }
+  .team-content { min-height: auto; transform: none !important; gap: 22px; }
+  .team-title-anim { transform: none !important; font-size: clamp(1.3rem, 5.5vw, 1.9rem); max-width: 94vw; }
+  #teamTrackTop { animation: marqueeLeft 16s linear infinite; }
+  #teamTrackBot { animation: marqueeLeft 20s linear infinite reverse; }
   .thc { width: 72vw; }
 
   /* stats */
@@ -943,6 +956,16 @@ footer {
 @media (min-width: 961px) {
   .nav-mobile { display: none !important; }
   .nav-hamburger { display: none !important; }
+}
+
+/* marquee team mobile */
+@keyframes marqueeLeft {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+@media (max-width: 640px) {
+  /* pause le marquee quand on touche la section */
+  #team:active .team-track { animation-play-state: paused; }
 }
 
 /* ══════════════════════════════════════════════════════════════
@@ -1449,13 +1472,13 @@ body[data-atmosphere="maximal"] .btn-gold { box-shadow: 0 6px 32px rgba(115,92,0
     <div class="team-row">
       <div class="team-track" id="teamTrackTop">
         <div class="thc"><div class="thc-photo" style="background:url('input/satiana.jpeg') center/cover;"></div><div class="thc-info"><h4>Satiana</h4><div class="thc-role grad-gold">Content & Vidéo</div></div></div>
-        <div class="thc"><div class="thc-photo" style="background:url('input/aurel.png') center/cover;"></div><div class="thc-info"><h4>Aurélien</h4><div class="thc-role" style="background:linear-gradient(90deg,#3A80FF,#60B0FF);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Expert Web & Tunnels</div></div></div>
-        <div class="thc"><div class="thc-photo" style="background:url('input/ket.jpeg') center/cover;"></div><div class="thc-info"><h4>Ketline Elisa Lola</h4><div class="thc-role grad-violet">Directrice Créative</div></div></div>
+        <div class="thc"><div class="thc-photo" style="background:url('input/aurel.png') center/cover;"></div><div class="thc-info"><h4>Aurélien</h4><div class="thc-role" style="background:linear-gradient(90deg,#3A80FF,#60B0FF);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Développeur</div></div></div>
+        <div class="thc"><div class="thc-photo" style="background:url('input/ket.jpeg') center/cover;"></div><div class="thc-info"><h4>Ketline</h4><div class="thc-role grad-violet">Vidéaste</div></div></div>
         <div class="thc"><div class="thc-photo" style="background:url('input/will.jpeg') center 25%/cover;"></div><div class="thc-info"><h4>William Adamsha</h4><div class="thc-role grad-gold">Co-fondateur & CEO</div></div></div>
         <div class="thc"><div class="thc-photo" style="background:url('input/Alex.jpeg') center 25%/cover;"></div><div class="thc-info"><h4>Alexandre Adamsha</h4><div class="thc-role grad-gold">Co-fondateur & CEO</div></div></div>
         <div class="thc"><div class="thc-photo" style="background:url('input/satiana.jpeg') center/cover;"></div><div class="thc-info"><h4>Satiana</h4><div class="thc-role grad-gold">Content & Vidéo</div></div></div>
-        <div class="thc"><div class="thc-photo" style="background:url('input/aurel.png') center/cover;"></div><div class="thc-info"><h4>Aurélien</h4><div class="thc-role" style="background:linear-gradient(90deg,#3A80FF,#60B0FF);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Expert Web & Tunnels</div></div></div>
-        <div class="thc"><div class="thc-photo" style="background:url('input/ket.jpeg') center/cover;"></div><div class="thc-info"><h4>Ketline Elisa Lola</h4><div class="thc-role grad-violet">Directrice Créative</div></div></div>
+        <div class="thc"><div class="thc-photo" style="background:url('input/aurel.png') center/cover;"></div><div class="thc-info"><h4>Aurélien</h4><div class="thc-role" style="background:linear-gradient(90deg,#3A80FF,#60B0FF);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Développeur</div></div></div>
+        <div class="thc"><div class="thc-photo" style="background:url('input/ket.jpeg') center/cover;"></div><div class="thc-info"><h4>Ketline</h4><div class="thc-role grad-violet">Vidéaste</div></div></div>
         <div class="thc"><div class="thc-photo" style="background:url('input/will.jpeg') center 5%/cover;"></div><div class="thc-info"><h4>William Adamsha</h4><div class="thc-role grad-gold">Co-fondateur & CEO</div></div></div>
         <div class="thc"><div class="thc-photo" style="background:url('input/Alex.jpeg') center 25%/cover;"></div><div class="thc-info"><h4>Alexandre Adamsha</h4><div class="thc-role grad-gold">Co-fondateur & CEO</div></div></div>
       </div>
@@ -1668,14 +1691,23 @@ document.querySelectorAll('[data-target]').forEach(el => {
   const metrics  = document.getElementById('heroMetrics');
   const hint     = document.getElementById('heroScrollHint');
 
+  /* ── mobile : plein écran immédiat, zéro scroll-jacking ──
+     Les animations width/height déclenchent du reflow à chaque frame
+     ce qui est trop lourd sur mobile. On affiche directement plein écran. */
+  if (window.innerWidth <= 640) {
+    card.style.cssText = 'width:100%;height:100%;border-radius:0;will-change:auto;';
+    if (hint) hint.style.display = 'none';
+    metrics.classList.add('visible');
+    metrics.querySelectorAll('[data-target]').forEach(animateCounter);
+    return;
+  }
+
   let progress = 0;
   let locked = true;
   let metricsShown = false;
   let counted = false;
   let rafPending = false;
   let touchStartY = 0;
-
-  const isMobile = () => window.innerWidth <= 640;
 
   function applyProgress() {
     if (rafPending) return;
@@ -1684,16 +1716,8 @@ document.querySelectorAll('[data-target]').forEach(el => {
       rafPending = false;
       const p = progress;
 
-      if (isMobile()) {
-        /* utilise window.innerHeight pour éviter le bug iOS Safari où
-           100vh inclut la barre d'adresse cachée */
-        const vh = window.innerHeight;
-        card.style.width  = (96 + 4 * p) + 'vw';
-        card.style.height = Math.round((0.78 + 0.22 * p) * vh) + 'px';
-      } else {
-        card.style.width        = (65 + 35 * p) + 'vw';
-        card.style.height       = (60 + 40 * p) + 'vh';
-      }
+      card.style.width        = (65 + 35 * p) + 'vw';
+      card.style.height       = (60 + 40 * p) + 'vh';
       card.style.borderRadius = (24 - 24 * p) + 'px';
 
       const shift = -52 * Math.max(0, Math.min(1, (p - 0.55) / 0.45));
@@ -1869,6 +1893,9 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
   const trackBot = document.getElementById('teamTrackBot');
   const title    = document.getElementById('teamTitle');
   if (!section || !content || !trackTop || !trackBot || !title) return;
+
+  /* ── mobile : marquee CSS, le scroll-jacking est trop lourd + conflits touch ── */
+  if (window.innerWidth <= 640) return;
 
   const LOCK_AT_SP    = 0.28;  /* descente : lock dès que la section est en vue */
   const LOCK_UP_AT_SP = 0.6;   /* remontée : lock seulement quand la section est bien rentrée */
