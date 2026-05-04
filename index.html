@@ -751,7 +751,42 @@ h3 { font-size: 1.25rem; font-weight: 600; }
 .fg select option { background: #0A0818; }
 .fg textarea { resize: vertical; min-height: 100px; }
 .fg-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-.form-submit { width: 100%; justify-content: center; margin-top: 4px; font-size: 0.95rem; padding: 16px 40px; }
+.form-submit { width: 100%; justify-content: center; margin-top: 4px; font-size: 0.95rem; padding: 16px 40px; position: relative; }
+.form-submit:disabled { opacity: 0.7; cursor: not-allowed; transform: none !important; }
+.form-submit .btn-loader {
+  display: none; width: 16px; height: 16px; border-radius: 50%;
+  border: 2px solid rgba(255,255,255,0.3); border-top-color: #fff;
+  animation: spin 0.7s linear infinite; position: absolute; right: 20px;
+}
+.form-submit.loading .btn-label { opacity: 0.5; }
+.form-submit.loading .btn-loader { display: block; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* validation */
+.req { color: var(--gold-lt); font-size: 0.8em; }
+.field-err {
+  display: none; font-size: 11px; color: #FF6B6B;
+  margin-top: 5px; font-weight: 500;
+}
+.fg.invalid input, .fg.invalid select, .fg.invalid textarea {
+  border-color: rgba(255,107,107,0.55);
+  box-shadow: 0 0 0 3px rgba(255,107,107,0.1);
+}
+.fg.invalid .field-err { display: block; }
+
+/* global send error */
+.form-send-err {
+  display: none; align-items: center; gap: 10px;
+  background: rgba(255,107,107,0.07);
+  border: 1px solid rgba(255,107,107,0.22);
+  border-radius: 10px; padding: 12px 16px;
+  font-size: 0.85rem; color: rgba(232,230,255,0.7);
+  margin-bottom: 14px;
+}
+.form-send-err svg { flex-shrink: 0; color: #FF6B6B; }
+.form-send-err a { color: var(--gold-lt); text-decoration: none; }
+.form-send-err.show { display: flex; }
+
 .form-ok { display: none; text-align: center; padding: 50px 20px; }
 .form-ok .ck {
   width: 60px; height: 60px; border-radius: 50%;
@@ -1605,24 +1640,49 @@ body[data-atmosphere="maximal"] .btn-gold { box-shadow: 0 6px 32px rgba(115,92,0
       <div class="glass cform fu d2" id="formWrap">
         <form id="cform" novalidate>
           <div class="fg-row">
-            <div class="fg"><label>Prénom</label><input type="text" placeholder="Votre prénom"></div>
-            <div class="fg"><label>Nom</label><input type="text" placeholder="Votre nom"></div>
+            <div class="fg">
+              <label for="f-prenom">Prénom <span class="req">*</span></label>
+              <input id="f-prenom" name="prenom" type="text" placeholder="Votre prénom" autocomplete="given-name">
+              <span class="field-err">Champ requis</span>
+            </div>
+            <div class="fg">
+              <label for="f-nom">Nom</label>
+              <input id="f-nom" name="nom" type="text" placeholder="Votre nom" autocomplete="family-name">
+            </div>
           </div>
-          <div class="fg"><label>Email</label><input type="email" placeholder="votre@email.com"></div>
-          <div class="fg"><label>Entreprise</label><input type="text" placeholder="Nom de votre entreprise"></div>
           <div class="fg">
-            <label>Service souhaité</label>
-            <select>
+            <label for="f-email">Email <span class="req">*</span></label>
+            <input id="f-email" name="email" type="email" placeholder="votre@email.com" autocomplete="email">
+            <span class="field-err">Email invalide</span>
+          </div>
+          <div class="fg">
+            <label for="f-entreprise">Entreprise</label>
+            <input id="f-entreprise" name="entreprise" type="text" placeholder="Nom de votre entreprise" autocomplete="organization">
+          </div>
+          <div class="fg">
+            <label for="f-service">Service souhaité</label>
+            <select id="f-service" name="service">
               <option value="" disabled selected>Choisir un service…</option>
               <option>Publicité en ligne (Ads)</option>
               <option>Site Internet</option>
               <option>Tunnel de vente</option>
-              <option>Interview & Personal Branding</option>
+              <option>Interview &amp; Personal Branding</option>
               <option>Pack complet</option>
             </select>
           </div>
-          <div class="fg"><label>Message</label><textarea placeholder="Décrivez votre projet et vos objectifs…"></textarea></div>
-          <button type="submit" class="btn btn-gold form-submit">Envoyer ma demande →</button>
+          <div class="fg">
+            <label for="f-message">Message <span class="req">*</span></label>
+            <textarea id="f-message" name="message" placeholder="Décrivez votre projet et vos objectifs…"></textarea>
+            <span class="field-err">Champ requis</span>
+          </div>
+          <div class="form-send-err" id="formSendErr">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            Une erreur est survenue. Réessayez ou écrivez-nous à <a href="mailto:contact@kingdomads.fr">contact@kingdomads.fr</a>
+          </div>
+          <button type="submit" class="btn btn-gold form-submit" id="formBtn">
+            <span class="btn-label">Envoyer ma demande →</span>
+            <span class="btn-loader" aria-hidden="true"></span>
+          </button>
         </form>
         <div class="form-ok" id="formOk">
           <div class="ck" style="color:var(--gold-lt);"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
@@ -1819,12 +1879,76 @@ document.querySelectorAll('[data-target]').forEach(el => {
   document.addEventListener('keydown', e => { if (e.key === 'Escape') closeMenu(); });
 })();
 
-/* form submit */
-document.getElementById('cform').addEventListener('submit', e => {
-  e.preventDefault();
-  document.getElementById('cform').style.display = 'none';
-  document.getElementById('formOk').style.display = 'block';
-});
+/* form submit — Make webhook
+   ⚠️  Pour activer :
+   1. Make → nouveau scénario → module "Webhooks" → "Custom webhook"
+   2. Copiez l'URL (ex: https://hook.eu2.make.com/xxxxxxxxxxxx)
+   3. Collez-la dans WEBHOOK_URL ci-dessous
+   Ensuite dans Make : ajoutez un module Gmail/Outlook pour recevoir les demandes. */
+const WEBHOOK_URL = 'https://hook.eu2.make.com/whtpiyy11mrnrgkfd0x65l7u82kr5off';
+
+(function () {
+  const form    = document.getElementById('cform');
+  const btn     = document.getElementById('formBtn');
+  const sendErr = document.getElementById('formSendErr');
+
+  function validate() {
+    let ok = true;
+    const prenom = form.querySelector('[name="prenom"]');
+    toggle(prenom, !prenom.value.trim());
+    if (!prenom.value.trim()) ok = false;
+    const email = form.querySelector('[name="email"]');
+    const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value.trim());
+    toggle(email, !emailOk);
+    if (!emailOk) ok = false;
+    const msg = form.querySelector('[name="message"]');
+    toggle(msg, !msg.value.trim());
+    if (!msg.value.trim()) ok = false;
+    return ok;
+  }
+
+  function toggle(el, isInvalid) {
+    el.closest('.fg').classList.toggle('invalid', isInvalid);
+  }
+
+  form.querySelectorAll('input, textarea, select').forEach(el => {
+    el.addEventListener('input', () => el.closest('.fg').classList.remove('invalid'));
+  });
+
+  form.addEventListener('submit', async function (e) {
+    e.preventDefault();
+    sendErr.classList.remove('show');
+    if (!validate()) return;
+
+    btn.disabled = true;
+    btn.classList.add('loading');
+
+    const payload = {
+      prenom:     form.querySelector('[name="prenom"]').value.trim(),
+      nom:        form.querySelector('[name="nom"]').value.trim(),
+      email:      form.querySelector('[name="email"]').value.trim(),
+      entreprise: form.querySelector('[name="entreprise"]').value.trim(),
+      service:    form.querySelector('[name="service"]').value,
+      message:    form.querySelector('[name="message"]').value.trim(),
+    };
+
+    try {
+      /* mode no-cors : évite le preflight OPTIONS qui bloque Make.
+         URLSearchParams est accepté sans preflight par tous les navigateurs. */
+      await fetch(WEBHOOK_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        body: new URLSearchParams(payload),
+      });
+      form.style.display = 'none';
+      document.getElementById('formOk').style.display = 'block';
+    } catch {
+      btn.disabled = false;
+      btn.classList.remove('loading');
+      sendErr.classList.add('show');
+    }
+  });
+})();
 
 /* smooth scroll */
 document.querySelectorAll('a[href^="#"]').forEach(a => {
