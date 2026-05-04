@@ -626,7 +626,7 @@ h3 { font-size: 1.25rem; font-weight: 600; }
 /* horizontal team card */
 .thc {
   flex: 0 0 auto;
-  width: 24vw;
+  width: 17vw;
   background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: 16px;
@@ -645,7 +645,7 @@ h3 { font-size: 1.25rem; font-weight: 600; }
 .thc-info h4 { font-size: 1.05rem; font-weight: 600; margin-bottom: 4px; }
 .thc-role { font-size: 0.8rem; font-weight: 500; }
 @media (max-width: 768px) {
-  .thc { width: 56vw; }
+  .thc { width: 42vw; }
   .thc-photo { font-size: 3rem; }
 }
 
@@ -898,7 +898,7 @@ footer {
 
   /* team */
   .team-title-anim { font-size: clamp(1.3rem, 5.5vw, 1.9rem); max-width: 94vw; }
-  .thc { width: 68vw; }
+  .thc { width: 50vw; }
 
   /* stats */
   .stats-grid { grid-template-columns: 1fr; }
@@ -933,7 +933,7 @@ footer {
   .hc-content { padding: 22px 16px 56px; }
   .hc-metrics { gap: 6px; }
   .hc-metrics .metric-card .num { font-size: 1.3rem; }
-  .thc { width: 80vw; }
+  .thc { width: 60vw; }
 }
 
 /* ══════════════════════════════════════════════════════════════
@@ -1856,8 +1856,8 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
   const title    = document.getElementById('teamTitle');
   if (!section || !content || !trackTop || !trackBot || !title) return;
 
-  const LOCK_AT_SP    = 0.4;   /* descente : lock dès que la section est en vue */
-  const LOCK_UP_AT_SP = 0.65;  /* remontée : lock seulement quand la section est bien rentrée */
+  const LOCK_AT_SP    = 0.28;  /* descente : lock dès que la section est en vue */
+  const LOCK_UP_AT_SP = 0.6;   /* remontée : lock seulement quand la section est bien rentrée */
   const WHEEL_FACTOR  = 0.0006; /* ≈ 17 crans pour tout voir (≈ 2/card) */
   const TOUCH_FACTOR  = 0.0012;
   const STEP_CAP      = 0.018;  /* fling max 1.8% par évènement         */
