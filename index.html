@@ -373,7 +373,6 @@ h3 { font-size: 1.25rem; font-weight: 600; }
   50%       { transform: translateY(5px); }
 }
 @media (max-width: 960px) {
-  .hero-expand-card { width: 90vw; height: 55vh; }
   .hc-content { padding: 40px 28px; }
   .hc-metrics { flex-wrap: wrap; gap: 10px; bottom: 14px; }
   .hc-metrics .metric-card { width: 150px; padding: 14px 12px; }
@@ -787,6 +786,58 @@ footer {
 .footer-links a:hover { color: var(--white); }
 .footer-copy { font-size: 0.8rem; color: var(--muted); }
 
+/* ══ HAMBURGER MENU ══ */
+.nav-hamburger {
+  display: none;
+  width: 36px; height: 36px;
+  background: none; border: none;
+  cursor: pointer; padding: 4px;
+  flex-direction: column; align-items: center; justify-content: center; gap: 5px;
+}
+.nav-hamburger span {
+  display: block; width: 22px; height: 2px;
+  background: var(--white); border-radius: 2px;
+  transition: transform 0.32s cubic-bezier(0.23,1,0.32,1), opacity 0.25s;
+}
+.nav-hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.nav-hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+.nav-hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+/* Mobile nav overlay */
+.nav-mobile {
+  position: fixed; top: 76px; left: 0; right: 0; bottom: 0;
+  background: rgba(6,4,18,0.97);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  z-index: 98;
+  flex-direction: column; align-items: center; justify-content: center;
+  gap: 10px;
+  opacity: 0;
+  transform: translateY(-14px);
+  transition: opacity 0.35s ease, transform 0.35s cubic-bezier(0.23,1,0.32,1);
+  pointer-events: none;
+  display: flex;
+  visibility: hidden;
+}
+.nav-mobile.open {
+  opacity: 1; transform: none; pointer-events: all; visibility: visible;
+}
+.nm-link {
+  color: rgba(232,230,255,0.7); font-size: 1.35rem; font-weight: 600;
+  text-decoration: none; letter-spacing: -0.02em;
+  padding: 12px 24px; border-radius: 10px;
+  transition: color 0.2s, background 0.2s;
+  width: 100%; max-width: 320px; text-align: center;
+}
+.nm-link:hover { color: var(--white); background: rgba(255,255,255,0.05); }
+.nm-link.nm-cta {
+  margin-top: 16px;
+  background: linear-gradient(135deg, var(--gold), var(--gold-mid));
+  color: #fff; font-size: 1rem;
+  box-shadow: 0 6px 28px rgba(115,92,0,0.45);
+}
+.nm-link.nm-cta:hover { background: linear-gradient(135deg, var(--gold-mid), var(--gold-lt)); }
+
 /* ── responsive ── */
 @media (max-width: 960px) {
   .features-grid, .srv-row, .team-grid, .blog-grid, .contact-grid, .values-wrap { grid-template-columns: 1fr; }
@@ -796,7 +847,93 @@ footer {
   .team-grid { grid-template-columns: repeat(2,1fr); }
   .srv-wide { flex-direction: column; gap: 28px; }
   .nav-links { display: none; }
+  .nav-hamburger { display: flex; }
   .values-wrap { gap: 40px; }
+  .sec-header.split { flex-direction: column; align-items: flex-start; }
+}
+
+/* ── mobile ── */
+@media (max-width: 640px) {
+  .container { padding: 0 20px; }
+  section { padding: 72px 0; }
+
+  /* nav */
+  #navbar { width: calc(100% - 24px); padding: 0 16px; }
+  .nav-cta { display: none; }
+
+  /* hero */
+  .hero-expand-card { width: 96vw; height: 82vh; }
+  .hc-content { padding: 28px 22px 60px; }
+  .hero-title { font-size: clamp(1.85rem, 7.5vw, 2.8rem); margin-bottom: 18px; }
+  .hero-sub { font-size: 0.95rem; margin-bottom: 28px; }
+  .hero-btns { flex-direction: column; align-items: stretch; gap: 10px; width: 100%; }
+  .hero-btns .btn { justify-content: center; padding: 14px 24px; font-size: 0.9rem; }
+  .hc-metrics { flex-wrap: nowrap; gap: 8px; bottom: 10px; padding: 0 10px; }
+  .hc-metrics .metric-card { width: auto; flex: 1; padding: 12px 8px; }
+  .hc-metrics .metric-card .num { font-size: 1.5rem; }
+  .hc-metrics .metric-card .lbl { font-size: 9px; }
+  .hc-scroll-hint { bottom: 18px; }
+
+  /* pill */
+  .pill { font-size: 10px; padding: 5px 14px; }
+
+  /* section headers */
+  .sec-header { margin-bottom: 40px; }
+  h2 { font-size: clamp(1.7rem, 6.5vw, 2.4rem); }
+
+  /* features */
+  .feat-gcard:hover { transform: none; box-shadow: none; }
+  .fgc-visual { height: 200px !important; }
+  .fgc-body { padding: 16px 18px 22px; }
+
+  /* services */
+  .srv-card { padding: 28px 22px; }
+  .srv-row .srv-card:hover { transform: none; }
+  .srv-wide:hover { transform: none; }
+  .srv-card h3 { font-size: 1.25rem; }
+
+  /* values */
+  .values-wrap { gap: 32px; }
+  .values-left h2 { font-size: clamp(1.7rem, 7vw, 2.4rem); }
+
+  /* team */
+  .team-title-anim { font-size: clamp(1.3rem, 5.5vw, 1.9rem); max-width: 94vw; }
+  .thc { width: 68vw; }
+
+  /* stats */
+  .stats-grid { grid-template-columns: 1fr; }
+  .stat-item { border-right: none; border-bottom: 1px solid var(--border); padding: 28px 20px; }
+  .stat-item:last-child { border-bottom: none; }
+
+  /* blog */
+  .blog-card:hover { transform: none; }
+
+  /* contact */
+  .contact-grid { gap: 40px; }
+  .fg-row { grid-template-columns: 1fr; gap: 0; }
+  .cform { padding: 26px 18px 30px; }
+  .contact-left h2 { font-size: clamp(1.7rem, 7vw, 2.4rem); }
+
+  /* footer */
+  .footer-inner { flex-direction: column; align-items: center; text-align: center; gap: 16px; }
+  .footer-links { flex-wrap: wrap; justify-content: center; gap: 12px 20px; }
+
+  /* tweaks panel */
+  #tweaksPanel { width: calc(100vw - 32px); right: 16px; bottom: 16px; left: 16px; }
+  #tweaksLauncher { bottom: 16px; right: 16px; }
+
+  /* buttons */
+  .btn-gold, .btn-ghost { padding: 13px 28px; font-size: 0.88rem; }
+}
+
+/* ── very small screens ── */
+@media (max-width: 380px) {
+  .container { padding: 0 16px; }
+  .hero-title { font-size: 1.7rem; }
+  .hc-content { padding: 22px 16px 56px; }
+  .hc-metrics { gap: 6px; }
+  .hc-metrics .metric-card .num { font-size: 1.3rem; }
+  .thc { width: 80vw; }
 }
 
 /* ══════════════════════════════════════════════════════════════
@@ -1001,8 +1138,20 @@ body[data-atmosphere="maximal"] .btn-gold { box-shadow: 0 6px 32px rgba(115,92,0
         <span class="nav-cta-bg"></span>
         <span class="nav-cta-arr nav-cta-arr-r"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
       </a>
+      <button class="nav-hamburger" id="navHamburger" aria-label="Ouvrir le menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
     </div>
 </nav>
+
+<!-- ══ MOBILE NAV ══ -->
+<div class="nav-mobile" id="navMobile" aria-hidden="true">
+  <a href="#hero"     class="nm-link" data-nm>Accueil</a>
+  <a href="#services" class="nm-link" data-nm>Services</a>
+  <a href="#team"     class="nm-link" data-nm>À propos</a>
+  <a href="#blog"     class="nm-link" data-nm>Actualités</a>
+  <a href="#contact"  class="nm-link nm-cta" data-nm>Demander une interview</a>
+</div>
 
 <!-- ══ HERO ══ -->
 <section id="hero">
@@ -1290,14 +1439,16 @@ body[data-atmosphere="maximal"] .btn-gold { box-shadow: 0 6px 32px rgba(115,92,0
     <!-- top row : slides from left to right -->
     <div class="team-row">
       <div class="team-track" id="teamTrackTop">
-        <div class="thc"><div class="thc-photo" style="background:linear-gradient(135deg,rgba(115,92,0,0.28),rgba(232,201,106,0.18));color:var(--gold-lt);">W</div><div class="thc-info"><h4>William</h4><div class="thc-role grad-gold">Fondateur & Stratège Ads</div></div></div>
-        <div class="thc"><div class="thc-photo" style="background:linear-gradient(135deg,rgba(112,64,204,0.3),rgba(58,128,255,0.3));color:#9060DD;">S</div><div class="thc-info"><h4>Sarah</h4><div class="thc-role grad-violet">Directrice Créative</div></div></div>
-        <div class="thc"><div class="thc-photo" style="background:linear-gradient(135deg,rgba(58,128,255,0.3),rgba(112,64,204,0.3));color:#60B0FF;">A</div><div class="thc-info"><h4>Alex</h4><div class="thc-role" style="background:linear-gradient(90deg,#3A80FF,#60B0FF);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Expert Web & Tunnels</div></div></div>
-        <div class="thc"><div class="thc-photo" style="background:linear-gradient(135deg,rgba(201,168,76,0.25),rgba(232,201,106,0.2));color:var(--gold-pale);">Sa</div><div class="thc-info"><h4>Satiana</h4><div class="thc-role grad-gold">Content & Vidéo</div></div></div>
-        <div class="thc"><div class="thc-photo" style="background:linear-gradient(135deg,rgba(115,92,0,0.28),rgba(232,201,106,0.18));color:var(--gold-lt);">W</div><div class="thc-info"><h4>William</h4><div class="thc-role grad-gold">Fondateur & Stratège Ads</div></div></div>
-        <div class="thc"><div class="thc-photo" style="background:linear-gradient(135deg,rgba(112,64,204,0.3),rgba(58,128,255,0.3));color:#9060DD;">S</div><div class="thc-info"><h4>Sarah</h4><div class="thc-role grad-violet">Directrice Créative</div></div></div>
-        <div class="thc"><div class="thc-photo" style="background:linear-gradient(135deg,rgba(58,128,255,0.3),rgba(112,64,204,0.3));color:#60B0FF;">A</div><div class="thc-info"><h4>Alex</h4><div class="thc-role" style="background:linear-gradient(90deg,#3A80FF,#60B0FF);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Expert Web & Tunnels</div></div></div>
-        <div class="thc"><div class="thc-photo" style="background:linear-gradient(135deg,rgba(201,168,76,0.25),rgba(232,201,106,0.2));color:var(--gold-pale);">Sa</div><div class="thc-info"><h4>Satiana</h4><div class="thc-role grad-gold">Content & Vidéo</div></div></div>
+        <div class="thc"><div class="thc-photo" style="background:url('input/satiana.jpeg') center/cover;"></div><div class="thc-info"><h4>Satiana</h4><div class="thc-role grad-gold">Content & Vidéo</div></div></div>
+        <div class="thc"><div class="thc-photo" style="background:url('input/aurel.png') center/cover;"></div><div class="thc-info"><h4>Aurélien</h4><div class="thc-role" style="background:linear-gradient(90deg,#3A80FF,#60B0FF);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Expert Web & Tunnels</div></div></div>
+        <div class="thc"><div class="thc-photo" style="background:url('input/ket.jpeg') center/cover;"></div><div class="thc-info"><h4>Ketline Elisa Lola</h4><div class="thc-role grad-violet">Directrice Créative</div></div></div>
+        <div class="thc"><div class="thc-photo" style="background:url('input/will.jpeg') center 25%/cover;"></div><div class="thc-info"><h4>William Adamsha</h4><div class="thc-role grad-gold">Co-fondateur & CEO</div></div></div>
+        <div class="thc"><div class="thc-photo" style="background:url('input/Alex.jpeg') center 25%/cover;"></div><div class="thc-info"><h4>Alexandre Adamsha</h4><div class="thc-role grad-gold">Co-fondateur & CEO</div></div></div>
+        <div class="thc"><div class="thc-photo" style="background:url('input/satiana.jpeg') center/cover;"></div><div class="thc-info"><h4>Satiana</h4><div class="thc-role grad-gold">Content & Vidéo</div></div></div>
+        <div class="thc"><div class="thc-photo" style="background:url('input/aurel.png') center/cover;"></div><div class="thc-info"><h4>Aurélien</h4><div class="thc-role" style="background:linear-gradient(90deg,#3A80FF,#60B0FF);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Expert Web & Tunnels</div></div></div>
+        <div class="thc"><div class="thc-photo" style="background:url('input/ket.jpeg') center/cover;"></div><div class="thc-info"><h4>Ketline Elisa Lola</h4><div class="thc-role grad-violet">Directrice Créative</div></div></div>
+        <div class="thc"><div class="thc-photo" style="background:url('input/will.jpeg') center 5%/cover;"></div><div class="thc-info"><h4>William Adamsha</h4><div class="thc-role grad-gold">Co-fondateur & CEO</div></div></div>
+        <div class="thc"><div class="thc-photo" style="background:url('input/Alex.jpeg') center 25%/cover;"></div><div class="thc-info"><h4>Alexandre Adamsha</h4><div class="thc-role grad-gold">Co-fondateur & CEO</div></div></div>
       </div>
     </div>
 
@@ -1309,14 +1460,16 @@ body[data-atmosphere="maximal"] .btn-gold { box-shadow: 0 6px 32px rgba(115,92,0
     <!-- bottom row : slides from right to left -->
     <div class="team-row">
       <div class="team-track" id="teamTrackBot">
-        <div class="thc"><div class="thc-photo" style="background:linear-gradient(135deg,rgba(201,168,76,0.25),rgba(232,201,106,0.2));color:var(--gold-pale);">Sa</div><div class="thc-info"><h4>Satiana</h4><div class="thc-role grad-gold">Content & Vidéo</div></div></div>
-        <div class="thc"><div class="thc-photo" style="background:linear-gradient(135deg,rgba(58,128,255,0.3),rgba(112,64,204,0.3));color:#60B0FF;">A</div><div class="thc-info"><h4>Alex</h4><div class="thc-role" style="background:linear-gradient(90deg,#3A80FF,#60B0FF);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Expert Web & Tunnels</div></div></div>
-        <div class="thc"><div class="thc-photo" style="background:linear-gradient(135deg,rgba(112,64,204,0.3),rgba(58,128,255,0.3));color:#9060DD;">S</div><div class="thc-info"><h4>Sarah</h4><div class="thc-role grad-violet">Directrice Créative</div></div></div>
-        <div class="thc"><div class="thc-photo" style="background:linear-gradient(135deg,rgba(115,92,0,0.28),rgba(232,201,106,0.18));color:var(--gold-lt);">W</div><div class="thc-info"><h4>William</h4><div class="thc-role grad-gold">Fondateur & Stratège Ads</div></div></div>
-        <div class="thc"><div class="thc-photo" style="background:linear-gradient(135deg,rgba(201,168,76,0.25),rgba(232,201,106,0.2));color:var(--gold-pale);">Sa</div><div class="thc-info"><h4>Satiana</h4><div class="thc-role grad-gold">Content & Vidéo</div></div></div>
-        <div class="thc"><div class="thc-photo" style="background:linear-gradient(135deg,rgba(58,128,255,0.3),rgba(112,64,204,0.3));color:#60B0FF;">A</div><div class="thc-info"><h4>Alex</h4><div class="thc-role" style="background:linear-gradient(90deg,#3A80FF,#60B0FF);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Expert Web & Tunnels</div></div></div>
-        <div class="thc"><div class="thc-photo" style="background:linear-gradient(135deg,rgba(112,64,204,0.3),rgba(58,128,255,0.3));color:#9060DD;">S</div><div class="thc-info"><h4>Sarah</h4><div class="thc-role grad-violet">Directrice Créative</div></div></div>
-        <div class="thc"><div class="thc-photo" style="background:linear-gradient(135deg,rgba(115,92,0,0.28),rgba(232,201,106,0.18));color:var(--gold-lt);">W</div><div class="thc-info"><h4>William</h4><div class="thc-role grad-gold">Fondateur & Stratège Ads</div></div></div>
+        <div class="thc"><div class="thc-photo" style="background:url('input/Alex.jpeg') center 25%/cover;"></div><div class="thc-info"><h4>Alexandre Adamsha</h4><div class="thc-role grad-gold">Co-fondateur & CEO</div></div></div>
+        <div class="thc"><div class="thc-photo" style="background:url('input/will.jpeg') center 5%/cover;"></div><div class="thc-info"><h4>William Adamsha</h4><div class="thc-role grad-gold">Co-fondateur & CEO</div></div></div>
+        <div class="thc"><div class="thc-photo" style="background:url('input/ket.jpeg') center/cover;"></div><div class="thc-info"><h4>Ketline Elisa Lola</h4><div class="thc-role grad-violet">Directrice Créative</div></div></div>
+        <div class="thc"><div class="thc-photo" style="background:url('input/aurel.png') center/cover;"></div><div class="thc-info"><h4>Aurélien</h4><div class="thc-role" style="background:linear-gradient(90deg,#3A80FF,#60B0FF);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Expert Web & Tunnels</div></div></div>
+        <div class="thc"><div class="thc-photo" style="background:url('input/satiana.jpeg') center/cover;"></div><div class="thc-info"><h4>Satiana</h4><div class="thc-role grad-gold">Content & Vidéo</div></div></div>
+        <div class="thc"><div class="thc-photo" style="background:url('input/Alex.jpeg') center 25%/cover;"></div><div class="thc-info"><h4>Alexandre Adamsha</h4><div class="thc-role grad-gold">Co-fondateur & CEO</div></div></div>
+        <div class="thc"><div class="thc-photo" style="background:url('input/will.jpeg') center 5%/cover;"></div><div class="thc-info"><h4>William Adamsha</h4><div class="thc-role grad-gold">Co-fondateur & CEO</div></div></div>
+        <div class="thc"><div class="thc-photo" style="background:url('input/ket.jpeg') center/cover;"></div><div class="thc-info"><h4>Ketline Elisa Lola</h4><div class="thc-role grad-violet">Directrice Créative</div></div></div>
+        <div class="thc"><div class="thc-photo" style="background:url('input/aurel.png') center/cover;"></div><div class="thc-info"><h4>Aurélien</h4><div class="thc-role" style="background:linear-gradient(90deg,#3A80FF,#60B0FF);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Expert Web & Tunnels</div></div></div>
+        <div class="thc"><div class="thc-photo" style="background:url('input/satiana.jpeg') center/cover;"></div><div class="thc-info"><h4>Satiana</h4><div class="thc-role grad-gold">Content & Vidéo</div></div></div>
       </div>
     </div>
 
@@ -1513,6 +1666,8 @@ document.querySelectorAll('[data-target]').forEach(el => {
   let rafPending = false;
   let touchStartY = 0;
 
+  const isMobile = () => window.innerWidth <= 640;
+
   function applyProgress() {
     if (rafPending) return;
     rafPending = true;
@@ -1520,8 +1675,13 @@ document.querySelectorAll('[data-target]').forEach(el => {
       rafPending = false;
       const p = progress;
 
-      card.style.width        = (65 + 35 * p) + 'vw';
-      card.style.height       = (60 + 40 * p) + 'vh';
+      if (isMobile()) {
+        card.style.width        = (96 + 4 * p) + 'vw';
+        card.style.height       = (82 + 18 * p) + 'vh';
+      } else {
+        card.style.width        = (65 + 35 * p) + 'vw';
+        card.style.height       = (60 + 40 * p) + 'vh';
+      }
       card.style.borderRadius = (24 - 24 * p) + 'px';
 
       const shift = -52 * Math.max(0, Math.min(1, (p - 0.55) / 0.45));
@@ -1576,7 +1736,7 @@ document.querySelectorAll('[data-target]').forEach(el => {
   }
 
   /* clic sur un lien d'ancre → débloque la hero pour laisser passer le smooth scroll */
-  document.querySelectorAll('a[href^="#"]').forEach(a => {
+  document.querySelectorAll('a[href^="#"], [data-nm]').forEach(a => {
     a.addEventListener('click', () => {
       const href = a.getAttribute('href');
       if (href && href !== '#hero' && href !== '#') {
@@ -1590,6 +1750,35 @@ document.querySelectorAll('[data-target]').forEach(el => {
   window.addEventListener('wheel',      onWheel,      { passive: false });
   window.addEventListener('touchstart', onTouchStart, { passive: true  });
   window.addEventListener('touchmove',  onTouchMove,  { passive: false });
+})();
+
+/* hamburger toggle */
+(function () {
+  const btn    = document.getElementById('navHamburger');
+  const menu   = document.getElementById('navMobile');
+  const nb     = document.getElementById('navbar');
+  if (!btn || !menu) return;
+
+  function openMenu() {
+    btn.classList.add('open');
+    btn.setAttribute('aria-expanded', 'true');
+    menu.classList.add('open');
+    menu.removeAttribute('aria-hidden');
+    /* don't lock body scroll here — the hero scroll-jacking manages overflow itself */
+  }
+  function closeMenu() {
+    btn.classList.remove('open');
+    btn.setAttribute('aria-expanded', 'false');
+    menu.classList.remove('open');
+    menu.setAttribute('aria-hidden', 'true');
+  }
+  btn.addEventListener('click', () => {
+    btn.classList.contains('open') ? closeMenu() : openMenu();
+  });
+  menu.querySelectorAll('[data-nm]').forEach(a => {
+    a.addEventListener('click', closeMenu);
+  });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeMenu(); });
 })();
 
 /* form submit */
