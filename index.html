@@ -645,7 +645,7 @@ h3 { font-size: 1.25rem; font-weight: 600; }
 .thc-info h4 { font-size: 1.05rem; font-weight: 600; margin-bottom: 4px; }
 .thc-role { font-size: 0.8rem; font-weight: 500; }
 @media (max-width: 768px) {
-  .thc { width: 42vw; }
+  .thc { width: 44vw; }
   .thc-photo { font-size: 3rem; }
 }
 
@@ -862,17 +862,17 @@ footer {
   .nav-cta { display: none; }
 
   /* hero */
-  .hero-expand-card { width: 96vw; height: 82vh; }
+  .hero-expand-card { width: 96vw; height: 78svh; height: 78vh; }
   .hc-content { padding: 28px 22px 60px; }
   .hero-title { font-size: clamp(1.85rem, 7.5vw, 2.8rem); margin-bottom: 18px; }
   .hero-sub { font-size: 0.95rem; margin-bottom: 28px; }
   .hero-btns { flex-direction: column; align-items: stretch; gap: 10px; width: 100%; }
   .hero-btns .btn { justify-content: center; padding: 14px 24px; font-size: 0.9rem; }
-  .hc-metrics { flex-wrap: nowrap; gap: 8px; bottom: 10px; padding: 0 10px; }
-  .hc-metrics .metric-card { width: auto; flex: 1; padding: 12px 8px; }
-  .hc-metrics .metric-card .num { font-size: 1.5rem; }
-  .hc-metrics .metric-card .lbl { font-size: 9px; }
-  .hc-scroll-hint { bottom: 18px; }
+  .hc-metrics { flex-wrap: nowrap; gap: 6px; bottom: 12px; padding: 0 8px; }
+  .hc-metrics .metric-card { width: 0; flex: 1; padding: 10px 6px; min-width: 0; }
+  .hc-metrics .metric-card .num { font-size: 1.35rem; white-space: nowrap; }
+  .hc-metrics .metric-card .lbl { font-size: 8.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .hc-scroll-hint { bottom: 20px; }
 
   /* pill */
   .pill { font-size: 10px; padding: 5px 14px; }
@@ -883,14 +883,17 @@ footer {
 
   /* features */
   .feat-gcard:hover { transform: none; box-shadow: none; }
+  .feat-gcard:hover .fgc-avatar { transform: none; }
   .fgc-visual { height: 200px !important; }
   .fgc-body { padding: 16px 18px 22px; }
 
-  /* services */
+  /* services — désactive les effets hover qui restent bloqués au tap */
   .srv-card { padding: 28px 22px; }
   .srv-row .srv-card:hover { transform: none; }
   .srv-wide:hover { transform: none; }
+  .srv-card:hover { box-shadow: none; }
   .srv-card h3 { font-size: 1.25rem; }
+  .srv-bounce-bg { display: none; }
 
   /* values */
   .values-wrap { gap: 32px; }
@@ -898,7 +901,7 @@ footer {
 
   /* team */
   .team-title-anim { font-size: clamp(1.3rem, 5.5vw, 1.9rem); max-width: 94vw; }
-  .thc { width: 50vw; }
+  .thc { width: 72vw; }
 
   /* stats */
   .stats-grid { grid-template-columns: 1fr; }
@@ -933,7 +936,13 @@ footer {
   .hc-content { padding: 22px 16px 56px; }
   .hc-metrics { gap: 6px; }
   .hc-metrics .metric-card .num { font-size: 1.3rem; }
-  .thc { width: 60vw; }
+  .thc { width: 80vw; }
+}
+
+/* ── desktop: masque le menu mobile ── */
+@media (min-width: 961px) {
+  .nav-mobile { display: none !important; }
+  .nav-hamburger { display: none !important; }
 }
 
 /* ══════════════════════════════════════════════════════════════
@@ -1676,8 +1685,11 @@ document.querySelectorAll('[data-target]').forEach(el => {
       const p = progress;
 
       if (isMobile()) {
-        card.style.width        = (96 + 4 * p) + 'vw';
-        card.style.height       = (82 + 18 * p) + 'vh';
+        /* utilise window.innerHeight pour éviter le bug iOS Safari où
+           100vh inclut la barre d'adresse cachée */
+        const vh = window.innerHeight;
+        card.style.width  = (96 + 4 * p) + 'vw';
+        card.style.height = Math.round((0.78 + 0.22 * p) * vh) + 'px';
       } else {
         card.style.width        = (65 + 35 * p) + 'vw';
         card.style.height       = (60 + 40 * p) + 'vh';
@@ -1764,13 +1776,15 @@ document.querySelectorAll('[data-target]').forEach(el => {
     btn.setAttribute('aria-expanded', 'true');
     menu.classList.add('open');
     menu.removeAttribute('aria-hidden');
-    /* don't lock body scroll here — the hero scroll-jacking manages overflow itself */
   }
   function closeMenu() {
     btn.classList.remove('open');
     btn.setAttribute('aria-expanded', 'false');
     menu.classList.remove('open');
     menu.setAttribute('aria-hidden', 'true');
+    /* libère tout scroll-lock (team, etc.) pour que la navigation fonctionne */
+    document.documentElement.style.overflow = '';
+    document.body.style.overflow = '';
   }
   btn.addEventListener('click', () => {
     btn.classList.contains('open') ? closeMenu() : openMenu();
