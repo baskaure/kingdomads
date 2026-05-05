@@ -7,7 +7,7 @@
 <meta name="description" content="Kingdom Ads, agence de marketing digital spécialisée en publicité Meta Ads, Google Ads et TikTok Ads. Nous aidons les entreprises à booster leur visibilité et leur ROI grâce à des campagnes publicitaires sur mesure.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Barlow+Condensed:wght@400;600;700;800;900&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -1253,7 +1253,7 @@ body[data-atmosphere="maximal"] .btn-gold { box-shadow: 0 6px 32px rgba(115,92,0
     <div class="orb hero-orb3"></div>
 
     <div class="hero-expand-card" id="heroCard">
-      <video class="hc-video" autoplay loop muted playsinline>
+      <video class="hc-video" autoplay loop muted playsinline preload="none" id="heroVideo">
         <source src="input/hero.MOV">
       </video>
       <div class="hc-overlay"></div>
@@ -1729,6 +1729,12 @@ body[data-atmosphere="maximal"] .btn-gold { box-shadow: 0 6px 32px rgba(115,92,0
 </footer>
 
 <script>
+/* vidéo hero — pas de chargement sur mobile */
+if (window.innerWidth <= 640) {
+  const v = document.getElementById('heroVideo');
+  if (v) { v.querySelectorAll('source').forEach(s => s.src = ''); v.load(); }
+}
+
 /* nav scroll */
 const nb = document.getElementById('navbar');
 function checkNavScroll() { nb.classList.toggle('scrolled', scrollY > 80); }
@@ -2292,7 +2298,15 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
   const launcher = document.getElementById('tweaksLauncher');
   const closeBtn = document.getElementById('tpClose');
 
-  function openPanel() { panel.classList.add('open'); launcher.classList.remove('show'); }
+  let _tweakFonts = false;
+  function loadTweakFonts() {
+    if (_tweakFonts) return; _tweakFonts = true;
+    const l = document.createElement('link');
+    l.rel = 'stylesheet';
+    l.href = 'https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Barlow+Condensed:wght@400;600;700;800;900&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap';
+    document.head.appendChild(l);
+  }
+  function openPanel() { loadTweakFonts(); panel.classList.add('open'); launcher.classList.remove('show'); }
   function closePanel() {
     panel.classList.remove('open');
     launcher.classList.add('show');
