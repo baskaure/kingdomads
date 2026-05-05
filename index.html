@@ -4,10 +4,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Kingdom Ads — Agence de Marketing Digital</title>
+<meta name="description" content="Kingdom Ads, agence de marketing digital spécialisée en publicité Meta Ads, Google Ads et TikTok Ads. Nous aidons les entreprises à booster leur visibilité et leur ROI grâce à des campagnes publicitaires sur mesure.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Barlow+Condensed:wght@400;600;700;800;900&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
-<script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -1597,7 +1598,7 @@ body[data-atmosphere="maximal"] .btn-gold { box-shadow: 0 6px 32px rgba(115,92,0
         <div class="pill">Instagram</div>
         <h2>Nos derniers <span class="grad-gold">posts</span></h2>
       </div>
-      <a href="https://www.instagram.com/kingdomads/" target="_blank" rel="noopener" class="btn btn-ghost" style="padding:12px 24px;font-size:0.83rem;">Voir notre profil →</a>
+      <a href="https://www.instagram.com/kingdomads/" target="_blank" rel="noopener noreferrer" class="btn btn-ghost" style="padding:12px 24px;font-size:0.83rem;">Voir notre profil →</a>
     </div>
     <div class="blog-grid insta-grid">
       <!-- ✏️ Post 1 — Remplace l'URL par le lien de ton post Instagram -->
@@ -2324,6 +2325,41 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
 })();
 </script>
 
-<script async src="https://www.instagram.com/embed.js"></script>
+<script>
+(function () {
+  const blog = document.getElementById('blog');
+  if (!blog) return;
+  let done = false;
+  const io = new IntersectionObserver(function (entries) {
+    if (entries[0].isIntersecting && !done) {
+      done = true;
+      io.disconnect();
+      const s = document.createElement('script');
+      s.src = 'https://www.instagram.com/embed.js';
+      s.async = true;
+      s.onload = function () { if (window.instgrm) window.instgrm.Embeds.process(); };
+      document.body.appendChild(s);
+    }
+  }, { rootMargin: '100px' });
+  io.observe(blog);
+})();
+
+(function () {
+  const features = document.getElementById('features');
+  if (!features) return;
+  let done = false;
+  const io = new IntersectionObserver(function (entries) {
+    if (entries[0].isIntersecting && !done) {
+      done = true;
+      io.disconnect();
+      const s = document.createElement('script');
+      s.type = 'module';
+      s.src = 'https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js';
+      document.head.appendChild(s);
+    }
+  }, { rootMargin: '200px' });
+  io.observe(features);
+})();
+</script>
 </body>
 </html>
