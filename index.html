@@ -1950,11 +1950,10 @@ const WEBHOOK_URL = 'https://hook.eu2.make.com/whtpiyy11mrnrgkfd0x65l7u82kr5off'
     try {
       /* mode no-cors : évite le preflight OPTIONS qui bloque Make.
          URLSearchParams est accepté sans preflight par tous les navigateurs. */
-      await fetch(WEBHOOK_URL, {
-        method: 'POST',
-        mode: 'no-cors',
-        body: new URLSearchParams(payload),
-      });
+      await Promise.all([
+        fetch(WEBHOOK_URL, { method: 'POST', mode: 'no-cors', body: new URLSearchParams(payload) }),
+        new Promise(r => setTimeout(r, 2000)),
+      ]);
       form.style.display = 'none';
       document.getElementById('formOk').style.display = 'block';
     } catch {
