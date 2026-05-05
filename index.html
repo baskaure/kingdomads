@@ -395,12 +395,19 @@ h3 { font-size: 1.25rem; font-weight: 600; }
   width: 200px; padding: 22px 20px;
   text-align: center;
 }
-.metric-card .top-line {
-  position: absolute; top: 0; left: 0; right: 0; height: 2px;
-  background: linear-gradient(90deg, transparent, var(--col), transparent);
-}
-.metric-card .num {
+.metric-card .top-line { display: none !important; }
+.metric-card .num,
+body .metric-card .num.grad-gold,
+body .metric-card .num.grad-violet,
+body .hero-metrics .metric-card .num,
+body .hc-metrics .metric-card .num {
   font-size: 2.2rem; font-weight: 700; line-height: 1; margin-bottom: 7px;
+  background: none !important;
+  -webkit-background-clip: initial !important;
+  background-clip: initial !important;
+  -webkit-text-fill-color: #fff !important;
+  color: #fff !important;
+  filter: none !important;
 }
 .metric-card .lbl {
   font-size: 10px; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase;
@@ -1346,7 +1353,7 @@ body[data-atmosphere="maximal"] .btn-gold { box-shadow: 0 6px 32px rgba(115,92,0
             camera-orbit="90deg 75deg auto"
             interaction-prompt="none"
             field-of-view="10deg"
-            exposure="1.4"
+            exposure="0.7"
             shadow-intensity="0"
             style="width:100%;height:100%;background:transparent;position:absolute;inset:0;z-index:2;"
           ></model-viewer>
@@ -1372,7 +1379,7 @@ body[data-atmosphere="maximal"] .btn-gold { box-shadow: 0 6px 32px rgba(115,92,0
             camera-orbit="90deg 75deg auto"
             interaction-prompt="none"
             field-of-view="10deg"
-            exposure="1.2"
+            exposure="0.7"
             shadow-intensity="0"
             style="width:100%;height:100%;background:transparent;position:absolute;inset:0;z-index:2;"
           ></model-viewer>
@@ -1398,7 +1405,7 @@ body[data-atmosphere="maximal"] .btn-gold { box-shadow: 0 6px 32px rgba(115,92,0
             camera-orbit="90deg 75deg auto"
             interaction-prompt="none"
             field-of-view="10deg"
-            exposure="1.2"
+            exposure="0.7"
             shadow-intensity="0"
             style="width:100%;height:100%;background:transparent;position:absolute;inset:0;z-index:2;"
           ></model-viewer>
