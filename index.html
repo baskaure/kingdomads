@@ -2031,6 +2031,8 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
   let curXp     = 0;
   let touchStartY = 0;
   let lastScrollY = window.scrollY;
+  let navigating  = false;
+  let navTimer    = 0;
 
   /* on évite le saut de layout quand la scrollbar disparaît */
   document.documentElement.style.scrollbarGutter = 'stable';
@@ -2115,6 +2117,7 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
   }
 
   function onWheel(e) {
+    if (navigating) return;
     if (shouldLock(e.deltaY)) engageLock();
     if (locked) {
       e.preventDefault();
@@ -2139,7 +2142,7 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
      (clavier, scrollbar, smooth-scroll JS), on engage le lock quand même.
      On détecte la direction via la variation de scrollY pour gérer les deux sens. */
   function onScroll() {
-    if (!locked) {
+    if (!locked && !navigating) {
       const sp = getSP();
       const dir = window.scrollY - lastScrollY;
       if (sp >= LOCK_AT_SP) {
@@ -2150,6 +2153,19 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
     lastScrollY = window.scrollY;
     schedule();
   }
+
+  /* libère le lock sur navigation par ancre (empêche le scroll-lock de couper le smooth scroll) */
+  document.querySelectorAll('a[href^="#"], [data-nm]').forEach(a => {
+    a.addEventListener('click', () => {
+      if (locked) releaseLock();
+      navigating = true;
+      clearTimeout(navTimer);
+      navTimer = setTimeout(() => { navigating = false; }, 1200);
+    });
+  });
+
+  /* filet de sécurité : libère si la fenêtre reprend le focus (ex: retour depuis un iframe) */
+  window.addEventListener('focus', () => { if (locked) releaseLock(); });
 
   window.addEventListener('scroll',     onScroll,     { passive: true  });
   window.addEventListener('resize',     onScroll,     { passive: true  });
