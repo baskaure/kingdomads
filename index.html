@@ -7,7 +7,6 @@
 <meta name="description" content="Kingdom Ads, agence de marketing digital spécialisée en publicité Meta Ads, Google Ads et TikTok Ads. Nous aidons les entreprises à booster leur visibilité et leur ROI grâce à des campagnes publicitaires sur mesure.">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" as="font" type="font/woff2" href="https://fonts.gstatic.com/s/spacegrotesk/v22/V8mDoQDjQSkFtoMM3T6r8E7mPbF4Cw.woff2" crossorigin>
-<noscript><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet"></noscript>
 
 <style>
 /* ── Space Grotesk inliné (latin) + fallback métrique pour éviter CLS swap ── */
@@ -1016,6 +1015,61 @@ footer {
 
   /* buttons */
   .btn-gold, .btn-ghost { padding: 13px 28px; font-size: 0.88rem; }
+}
+
+/* ── perf mobile : skip layout/paint des sections hors écran + coupe les effets coûteux ── */
+@media (max-width: 768px) {
+  /* le dot-grid full-screen est repeint à chaque scroll : on le retire sur mobile */
+  body::after { display: none; }
+
+  /* backdrop-filter est très coûteux sur GPU mobile : on le coupe et on opacifie le fond
+     pour garder un rendu lisible */
+  .glass,
+  .feat-gcard,
+  .pillar,
+  .srv-card,
+  .insta-card,
+  .cform,
+  #navbar,
+  .nav-mobile,
+  #tweaksPanel,
+  #tweaksLauncher,
+  .btn-ghost,
+  .metric-card {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+  .glass,
+  .feat-gcard,
+  .pillar,
+  .srv-card,
+  .insta-card,
+  .cform,
+  .nav-mobile,
+  #tweaksPanel,
+  #tweaksLauncher {
+    background: rgba(15, 12, 32, 0.78);
+  }
+  #navbar { background: rgba(6, 4, 18, 0.92); }
+  /* la metric-card hero garde sa transparence pour laisser voir la vidéo */
+  .metric-card { background: rgba(10, 7, 22, 0.55); }
+
+  /* will-change permanent = mémoire GPU bloquée pour rien : on enlève hors animation */
+  .hero-expand-card,
+  .hc-content,
+  .team-content,
+  .team-track { will-change: auto !important; }
+
+  /* skip rendering des sections hors écran — gros gain SI / TBT.
+     contain-intrinsic-size réserve la place verticale pour éviter les sauts. */
+  #features  { content-visibility: auto; contain-intrinsic-size: 0 1100px; }
+  #services  { content-visibility: auto; contain-intrinsic-size: 0 2400px; }
+  #values    { content-visibility: auto; contain-intrinsic-size: 0 1300px; }
+  #team      { content-visibility: auto; contain-intrinsic-size: 0 900px; }
+  #blog      { content-visibility: auto; contain-intrinsic-size: 0 1200px; }
+  #stats     { content-visibility: auto; contain-intrinsic-size: 0 700px; }
+  #contact   { content-visibility: auto; contain-intrinsic-size: 0 1500px; }
+  footer     { content-visibility: auto; contain-intrinsic-size: 0 300px; }
 }
 
 /* ── very small screens ── */
