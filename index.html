@@ -700,6 +700,11 @@ h3 { font-size: 1.25rem; font-weight: 600; }
 }
 .blog-read:hover { gap: 10px; }
 
+/* ══ INSTAGRAM EMBEDS ══ */
+.insta-grid { align-items: start; }
+.insta-card { overflow: hidden; border-radius: 16px; }
+.insta-card .instagram-media { max-width: 100% !important; min-width: 0 !important; width: 100% !important; margin: 0 !important; box-shadow: none !important; }
+
 /* ══════════════════════════════════
    CONTACT
 ══════════════════════════════════ */
@@ -1565,49 +1570,40 @@ body[data-atmosphere="maximal"] .btn-gold { box-shadow: 0 6px 32px rgba(115,92,0
   </div>
 </section>
 
-<!-- ══ BLOG ══ -->
+<!-- ══ BLOG / INSTAGRAM ══ -->
 <section id="blog">
   <div class="container">
     <div class="sec-header split fu">
       <div>
-        <div class="pill">Actualités</div>
-        <h2>Dernières <span class="grad-gold">nouvelles</span></h2>
+        <div class="pill">Instagram</div>
+        <h2>Nos derniers <span class="grad-gold">posts</span></h2>
       </div>
-      <a href="#" class="btn btn-ghost" style="padding:12px 24px;font-size:0.83rem;">Voir tous les articles →</a>
+      <a href="https://www.instagram.com/kingdomads/" target="_blank" rel="noopener" class="btn btn-ghost" style="padding:12px 24px;font-size:0.83rem;">Voir notre profil →</a>
     </div>
-    <div class="blog-grid">
-      <div class="glass blog-card fu d1">
-        <div class="blog-thumb">
-          <div class="blog-cat" style="background:linear-gradient(135deg,rgba(115,92,0,0.9),rgba(184,146,30,0.9));">Publicité</div>
-        </div>
-        <div class="blog-body">
-          <div class="blog-date">14 Avril 2026</div>
-          <h3>Les 5 stratégies Meta Ads qui explosent les résultats en 2026</h3>
-          <p>Découvrez comment nos clients obtiennent des ROAS de 8x grâce à ces tactiques d'optimisation avancées.</p>
-          <a href="#" class="blog-read">Lire l'article →</a>
-        </div>
+    <div class="blog-grid insta-grid">
+      <!-- ✏️ Post 1 — Remplace l'URL par le lien de ton post Instagram -->
+      <div class="insta-card fu d1">
+        <blockquote class="instagram-media" data-instgrm-captioned
+          data-instgrm-permalink="https://www.instagram.com/reel/DWHL4s7DDIn/"
+          data-instgrm-version="14"
+          style="max-width:100%;min-width:0;width:100%;margin:0;">
+        </blockquote>
       </div>
-      <div class="glass blog-card fu d2">
-        <div class="blog-thumb">
-          <div class="blog-cat" style="background:linear-gradient(135deg,rgba(112,64,204,0.9),rgba(58,128,255,0.9));">Intelligence Artificielle</div>
-        </div>
-        <div class="blog-body">
-          <div class="blog-date">7 Avril 2026</div>
-          <h3>Comment l'IA transforme la création de contenu publicitaire</h3>
-          <p>L'intelligence artificielle révolutionne la façon dont nous créons et testons les visuels pour vos campagnes.</p>
-          <a href="#" class="blog-read">Lire l'article →</a>
-        </div>
+      <!-- ✏️ Post 2 — Remplace l'URL par le lien de ton post Instagram -->
+      <div class="insta-card fu d2">
+        <blockquote class="instagram-media" data-instgrm-captioned
+          data-instgrm-permalink="https://www.instagram.com/p/DO-gbzej-LV/"
+          data-instgrm-version="14"
+          style="max-width:100%;min-width:0;width:100%;margin:0;">
+        </blockquote>
       </div>
-      <div class="glass blog-card fu d3">
-        <div class="blog-thumb">
-          <div class="blog-cat" style="background:linear-gradient(135deg,rgba(58,128,255,0.9),rgba(96,176,255,0.9));">Tendances</div>
-        </div>
-        <div class="blog-body">
-          <div class="blog-date">28 Mars 2026</div>
-          <h3>Les tendances marketing digital à ne pas manquer en 2026</h3>
-          <p>Short-form video, UGC et social commerce : les leviers de croissance à exploiter maintenant.</p>
-          <a href="#" class="blog-read">Lire l'article →</a>
-        </div>
+      <!-- ✏️ Post 3 — Remplace l'URL par le lien de ton post Instagram -->
+      <div class="insta-card fu d3">
+        <blockquote class="instagram-media" data-instgrm-captioned
+          data-instgrm-permalink="https://www.instagram.com/reel/DQueJZ1DJCo/"
+          data-instgrm-version="14"
+          style="max-width:100%;min-width:0;width:100%;margin:0;">
+        </blockquote>
       </div>
     </div>
   </div>
@@ -2294,5 +2290,6 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
 })();
 </script>
 
+<script async src="https://www.instagram.com/embed.js"></script>
 </body>
 </html>
