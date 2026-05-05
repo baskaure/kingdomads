@@ -594,7 +594,7 @@ body .hc-metrics .metric-card .num {
   display: flex; align-items: center; justify-content: center;
   font-size: 1.2rem; flex-shrink: 0;
 }
-.pillar h4 { font-size: 0.97rem; font-weight: 700; margin-bottom: 5px; }
+.pillar h3 { font-size: 0.97rem; font-weight: 700; margin-bottom: 5px; }
 .pillar p { color: var(--muted); font-size: 0.85rem; line-height: 1.6; font-weight: 300; }
 
 /* ══════════════════════════════════
@@ -650,7 +650,7 @@ body .hc-metrics .metric-card .num {
   color: var(--gold-lt);
 }
 .thc-info { padding: 18px 22px 22px; }
-.thc-info h4 { font-size: 1.05rem; font-weight: 600; margin-bottom: 4px; }
+.thc-info .thc-name { font-size: 1.05rem; font-weight: 600; margin-bottom: 4px; }
 .thc-role { font-size: 0.8rem; font-weight: 500; }
 @media (max-width: 768px) {
   .thc { width: 44vw; }
@@ -1253,8 +1253,10 @@ body[data-atmosphere="maximal"] .btn-gold { box-shadow: 0 6px 32px rgba(115,92,0
     <div class="orb hero-orb3"></div>
 
     <div class="hero-expand-card" id="heroCard">
-      <video class="hc-video" autoplay loop muted playsinline preload="none" id="heroVideo">
-        <source src="input/hero.MOV">
+      <video class="hc-video" autoplay loop muted playsinline preload="none" id="heroVideo"
+        onerror="this.style.display='none'">
+        <source src="input/hero.mp4" type="video/mp4">
+        <source src="input/hero.MOV" type="video/quicktime">
       </video>
       <div class="hc-overlay"></div>
 
@@ -1501,21 +1503,21 @@ body[data-atmosphere="maximal"] .btn-gold { box-shadow: 0 6px 32px rgba(115,92,0
         <div class="glass pillar">
           <div class="pillar-ico" style="background:rgba(201,168,76,0.12);color:var(--gold-lt);"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg></div>
           <div>
-            <h4>Passionné</h4>
+            <h3>Passionné</h3>
             <p>Nous vivons et respirons le marketing digital. Chaque projet est traité avec une énergie et un engagement total.</p>
           </div>
         </div>
         <div class="glass pillar">
           <div class="pillar-ico" style="background:rgba(112,64,204,0.12);color:#9060DD;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12l4 6-10 13L2 9z"/><path d="M11 3L8 9l4 13 4-13-3-6"/><path d="M2 9h20"/></svg></div>
           <div>
-            <h4>Dévoué</h4>
+            <h3>Dévoué</h3>
             <p>Vos objectifs deviennent les nôtres. Nous ne nous arrêtons pas tant que les résultats ne sont pas au rendez-vous.</p>
           </div>
         </div>
         <div class="glass pillar">
           <div class="pillar-ico" style="background:rgba(58,128,255,0.12);color:#3A80FF;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m2 4 3 12h14l3-12-6 5-4-5-4 5-6-5zm3 16h14"/></svg></div>
           <div>
-            <h4>Professionnel</h4>
+            <h3>Professionnel</h3>
             <p>Processus rigoureux, communication claire et livrables de qualité premium pour chaque client, sans exception.</p>
           </div>
         </div>
@@ -1531,16 +1533,16 @@ body[data-atmosphere="maximal"] .btn-gold { box-shadow: 0 6px 32px rgba(115,92,0
     <!-- top row : slides from left to right -->
     <div class="team-row">
       <div class="team-track" id="teamTrackTop">
-        <div class="thc"><div class="thc-photo" style="background:url('input/satiana.jpeg') center/cover;"></div><div class="thc-info"><h4>Satiana</h4><div class="thc-role grad-gold">Content & Vidéo</div></div></div>
-        <div class="thc"><div class="thc-photo" style="background:url('input/aurel.png') center/cover;"></div><div class="thc-info"><h4>Aurélien</h4><div class="thc-role" style="background:linear-gradient(90deg,#3A80FF,#60B0FF);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Développeur</div></div></div>
-        <div class="thc"><div class="thc-photo" style="background:url('input/ket.jpeg') center/cover;"></div><div class="thc-info"><h4>Ketline</h4><div class="thc-role grad-violet">Vidéaste</div></div></div>
-        <div class="thc"><div class="thc-photo" style="background:url('input/will.jpeg') center 25%/cover;"></div><div class="thc-info"><h4>William Adamsha</h4><div class="thc-role grad-gold">Co-fondateur & CEO</div></div></div>
-        <div class="thc"><div class="thc-photo" style="background:url('input/Alex.jpeg') center 25%/cover;"></div><div class="thc-info"><h4>Alexandre Adamsha</h4><div class="thc-role grad-gold">Co-fondateur & CEO</div></div></div>
-        <div class="thc"><div class="thc-photo" style="background:url('input/satiana.jpeg') center/cover;"></div><div class="thc-info"><h4>Satiana</h4><div class="thc-role grad-gold">Content & Vidéo</div></div></div>
-        <div class="thc"><div class="thc-photo" style="background:url('input/aurel.png') center/cover;"></div><div class="thc-info"><h4>Aurélien</h4><div class="thc-role" style="background:linear-gradient(90deg,#3A80FF,#60B0FF);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Développeur</div></div></div>
-        <div class="thc"><div class="thc-photo" style="background:url('input/ket.jpeg') center/cover;"></div><div class="thc-info"><h4>Ketline</h4><div class="thc-role grad-violet">Vidéaste</div></div></div>
-        <div class="thc"><div class="thc-photo" style="background:url('input/will.jpeg') center 5%/cover;"></div><div class="thc-info"><h4>William Adamsha</h4><div class="thc-role grad-gold">Co-fondateur & CEO</div></div></div>
-        <div class="thc"><div class="thc-photo" style="background:url('input/Alex.jpeg') center 25%/cover;"></div><div class="thc-info"><h4>Alexandre Adamsha</h4><div class="thc-role grad-gold">Co-fondateur & CEO</div></div></div>
+        <div class="thc"><div class="thc-photo" style="background:url('input/satiana.jpeg') center/cover;"></div><div class="thc-info"><p class="thc-name">Satiana</p><div class="thc-role grad-gold">Content & Vidéo</div></div></div>
+        <div class="thc"><div class="thc-photo" style="background:url('input/aurel.png') center/cover;"></div><div class="thc-info"><p class="thc-name">Aurélien</p><div class="thc-role" style="background:linear-gradient(90deg,#3A80FF,#60B0FF);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Développeur</div></div></div>
+        <div class="thc"><div class="thc-photo" style="background:url('input/ket.jpeg') center/cover;"></div><div class="thc-info"><p class="thc-name">Ketline</p><div class="thc-role grad-violet">Vidéaste</div></div></div>
+        <div class="thc"><div class="thc-photo" style="background:url('input/will.jpeg') center 25%/cover;"></div><div class="thc-info"><p class="thc-name">William Adamsha</p><div class="thc-role grad-gold">Co-fondateur & CEO</div></div></div>
+        <div class="thc"><div class="thc-photo" style="background:url('input/Alex.jpeg') center 25%/cover;"></div><div class="thc-info"><p class="thc-name">Alexandre Adamsha</p><div class="thc-role grad-gold">Co-fondateur & CEO</div></div></div>
+        <div class="thc"><div class="thc-photo" style="background:url('input/satiana.jpeg') center/cover;"></div><div class="thc-info"><p class="thc-name">Satiana</p><div class="thc-role grad-gold">Content & Vidéo</div></div></div>
+        <div class="thc"><div class="thc-photo" style="background:url('input/aurel.png') center/cover;"></div><div class="thc-info"><p class="thc-name">Aurélien</p><div class="thc-role" style="background:linear-gradient(90deg,#3A80FF,#60B0FF);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Développeur</div></div></div>
+        <div class="thc"><div class="thc-photo" style="background:url('input/ket.jpeg') center/cover;"></div><div class="thc-info"><p class="thc-name">Ketline</p><div class="thc-role grad-violet">Vidéaste</div></div></div>
+        <div class="thc"><div class="thc-photo" style="background:url('input/will.jpeg') center 5%/cover;"></div><div class="thc-info"><p class="thc-name">William Adamsha</p><div class="thc-role grad-gold">Co-fondateur & CEO</div></div></div>
+        <div class="thc"><div class="thc-photo" style="background:url('input/Alex.jpeg') center 25%/cover;"></div><div class="thc-info"><p class="thc-name">Alexandre Adamsha</p><div class="thc-role grad-gold">Co-fondateur & CEO</div></div></div>
       </div>
     </div>
 
@@ -1552,16 +1554,16 @@ body[data-atmosphere="maximal"] .btn-gold { box-shadow: 0 6px 32px rgba(115,92,0
     <!-- bottom row : slides from right to left -->
     <div class="team-row">
       <div class="team-track" id="teamTrackBot">
-        <div class="thc"><div class="thc-photo" style="background:url('input/Alex.jpeg') center 25%/cover;"></div><div class="thc-info"><h4>Alexandre Adamsha</h4><div class="thc-role grad-gold">Co-fondateur & CEO</div></div></div>
-        <div class="thc"><div class="thc-photo" style="background:url('input/will.jpeg') center 5%/cover;"></div><div class="thc-info"><h4>William Adamsha</h4><div class="thc-role grad-gold">Co-fondateur & CEO</div></div></div>
-        <div class="thc"><div class="thc-photo" style="background:url('input/ket.jpeg') center/cover;"></div><div class="thc-info"><h4>Ketline Elisa Lola</h4><div class="thc-role grad-violet">Directrice Créative</div></div></div>
-        <div class="thc"><div class="thc-photo" style="background:url('input/aurel.png') center/cover;"></div><div class="thc-info"><h4>Aurélien</h4><div class="thc-role" style="background:linear-gradient(90deg,#3A80FF,#60B0FF);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Expert Web & Tunnels</div></div></div>
-        <div class="thc"><div class="thc-photo" style="background:url('input/satiana.jpeg') center/cover;"></div><div class="thc-info"><h4>Satiana</h4><div class="thc-role grad-gold">Content & Vidéo</div></div></div>
-        <div class="thc"><div class="thc-photo" style="background:url('input/Alex.jpeg') center 25%/cover;"></div><div class="thc-info"><h4>Alexandre Adamsha</h4><div class="thc-role grad-gold">Co-fondateur & CEO</div></div></div>
-        <div class="thc"><div class="thc-photo" style="background:url('input/will.jpeg') center 5%/cover;"></div><div class="thc-info"><h4>William Adamsha</h4><div class="thc-role grad-gold">Co-fondateur & CEO</div></div></div>
-        <div class="thc"><div class="thc-photo" style="background:url('input/ket.jpeg') center/cover;"></div><div class="thc-info"><h4>Ketline Elisa Lola</h4><div class="thc-role grad-violet">Directrice Créative</div></div></div>
-        <div class="thc"><div class="thc-photo" style="background:url('input/aurel.png') center/cover;"></div><div class="thc-info"><h4>Aurélien</h4><div class="thc-role" style="background:linear-gradient(90deg,#3A80FF,#60B0FF);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Expert Web & Tunnels</div></div></div>
-        <div class="thc"><div class="thc-photo" style="background:url('input/satiana.jpeg') center/cover;"></div><div class="thc-info"><h4>Satiana</h4><div class="thc-role grad-gold">Content & Vidéo</div></div></div>
+        <div class="thc"><div class="thc-photo" style="background:url('input/Alex.jpeg') center 25%/cover;"></div><div class="thc-info"><p class="thc-name">Alexandre Adamsha</p><div class="thc-role grad-gold">Co-fondateur & CEO</div></div></div>
+        <div class="thc"><div class="thc-photo" style="background:url('input/will.jpeg') center 5%/cover;"></div><div class="thc-info"><p class="thc-name">William Adamsha</p><div class="thc-role grad-gold">Co-fondateur & CEO</div></div></div>
+        <div class="thc"><div class="thc-photo" style="background:url('input/ket.jpeg') center/cover;"></div><div class="thc-info"><p class="thc-name">Ketline Elisa Lola</p><div class="thc-role grad-violet">Directrice Créative</div></div></div>
+        <div class="thc"><div class="thc-photo" style="background:url('input/aurel.png') center/cover;"></div><div class="thc-info"><p class="thc-name">Aurélien</p><div class="thc-role" style="background:linear-gradient(90deg,#3A80FF,#60B0FF);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Expert Web & Tunnels</div></div></div>
+        <div class="thc"><div class="thc-photo" style="background:url('input/satiana.jpeg') center/cover;"></div><div class="thc-info"><p class="thc-name">Satiana</p><div class="thc-role grad-gold">Content & Vidéo</div></div></div>
+        <div class="thc"><div class="thc-photo" style="background:url('input/Alex.jpeg') center 25%/cover;"></div><div class="thc-info"><p class="thc-name">Alexandre Adamsha</p><div class="thc-role grad-gold">Co-fondateur & CEO</div></div></div>
+        <div class="thc"><div class="thc-photo" style="background:url('input/will.jpeg') center 5%/cover;"></div><div class="thc-info"><p class="thc-name">William Adamsha</p><div class="thc-role grad-gold">Co-fondateur & CEO</div></div></div>
+        <div class="thc"><div class="thc-photo" style="background:url('input/ket.jpeg') center/cover;"></div><div class="thc-info"><p class="thc-name">Ketline Elisa Lola</p><div class="thc-role grad-violet">Directrice Créative</div></div></div>
+        <div class="thc"><div class="thc-photo" style="background:url('input/aurel.png') center/cover;"></div><div class="thc-info"><p class="thc-name">Aurélien</p><div class="thc-role" style="background:linear-gradient(90deg,#3A80FF,#60B0FF);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Expert Web & Tunnels</div></div></div>
+        <div class="thc"><div class="thc-photo" style="background:url('input/satiana.jpeg') center/cover;"></div><div class="thc-info"><p class="thc-name">Satiana</p><div class="thc-role grad-gold">Content & Vidéo</div></div></div>
       </div>
     </div>
 
