@@ -710,7 +710,7 @@ body .hc-metrics .metric-card .num {
 
 /* ══ INSTAGRAM EMBEDS ══ */
 .insta-grid { align-items: start; }
-.insta-card { overflow: hidden; border-radius: 16px; }
+.insta-card { overflow: hidden; border-radius: 16px; min-height: 480px; }
 .insta-card .instagram-media { max-width: 100% !important; min-width: 0 !important; width: 100% !important; margin: 0 !important; box-shadow: none !important; }
 
 /* ══════════════════════════════════
@@ -2345,6 +2345,7 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
 })();
 
 (function () {
+  if (window.innerWidth <= 960) return; /* Three.js inutile sur mobile/tablette */
   const features = document.getElementById('features');
   if (!features) return;
   let done = false;
@@ -2354,7 +2355,7 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
       io.disconnect();
       const s = document.createElement('script');
       s.type = 'module';
-      s.src = 'https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js';
+      s.src = 'https://cdn.jsdelivr.net/npm/@google/model-viewer/dist/model-viewer.min.js';
       document.head.appendChild(s);
     }
   }, { rootMargin: '200px' });
