@@ -880,6 +880,7 @@ footer {
 
 /* ── responsive ── */
 @media (max-width: 960px) {
+  .container { padding: 0 32px; }
   .features-grid, .srv-row, .team-grid, .blog-grid, .contact-grid, .values-wrap { grid-template-columns: 1fr; }
   .stats-grid { grid-template-columns: repeat(3,1fr); }
   .stat-item { border-right: none; border-bottom: 1px solid var(--border); padding-bottom: 28px; }
@@ -895,7 +896,7 @@ footer {
 /* ── mobile ── */
 @media (max-width: 640px) {
   .container { padding: 0 20px; }
-  section { padding: 72px 0; }
+  section { padding: 64px 0; }
 
   /* nav */
   #navbar { width: calc(100% - 24px); padding: 0 16px; }
@@ -916,39 +917,46 @@ footer {
   .hc-metrics .metric-card .lbl { font-size: 8.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .hc-scroll-hint { bottom: 20px; }
 
-  /* hero titre — supprime le <br> forcé, laisse le texte wrapper naturellement */
+  /* hero titre — supprime le <br> forcé */
   .hero-title br { display: none; }
 
-  /* désactive les 3D (WebGL trop lourd → jank) — gradient de fond reste visible */
+  /* désactive les 3D */
   model-viewer { display: none !important; }
 
   /* pill */
-  .pill { font-size: 10px; padding: 5px 14px; }
+  .pill { font-size: 10px; padding: 5px 14px; margin-bottom: 18px; }
 
   /* section headers */
-  .sec-header { margin-bottom: 40px; }
+  .sec-header { margin-bottom: 32px; }
+  .sec-header.split { gap: 12px; align-items: stretch; }
+  .sec-header.split > a { justify-content: center; }
   h2 { font-size: clamp(1.7rem, 6.5vw, 2.4rem); }
 
   /* features */
   .feat-gcard:hover { transform: none; box-shadow: none; }
   .feat-gcard:hover .fgc-avatar { transform: none; }
-  .fgc-visual { height: 160px !important; }
+  .fgc-visual,
+  .fgc-visual:has(model-viewer) { height: 120px !important; padding-bottom: 0 !important; align-items: center !important; }
   .fgc-body { padding: 16px 18px 22px; }
 
-  /* services — désactive les effets hover qui restent bloqués au tap */
-  .srv-card { padding: 28px 22px; }
+  /* services */
+  .srv-card { padding: 26px 20px; gap: 14px; }
   .srv-row .srv-card:hover { transform: none; }
   .srv-wide:hover { transform: none; }
   .srv-card:hover { box-shadow: none; }
-  .srv-card h3 { font-size: 1.25rem; }
+  .srv-card h3 { font-size: 1.2rem; }
   .srv-bounce-bg { display: none; }
+  .srv-wide > div { min-width: 0; }
 
   /* values */
   .values-wrap { gap: 32px; }
   .values-left h2 { font-size: clamp(1.7rem, 7vw, 2.4rem); }
+  .pillar { padding: 16px 18px; gap: 14px; }
+  .pillar:hover { transform: none; }
+  .values-left .btn { width: 100%; justify-content: center; }
 
-  /* team — marquee CSS (scroll-jacking désactivé sur mobile) */
-  #team { padding: 80px 0; }
+  /* team */
+  #team { padding: 72px 0; }
   .team-spacer { display: none; }
   .team-content { min-height: auto; transform: none !important; gap: 22px; }
   .team-title-anim { transform: none !important; font-size: clamp(1.3rem, 5.5vw, 1.9rem); max-width: 94vw; }
@@ -957,17 +965,20 @@ footer {
   .thc { width: 72vw; }
 
   /* stats */
+  #stats { padding: 48px 0; }
   .stats-grid { grid-template-columns: 1fr; }
   .stat-item { border-right: none; border-bottom: 1px solid var(--border); padding: 28px 20px; }
   .stat-item:last-child { border-bottom: none; }
 
-  /* blog */
-  .blog-card:hover { transform: none; }
+  /* instagram / blog */
+  .insta-grid { overflow: hidden; }
+  .insta-card { border-radius: 12px; }
+  .insta-card .instagram-media { min-width: 0 !important; border-radius: 12px !important; }
 
   /* contact */
-  .contact-grid { gap: 40px; }
+  .contact-grid { gap: 32px; }
   .fg-row { grid-template-columns: 1fr; gap: 0; }
-  .cform { padding: 26px 18px 30px; }
+  .cform { padding: 24px 18px 28px; }
   .contact-left h2 { font-size: clamp(1.7rem, 7vw, 2.4rem); }
 
   /* footer */
@@ -987,9 +998,13 @@ footer {
   .container { padding: 0 16px; }
   .hero-title { font-size: 1.7rem; }
   .hc-content { padding: 22px 16px 56px; }
-  .hc-metrics { gap: 6px; }
-  .hc-metrics .metric-card .num { font-size: 1.3rem; }
+  .hc-metrics { gap: 4px; }
+  .hc-metrics .metric-card .num { font-size: 1.2rem; }
+  .hc-metrics .metric-card .lbl { font-size: 7.5px; }
   .thc { width: 80vw; }
+  .srv-card { padding: 22px 16px; }
+  .pillar { padding: 14px 16px; }
+  h2 { font-size: clamp(1.55rem, 6.5vw, 2rem); }
 }
 
 /* ── desktop: masque le menu mobile ── */
