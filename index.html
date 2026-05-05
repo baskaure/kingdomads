@@ -5,11 +5,29 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Kingdom Ads — Agence de Marketing Digital</title>
 <meta name="description" content="Kingdom Ads, agence de marketing digital spécialisée en publicité Meta Ads, Google Ads et TikTok Ads. Nous aidons les entreprises à booster leur visibilité et leur ROI grâce à des campagnes publicitaires sur mesure.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="preload" as="font" type="font/woff2" href="https://fonts.gstatic.com/s/spacegrotesk/v22/V8mDoQDjQSkFtoMM3T6r8E7mPbF4Cw.woff2" crossorigin>
+<noscript><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet"></noscript>
 
 <style>
+/* ── Space Grotesk inliné (latin) + fallback métrique pour éviter CLS swap ── */
+@font-face {
+  font-family: 'Space Grotesk';
+  font-style: normal;
+  font-weight: 300 700;
+  font-display: swap;
+  src: url('https://fonts.gstatic.com/s/spacegrotesk/v22/V8mDoQDjQSkFtoMM3T6r8E7mPbF4Cw.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'SG Fallback';
+  src: local('Arial');
+  size-adjust: 102.82%;
+  ascent-override: 96.62%;
+  descent-override: 26.74%;
+  line-gap-override: 0%;
+}
+
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
@@ -25,7 +43,7 @@
   --blue:      #3A80FF;
   --white:     #E8E6FF;
   --muted:     rgba(232,230,255,0.38);
-  --font:      'Space Grotesk', sans-serif;
+  --font:      'Space Grotesk', 'SG Fallback', sans-serif;
 }
 
 html { scroll-behavior: smooth; overflow-x: hidden; }
@@ -1255,10 +1273,7 @@ body[data-atmosphere="maximal"] .btn-gold { box-shadow: 0 6px 32px rgba(115,92,0
     <div class="orb hero-orb3"></div>
 
     <div class="hero-expand-card" id="heroCard">
-      <video class="hc-video" autoplay loop muted playsinline preload="none" id="heroVideo" onerror="this.style.display='none'">
-        <source src="input/hero.mp4" type="video/mp4">
-        <source src="input/hero.MOV" type="video/quicktime">
-      </video>
+      <video class="hc-video" autoplay loop muted playsinline preload="none" id="heroVideo" data-mp4="input/hero.mp4" data-mov="input/hero.MOV" onerror="this.style.display='none'"></video>
       <div class="hc-overlay"></div>
 
       <div class="hc-content" id="heroContent">
@@ -1352,6 +1367,7 @@ body[data-atmosphere="maximal"] .btn-gold { box-shadow: 0 6px 32px rgba(115,92,0
           </div>
           <model-viewer
             src="input/handshake.glb"
+            loading="lazy"
             camera-controls
             disable-zoom
             camera-orbit="90deg 75deg auto"
@@ -1378,6 +1394,7 @@ body[data-atmosphere="maximal"] .btn-gold { box-shadow: 0 6px 32px rgba(115,92,0
           </div>
           <model-viewer
             src="input/game_bar_target_arrow.glb"
+            loading="lazy"
             camera-controls
             disable-zoom
             camera-orbit="90deg 75deg auto"
@@ -1404,6 +1421,7 @@ body[data-atmosphere="maximal"] .btn-gold { box-shadow: 0 6px 32px rgba(115,92,0
           </div>
           <model-viewer
             src="input/headphone.glb"
+            loading="lazy"
             camera-controls
             disable-zoom
             camera-orbit="90deg 75deg auto"
@@ -1534,16 +1552,16 @@ body[data-atmosphere="maximal"] .btn-gold { box-shadow: 0 6px 32px rgba(115,92,0
     <!-- top row : slides from left to right -->
     <div class="team-row">
       <div class="team-track" id="teamTrackTop">
-        <div class="thc"><div class="thc-photo"><img src="input/satiana.jpeg" alt="Satiana" loading="lazy"></div><div class="thc-info"><p class="thc-name">Satiana</p><div class="thc-role grad-gold">Content & Vidéo</div></div></div>
-        <div class="thc"><div class="thc-photo"><img src="input/aurel.jpg" alt="Aurélien" loading="lazy"></div><div class="thc-info"><p class="thc-name">Aurélien</p><div class="thc-role" style="background:linear-gradient(90deg,#3A80FF,#60B0FF);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Développeur</div></div></div>
-        <div class="thc"><div class="thc-photo"><img src="input/ket.jpeg" alt="Ketline" loading="lazy"></div><div class="thc-info"><p class="thc-name">Ketline</p><div class="thc-role grad-violet">Vidéaste</div></div></div>
-        <div class="thc"><div class="thc-photo"><img src="input/will.jpeg" alt="William" loading="lazy" style="object-position:center 25%"></div><div class="thc-info"><p class="thc-name">William Adamsha</p><div class="thc-role grad-gold">Co-fondateur & CEO</div></div></div>
-        <div class="thc"><div class="thc-photo"><img src="input/Alex.jpeg" alt="Alexandre" loading="lazy" style="object-position:center 25%"></div><div class="thc-info"><p class="thc-name">Alexandre Adamsha</p><div class="thc-role grad-gold">Co-fondateur & CEO</div></div></div>
-        <div class="thc"><div class="thc-photo"><img src="input/satiana.jpeg" alt="Satiana" loading="lazy"></div><div class="thc-info"><p class="thc-name">Satiana</p><div class="thc-role grad-gold">Content & Vidéo</div></div></div>
-        <div class="thc"><div class="thc-photo"><img src="input/aurel.jpg" alt="Aurélien" loading="lazy"></div><div class="thc-info"><p class="thc-name">Aurélien</p><div class="thc-role" style="background:linear-gradient(90deg,#3A80FF,#60B0FF);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Développeur</div></div></div>
-        <div class="thc"><div class="thc-photo"><img src="input/ket.jpeg" alt="Ketline" loading="lazy"></div><div class="thc-info"><p class="thc-name">Ketline</p><div class="thc-role grad-violet">Vidéaste</div></div></div>
-        <div class="thc"><div class="thc-photo"><img src="input/will.jpeg" alt="William" loading="lazy" style="object-position:center 5%"></div><div class="thc-info"><p class="thc-name">William Adamsha</p><div class="thc-role grad-gold">Co-fondateur & CEO</div></div></div>
-        <div class="thc"><div class="thc-photo"><img src="input/Alex.jpeg" alt="Alexandre" loading="lazy" style="object-position:center 25%"></div><div class="thc-info"><p class="thc-name">Alexandre Adamsha</p><div class="thc-role grad-gold">Co-fondateur & CEO</div></div></div>
+        <div class="thc"><div class="thc-photo"><img src="input/optim/satiana-300.webp" srcset="input/optim/satiana-300.webp 1x, input/optim/satiana-600.webp 2x" alt="Satiana" width="300" height="300" loading="lazy" decoding="async"></div><div class="thc-info"><p class="thc-name">Satiana</p><div class="thc-role grad-gold">Content & Vidéo</div></div></div>
+        <div class="thc"><div class="thc-photo"><img src="input/optim/aurel-300.webp" srcset="input/optim/aurel-300.webp 1x, input/optim/aurel-600.webp 2x" alt="Aurélien" width="300" height="300" loading="lazy" decoding="async"></div><div class="thc-info"><p class="thc-name">Aurélien</p><div class="thc-role" style="background:linear-gradient(90deg,#3A80FF,#60B0FF);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Développeur</div></div></div>
+        <div class="thc"><div class="thc-photo"><img src="input/optim/ket-300.webp" srcset="input/optim/ket-300.webp 1x, input/optim/ket-600.webp 2x" alt="Ketline" width="300" height="300" loading="lazy" decoding="async"></div><div class="thc-info"><p class="thc-name">Ketline</p><div class="thc-role grad-violet">Vidéaste</div></div></div>
+        <div class="thc"><div class="thc-photo"><img src="input/optim/will-300.webp" srcset="input/optim/will-300.webp 1x, input/optim/will-600.webp 2x" alt="William" width="300" height="300" loading="lazy" decoding="async" style="object-position:center 25%"></div><div class="thc-info"><p class="thc-name">William Adamsha</p><div class="thc-role grad-gold">Co-fondateur & CEO</div></div></div>
+        <div class="thc"><div class="thc-photo"><img src="input/optim/Alex-300.webp" srcset="input/optim/Alex-300.webp 1x, input/optim/Alex-600.webp 2x" alt="Alexandre" width="300" height="300" loading="lazy" decoding="async" style="object-position:center 25%"></div><div class="thc-info"><p class="thc-name">Alexandre Adamsha</p><div class="thc-role grad-gold">Co-fondateur & CEO</div></div></div>
+        <div class="thc"><div class="thc-photo"><img src="input/optim/satiana-300.webp" srcset="input/optim/satiana-300.webp 1x, input/optim/satiana-600.webp 2x" alt="Satiana" width="300" height="300" loading="lazy" decoding="async"></div><div class="thc-info"><p class="thc-name">Satiana</p><div class="thc-role grad-gold">Content & Vidéo</div></div></div>
+        <div class="thc"><div class="thc-photo"><img src="input/optim/aurel-300.webp" srcset="input/optim/aurel-300.webp 1x, input/optim/aurel-600.webp 2x" alt="Aurélien" width="300" height="300" loading="lazy" decoding="async"></div><div class="thc-info"><p class="thc-name">Aurélien</p><div class="thc-role" style="background:linear-gradient(90deg,#3A80FF,#60B0FF);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Développeur</div></div></div>
+        <div class="thc"><div class="thc-photo"><img src="input/optim/ket-300.webp" srcset="input/optim/ket-300.webp 1x, input/optim/ket-600.webp 2x" alt="Ketline" width="300" height="300" loading="lazy" decoding="async"></div><div class="thc-info"><p class="thc-name">Ketline</p><div class="thc-role grad-violet">Vidéaste</div></div></div>
+        <div class="thc"><div class="thc-photo"><img src="input/optim/will-300.webp" srcset="input/optim/will-300.webp 1x, input/optim/will-600.webp 2x" alt="William" width="300" height="300" loading="lazy" decoding="async" style="object-position:center 5%"></div><div class="thc-info"><p class="thc-name">William Adamsha</p><div class="thc-role grad-gold">Co-fondateur & CEO</div></div></div>
+        <div class="thc"><div class="thc-photo"><img src="input/optim/Alex-300.webp" srcset="input/optim/Alex-300.webp 1x, input/optim/Alex-600.webp 2x" alt="Alexandre" width="300" height="300" loading="lazy" decoding="async" style="object-position:center 25%"></div><div class="thc-info"><p class="thc-name">Alexandre Adamsha</p><div class="thc-role grad-gold">Co-fondateur & CEO</div></div></div>
       </div>
     </div>
 
@@ -1555,16 +1573,16 @@ body[data-atmosphere="maximal"] .btn-gold { box-shadow: 0 6px 32px rgba(115,92,0
     <!-- bottom row : slides from right to left -->
     <div class="team-row">
       <div class="team-track" id="teamTrackBot">
-        <div class="thc"><div class="thc-photo"><img src="input/Alex.jpeg" alt="Alexandre" loading="lazy" style="object-position:center 25%"></div><div class="thc-info"><p class="thc-name">Alexandre Adamsha</p><div class="thc-role grad-gold">Co-fondateur & CEO</div></div></div>
-        <div class="thc"><div class="thc-photo"><img src="input/will.jpeg" alt="William" loading="lazy" style="object-position:center 5%"></div><div class="thc-info"><p class="thc-name">William Adamsha</p><div class="thc-role grad-gold">Co-fondateur & CEO</div></div></div>
-        <div class="thc"><div class="thc-photo"><img src="input/ket.jpeg" alt="Ketline" loading="lazy"></div><div class="thc-info"><p class="thc-name">Ketline Elisa Lola</p><div class="thc-role grad-violet">Directrice Créative</div></div></div>
-        <div class="thc"><div class="thc-photo"><img src="input/aurel.jpg" alt="Aurélien" loading="lazy"></div><div class="thc-info"><p class="thc-name">Aurélien</p><div class="thc-role" style="background:linear-gradient(90deg,#3A80FF,#60B0FF);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Expert Web & Tunnels</div></div></div>
-        <div class="thc"><div class="thc-photo"><img src="input/satiana.jpeg" alt="Satiana" loading="lazy"></div><div class="thc-info"><p class="thc-name">Satiana</p><div class="thc-role grad-gold">Content & Vidéo</div></div></div>
-        <div class="thc"><div class="thc-photo"><img src="input/Alex.jpeg" alt="Alexandre" loading="lazy" style="object-position:center 25%"></div><div class="thc-info"><p class="thc-name">Alexandre Adamsha</p><div class="thc-role grad-gold">Co-fondateur & CEO</div></div></div>
-        <div class="thc"><div class="thc-photo"><img src="input/will.jpeg" alt="William" loading="lazy" style="object-position:center 5%"></div><div class="thc-info"><p class="thc-name">William Adamsha</p><div class="thc-role grad-gold">Co-fondateur & CEO</div></div></div>
-        <div class="thc"><div class="thc-photo"><img src="input/ket.jpeg" alt="Ketline" loading="lazy"></div><div class="thc-info"><p class="thc-name">Ketline Elisa Lola</p><div class="thc-role grad-violet">Directrice Créative</div></div></div>
-        <div class="thc"><div class="thc-photo"><img src="input/aurel.jpg" alt="Aurélien" loading="lazy"></div><div class="thc-info"><p class="thc-name">Aurélien</p><div class="thc-role" style="background:linear-gradient(90deg,#3A80FF,#60B0FF);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Expert Web & Tunnels</div></div></div>
-        <div class="thc"><div class="thc-photo"><img src="input/satiana.jpeg" alt="Satiana" loading="lazy"></div><div class="thc-info"><p class="thc-name">Satiana</p><div class="thc-role grad-gold">Content & Vidéo</div></div></div>
+        <div class="thc"><div class="thc-photo"><img src="input/optim/Alex-300.webp" srcset="input/optim/Alex-300.webp 1x, input/optim/Alex-600.webp 2x" alt="Alexandre" width="300" height="300" loading="lazy" decoding="async" style="object-position:center 25%"></div><div class="thc-info"><p class="thc-name">Alexandre Adamsha</p><div class="thc-role grad-gold">Co-fondateur & CEO</div></div></div>
+        <div class="thc"><div class="thc-photo"><img src="input/optim/will-300.webp" srcset="input/optim/will-300.webp 1x, input/optim/will-600.webp 2x" alt="William" width="300" height="300" loading="lazy" decoding="async" style="object-position:center 5%"></div><div class="thc-info"><p class="thc-name">William Adamsha</p><div class="thc-role grad-gold">Co-fondateur & CEO</div></div></div>
+        <div class="thc"><div class="thc-photo"><img src="input/optim/ket-300.webp" srcset="input/optim/ket-300.webp 1x, input/optim/ket-600.webp 2x" alt="Ketline" width="300" height="300" loading="lazy" decoding="async"></div><div class="thc-info"><p class="thc-name">Ketline Elisa Lola</p><div class="thc-role grad-violet">Directrice Créative</div></div></div>
+        <div class="thc"><div class="thc-photo"><img src="input/optim/aurel-300.webp" srcset="input/optim/aurel-300.webp 1x, input/optim/aurel-600.webp 2x" alt="Aurélien" width="300" height="300" loading="lazy" decoding="async"></div><div class="thc-info"><p class="thc-name">Aurélien</p><div class="thc-role" style="background:linear-gradient(90deg,#3A80FF,#60B0FF);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Expert Web & Tunnels</div></div></div>
+        <div class="thc"><div class="thc-photo"><img src="input/optim/satiana-300.webp" srcset="input/optim/satiana-300.webp 1x, input/optim/satiana-600.webp 2x" alt="Satiana" width="300" height="300" loading="lazy" decoding="async"></div><div class="thc-info"><p class="thc-name">Satiana</p><div class="thc-role grad-gold">Content & Vidéo</div></div></div>
+        <div class="thc"><div class="thc-photo"><img src="input/optim/Alex-300.webp" srcset="input/optim/Alex-300.webp 1x, input/optim/Alex-600.webp 2x" alt="Alexandre" width="300" height="300" loading="lazy" decoding="async" style="object-position:center 25%"></div><div class="thc-info"><p class="thc-name">Alexandre Adamsha</p><div class="thc-role grad-gold">Co-fondateur & CEO</div></div></div>
+        <div class="thc"><div class="thc-photo"><img src="input/optim/will-300.webp" srcset="input/optim/will-300.webp 1x, input/optim/will-600.webp 2x" alt="William" width="300" height="300" loading="lazy" decoding="async" style="object-position:center 5%"></div><div class="thc-info"><p class="thc-name">William Adamsha</p><div class="thc-role grad-gold">Co-fondateur & CEO</div></div></div>
+        <div class="thc"><div class="thc-photo"><img src="input/optim/ket-300.webp" srcset="input/optim/ket-300.webp 1x, input/optim/ket-600.webp 2x" alt="Ketline" width="300" height="300" loading="lazy" decoding="async"></div><div class="thc-info"><p class="thc-name">Ketline Elisa Lola</p><div class="thc-role grad-violet">Directrice Créative</div></div></div>
+        <div class="thc"><div class="thc-photo"><img src="input/optim/aurel-300.webp" srcset="input/optim/aurel-300.webp 1x, input/optim/aurel-600.webp 2x" alt="Aurélien" width="300" height="300" loading="lazy" decoding="async"></div><div class="thc-info"><p class="thc-name">Aurélien</p><div class="thc-role" style="background:linear-gradient(90deg,#3A80FF,#60B0FF);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Expert Web & Tunnels</div></div></div>
+        <div class="thc"><div class="thc-photo"><img src="input/optim/satiana-300.webp" srcset="input/optim/satiana-300.webp 1x, input/optim/satiana-600.webp 2x" alt="Satiana" width="300" height="300" loading="lazy" decoding="async"></div><div class="thc-info"><p class="thc-name">Satiana</p><div class="thc-role grad-gold">Content & Vidéo</div></div></div>
       </div>
     </div>
 
@@ -1732,17 +1750,41 @@ body[data-atmosphere="maximal"] .btn-gold { box-shadow: 0 6px 32px rgba(115,92,0
 </footer>
 
 <script>
-/* vidéo hero — pas de chargement sur mobile */
-if (window.innerWidth <= 640) {
-  const v = document.getElementById('heroVideo');
-  if (v) { v.querySelectorAll('source').forEach(s => s.src = ''); v.load(); }
-}
+/* vidéo hero — chargement différé après l'event load (évite la concurrence avec FCP/LCP).
+   Sur mobile : aucun chargement. */
+(function () {
+  if (window.innerWidth <= 640) return;
+  function attach() {
+    const v = document.getElementById('heroVideo');
+    if (!v) return;
+    if (v.dataset.mp4) {
+      const s = document.createElement('source');
+      s.src = v.dataset.mp4; s.type = 'video/mp4';
+      v.appendChild(s);
+    }
+    if (v.dataset.mov) {
+      const s = document.createElement('source');
+      s.src = v.dataset.mov; s.type = 'video/quicktime';
+      v.appendChild(s);
+    }
+    v.load();
+  }
+  if (document.readyState === 'complete') attach();
+  else window.addEventListener('load', attach, { once: true });
+})();
 
-/* nav scroll */
-const nb = document.getElementById('navbar');
-function checkNavScroll() { nb.classList.toggle('scrolled', scrollY > 80); }
-window.addEventListener('scroll', checkNavScroll, { passive: true });
-checkNavScroll(); // check on first load (mirrors useScroll hook behaviour)
+/* nav scroll — sentinelle + IntersectionObserver (zéro lecture de scrollY, zéro reflow forcé) */
+(function () {
+  const nb = document.getElementById('navbar');
+  if (!nb) return;
+  const sentinel = document.createElement('div');
+  sentinel.setAttribute('aria-hidden', 'true');
+  sentinel.style.cssText = 'position:absolute;top:80px;left:0;width:1px;height:1px;pointer-events:none;';
+  document.body.prepend(sentinel);
+  new IntersectionObserver(function (entries) {
+    nb.classList.toggle('scrolled', !entries[0].isIntersecting);
+  }, { rootMargin: '0px', threshold: 0 }).observe(sentinel);
+})();
 
 /* fade-up observer */
 const io = new IntersectionObserver(entries => {
@@ -1821,7 +1863,8 @@ document.querySelectorAll('[data-target]').forEach(el => {
       }
     });
   }
-  applyProgress();
+  /* L'état initial (p=0) correspond exactement aux valeurs CSS de .hero-expand-card,
+     donc on n'écrit aucun inline style ici : évite une invalidation de layout au démarrage. */
 
   function setProgress(next) {
     progress = Math.max(0, Math.min(1, next));
@@ -2366,17 +2409,26 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
   const features = document.getElementById('features');
   if (!features) return;
   let done = false;
+  function load() {
+    if (done) return; done = true;
+    const s = document.createElement('script');
+    s.type = 'module';
+    s.src = 'https://cdn.jsdelivr.net/npm/@google/model-viewer/dist/model-viewer.min.js';
+    document.head.appendChild(s);
+  }
+  /* charge dès que la section approche réellement de l'écran (pas de marge prématurée
+     pour éviter le téléchargement durant les audits Lighthouse sans scroll) */
   const io = new IntersectionObserver(function (entries) {
-    if (entries[0].isIntersecting && !done) {
-      done = true;
-      io.disconnect();
-      const s = document.createElement('script');
-      s.type = 'module';
-      s.src = 'https://cdn.jsdelivr.net/npm/@google/model-viewer/dist/model-viewer.min.js';
-      document.head.appendChild(s);
-    }
-  }, { rootMargin: '200px' });
+    if (entries[0].isIntersecting) { io.disconnect(); load(); }
+  }, { rootMargin: '0px' });
   io.observe(features);
+  /* fallback : charge à la première interaction utilisateur (au plus tard) */
+  ['scroll','pointerdown','keydown'].forEach(ev =>
+    window.addEventListener(ev, function once() {
+      window.removeEventListener(ev, once);
+      load();
+    }, { passive: true, once: true })
+  );
 })();
 </script>
 </body>
