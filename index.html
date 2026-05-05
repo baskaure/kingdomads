@@ -920,9 +920,6 @@ footer {
   /* hero titre — supprime le <br> forcé */
   .hero-title br { display: none; }
 
-  /* désactive les 3D */
-  model-viewer { display: none !important; }
-
   /* pill */
   .pill { font-size: 10px; padding: 5px 14px; margin-bottom: 18px; }
 
@@ -935,8 +932,8 @@ footer {
   /* features */
   .feat-gcard:hover { transform: none; box-shadow: none; }
   .feat-gcard:hover .fgc-avatar { transform: none; }
-  .fgc-visual,
-  .fgc-visual:has(model-viewer) { height: 120px !important; padding-bottom: 0 !important; align-items: center !important; }
+  .fgc-visual { height: 120px !important; padding-bottom: 0 !important; align-items: center !important; }
+  .fgc-visual:has(model-viewer) { height: 200px !important; padding-bottom: 0 !important; align-items: stretch !important; }
   .fgc-body { padding: 16px 18px 22px; }
 
   /* services */
@@ -962,7 +959,7 @@ footer {
   .team-title-anim { transform: none !important; font-size: clamp(1.3rem, 5.5vw, 1.9rem); max-width: 94vw; }
   #teamTrackTop { animation: marqueeLeft 8s linear infinite; }
   #teamTrackBot { animation: marqueeLeft 10s linear infinite reverse; }
-  .thc { width: 72vw; }
+  .thc { width: 56vw; }
 
   /* stats */
   #stats { padding: 48px 0; }
@@ -1001,7 +998,7 @@ footer {
   .hc-metrics { gap: 4px; }
   .hc-metrics .metric-card .num { font-size: 1.2rem; }
   .hc-metrics .metric-card .lbl { font-size: 7.5px; }
-  .thc { width: 80vw; }
+  .thc { width: 66vw; }
   .srv-card { padding: 22px 16px; }
   .pillar { padding: 14px 16px; }
   h2 { font-size: clamp(1.55rem, 6.5vw, 2rem); }
