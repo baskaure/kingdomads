@@ -2272,14 +2272,7 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
       if (mRaf) return;
       mRaf = requestAnimationFrame(function () {
         mRaf = 0;
-        var x = clamp01((getSP() - 0.1) / 0.65);
-        paintM(x);
-        if (x >= 1) {
-          trackTop.style.willChange = 'auto';
-          trackBot.style.willChange = 'auto';
-          title.style.willChange    = 'auto';
-          window.removeEventListener('scroll', onScrollM);
-        }
+        paintM(clamp01((getSP() - 0.1) / 0.65));
       });
     }
 
