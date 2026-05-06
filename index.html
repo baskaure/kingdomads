@@ -2244,6 +2244,17 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
   const title    = document.getElementById('teamTitle');
   if (!section || !content || !trackTop || !trackBot || !title) return;
 
+  /* ── constantes et helpers partagés mobile + desktop ── */
+  const LOCK_AT_SP = 0.28;
+  const STEP_CAP   = 0.018;
+  const TOUCH_FACTOR = 0.0012;
+
+  function clamp01(x) { return Math.max(0, Math.min(1, x)); }
+  function getSP() {
+    const rect = section.getBoundingClientRect();
+    return clamp01((window.innerHeight - rect.top) / (rect.height + window.innerHeight));
+  }
+
   /* ── mobile : même animation que desktop, transform-only (GPU composité, zéro reflow) ── */
   if (window.innerWidth <= 640) {
     let tXp = 0, curXp = 0, mLocked = false, mRaf = 0, mTy = 0;
@@ -2305,11 +2316,8 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
     return;
   }
 
-  const LOCK_AT_SP    = 0.28;  /* descente : lock dès que la section est en vue */
   const LOCK_UP_AT_SP = 0.6;   /* remontée : lock seulement quand la section est bien rentrée */
   const WHEEL_FACTOR  = 0.0006; /* ≈ 17 crans pour tout voir (≈ 2/card) */
-  const TOUCH_FACTOR  = 0.0012;
-  const STEP_CAP      = 0.018;  /* fling max 1.8% par évènement         */
 
   let xProgress = 0;
   let locked    = false;
@@ -2324,14 +2332,6 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
 
   /* on évite le saut de layout quand la scrollbar disparaît */
   document.documentElement.style.scrollbarGutter = 'stable';
-
-  function clamp01(x) { return Math.max(0, Math.min(1, x)); }
-
-  function getSP() {
-    const rect = section.getBoundingClientRect();
-    const vh   = window.innerHeight;
-    return clamp01((vh - rect.top) / (rect.height + vh));
-  }
 
   function paint(sp, xp) {
     content.style.transform  = 'translateY(' + (sp * 384).toFixed(2) + 'px)';
