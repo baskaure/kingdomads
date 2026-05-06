@@ -1920,11 +1920,13 @@ document.querySelectorAll('[data-target]').forEach(el => {
   if (window.innerWidth <= 640) {
     const dw   = window.innerWidth;
     const btns = content.querySelector('.hero-btns');
+    const pill = content.querySelector('.pill');
     const initPad = Math.round(dw * 0.175);
 
     card.style.cssText         = 'width:100%;height:100%;border-radius:0;will-change:clip-path;clip-path:inset(20% 17.5% round 24px);';
     content.style.paddingLeft  = initPad + 'px';
     content.style.paddingRight = initPad + 'px';
+    if (pill) { pill.style.opacity = '0'; pill.style.pointerEvents = 'none'; }
     if (btns) { btns.style.opacity = '0'; btns.style.pointerEvents = 'none'; }
     if (hint) hint.style.display = 'none';
 
@@ -1946,6 +1948,13 @@ document.querySelectorAll('[data-target]').forEach(el => {
         const sp = Math.max(22, Math.round(dw * 0.175 * (1 - p)));
         content.style.paddingLeft  = sp + 'px';
         content.style.paddingRight = sp + 'px';
+
+        /* pill : apparaît à partir de p = 0.25 */
+        if (pill) {
+          const po = Math.max(0, Math.min(1, (p - 0.25) / 0.2));
+          pill.style.opacity       = po;
+          pill.style.pointerEvents = po > 0 ? '' : 'none';
+        }
 
         /* boutons : apparaissent à partir de p = 0.4 */
         if (btns) {
