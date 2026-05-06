@@ -983,9 +983,7 @@ footer {
   #team { padding: 72px 0; }
   .team-spacer { display: none; }
   .team-content { min-height: auto; transform: none !important; gap: 22px; }
-  .team-title-anim { transform: none !important; font-size: clamp(1.3rem, 5.5vw, 1.9rem); max-width: 94vw; }
-  #teamTrackTop { animation: marqueeLeft 8s linear infinite; }
-  #teamTrackBot { animation: marqueeLeft 10s linear infinite reverse; }
+  .team-title-anim { font-size: clamp(1.3rem, 5.5vw, 1.9rem); max-width: 94vw; }
   .thc { width: 56vw; }
 
   /* stats */
@@ -1092,15 +1090,6 @@ footer {
   .nav-hamburger { display: none !important; }
 }
 
-/* marquee team mobile */
-@keyframes marqueeLeft {
-  from { transform: translateX(0); }
-  to   { transform: translateX(-50%); }
-}
-@media (max-width: 640px) {
-  /* pause le marquee quand on touche la section */
-  #team:active .team-track { animation-play-state: paused; }
-}
 
 /* ══════════════════════════════════════════════════════════════
    TWEAKS — three expressive controls
@@ -2255,8 +2244,66 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
   const title    = document.getElementById('teamTitle');
   if (!section || !content || !trackTop || !trackBot || !title) return;
 
-  /* ── mobile : marquee CSS, le scroll-jacking est trop lourd + conflits touch ── */
-  if (window.innerWidth <= 640) return;
+  /* ── mobile : même animation que desktop, transform-only (GPU composité, zéro reflow) ── */
+  if (window.innerWidth <= 640) {
+    let tXp = 0, curXp = 0, mLocked = false, mRaf = 0, mTy = 0;
+
+    trackTop.style.willChange = 'transform';
+    trackBot.style.willChange = 'transform';
+    title.style.willChange    = 'transform';
+
+    function paintM(x) {
+      trackTop.style.transform = 'translateX(' + (-200 + 200 * x).toFixed(2) + '%)';
+      trackBot.style.transform = 'translateX(' + (100 - 150 * x).toFixed(2) + '%)';
+      title.style.transform    = 'scale(' + (1.2 - 0.2 * clamp01(x * 2)).toFixed(3) + ')';
+    }
+    paintM(0);
+
+    function loopM() {
+      mRaf = 0;
+      const d = tXp - curXp;
+      if (Math.abs(d) > 0.001) {
+        curXp += d * 0.3;
+        paintM(curXp);
+        mRaf = requestAnimationFrame(loopM);
+      } else {
+        curXp = tXp;
+        paintM(curXp);
+        if (curXp >= 1) {
+          trackTop.style.willChange = 'auto';
+          trackBot.style.willChange = 'auto';
+          title.style.willChange    = 'auto';
+        }
+      }
+    }
+    function schedM() { if (!mRaf) mRaf = requestAnimationFrame(loopM); }
+
+    function onMTStart(e) { mTy = e.touches[0].clientY; }
+    function onMTMove(e) {
+      const dy = mTy - e.touches[0].clientY;
+      mTy = e.touches[0].clientY;
+      if (getSP() < LOCK_AT_SP) return;
+      if (!mLocked) {
+        if (dy > 0 && tXp < 1) mLocked = true;
+        else if (dy < 0 && tXp > 0) mLocked = true;
+      }
+      if (mLocked) {
+        e.preventDefault();
+        const d = Math.max(-STEP_CAP, Math.min(STEP_CAP, dy * TOUCH_FACTOR * 2.5));
+        tXp = clamp01(tXp + d);
+        if ((tXp >= 1 && dy > 0) || (tXp <= 0 && dy < 0)) mLocked = false;
+        schedM();
+      }
+    }
+
+    document.querySelectorAll('a[href^="#"], [data-nm]').forEach(a => {
+      a.addEventListener('click', () => { mLocked = false; });
+    });
+    window.addEventListener('focus',      () => { mLocked = false; });
+    window.addEventListener('touchstart', onMTStart, { passive: true  });
+    window.addEventListener('touchmove',  onMTMove,  { passive: false });
+    return;
+  }
 
   const LOCK_AT_SP    = 0.28;  /* descente : lock dès que la section est en vue */
   const LOCK_UP_AT_SP = 0.6;   /* remontée : lock seulement quand la section est bien rentrée */
@@ -2414,6 +2461,80 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
   window.addEventListener('touchstart', onTouchStart, { passive: true  });
   window.addEventListener('touchmove',  onTouchMove,  { passive: false });
   onScroll();
+})();
+
+/* services — scroll-driven card reveal mobile (GPU composité, zéro reflow) */
+(function () {
+  if (window.innerWidth > 640) return;
+  const section = document.getElementById('services');
+  if (!section) return;
+  const cards = Array.from(section.querySelectorAll('.srv-card'));
+  if (!cards.length) return;
+
+  function clampS(x) { return Math.max(0, Math.min(1, x)); }
+  function getSPS() {
+    const rect = section.getBoundingClientRect();
+    return clampS((window.innerHeight - rect.top) / (rect.height + window.innerHeight));
+  }
+
+  const LOCK_SP = 0.1;
+  const TOUCH_F = 0.003;
+  const STEP_C  = 0.022;
+
+  let tXp = 0, curXp = 0, locked = false, raf = 0, ty = 0;
+
+  /* bypass fade-up, état initial hors-écran */
+  cards.forEach(c => { c.style.opacity = '1'; c.style.transition = 'none'; c.style.willChange = 'transform'; });
+
+  function paintS(x) {
+    /* card 1 : vient de gauche */
+    cards[0].style.transform = 'translateX(' + (-(1 - clampS(x / 0.55)) * 100).toFixed(1) + '%)';
+    /* card 2 : vient de droite */
+    cards[1].style.transform = 'translateX(' + ( (1 - clampS((x - 0.15) / 0.55)) * 100).toFixed(1) + '%)';
+    /* card 3 wide : vient de gauche, décalée */
+    cards[2].style.transform = 'translateX(' + (-(1 - clampS((x - 0.45) / 0.55)) * 100).toFixed(1) + '%)';
+  }
+  paintS(0);
+
+  function loopS() {
+    raf = 0;
+    const d = tXp - curXp;
+    if (Math.abs(d) > 0.001) {
+      curXp += d * 0.3;
+      paintS(curXp);
+      raf = requestAnimationFrame(loopS);
+    } else {
+      curXp = tXp;
+      paintS(curXp);
+      if (curXp >= 1) cards.forEach(c => { c.style.willChange = 'auto'; c.style.transition = ''; });
+    }
+  }
+  function schedS() { if (!raf) raf = requestAnimationFrame(loopS); }
+
+  function onSTStart(e) { ty = e.touches[0].clientY; }
+  function onSTMove(e) {
+    const dy = ty - e.touches[0].clientY;
+    ty = e.touches[0].clientY;
+    if (getSPS() < LOCK_SP) return;
+    if (!locked) {
+      if (dy > 0 && tXp < 1) locked = true;
+      else if (dy < 0 && tXp > 0) locked = true;
+    }
+    if (locked) {
+      e.preventDefault();
+      const d = Math.max(-STEP_C, Math.min(STEP_C, dy * TOUCH_F));
+      tXp = clampS(tXp + d);
+      if ((tXp >= 1 && dy > 0) || (tXp <= 0 && dy < 0)) locked = false;
+      schedS();
+    }
+  }
+
+  document.querySelectorAll('a[href^="#"], [data-nm]').forEach(a => {
+    a.addEventListener('click', () => { locked = false; });
+  });
+  window.addEventListener('focus',      () => { locked = false; });
+  window.addEventListener('touchstart', onSTStart, { passive: true  });
+  window.addEventListener('touchmove',  onSTMove,  { passive: false });
 })();
 </script>
 <!-- ══ TWEAKS PANEL ══ -->

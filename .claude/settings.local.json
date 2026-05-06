@@ -4,7 +4,9 @@
       "WebFetch(domain:21st.dev)",
       "Bash(powershell -Command \"Expand-Archive -Path 'Designers stuff icons.fig' -DestinationPath './fig_extracted' -Force\")",
       "Bash(powershell -Command \"Copy-Item 'Designers stuff icons.fig' 'designers_icons.zip'\")",
-      "Bash(powershell -Command \"Expand-Archive -Path 'designers_icons.zip' -DestinationPath './fig_extracted' -Force\")"
+      "Bash(powershell -Command \"Expand-Archive -Path 'designers_icons.zip' -DestinationPath './fig_extracted' -Force\")",
+      "Bash(awk '/\\\\/\\\\*/{flag=1} flag{print NR\": \"$0} /\\\\*\\\\//{flag=0}' index.html)",
+      "Bash(awk 'NR>=1490 && NR<=1600' index.html)"
     ]
   }
 }
