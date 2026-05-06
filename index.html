@@ -2255,10 +2255,8 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
     return clamp01((window.innerHeight - rect.top) / (rect.height + window.innerHeight));
   }
 
-  /* ── mobile : même animation que desktop, transform-only (GPU composité, zéro reflow) ── */
+  /* ── mobile : scroll-driven, zéro interception — les tracks suivent le scroll naturel ── */
   if (window.innerWidth <= 640) {
-    let tXp = 0, curXp = 0, mLocked = false, mRaf = 0, mTy = 0;
-
     trackTop.style.willChange = 'transform';
     trackBot.style.willChange = 'transform';
     title.style.willChange    = 'transform';
@@ -2268,51 +2266,25 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
       trackBot.style.transform = 'translateX(' + (100 - 150 * x).toFixed(2) + '%)';
       title.style.transform    = 'scale(' + (1.2 - 0.2 * clamp01(x * 2)).toFixed(3) + ')';
     }
-    paintM(0);
 
-    function loopM() {
-      mRaf = 0;
-      const d = tXp - curXp;
-      if (Math.abs(d) > 0.001) {
-        curXp += d * 0.3;
-        paintM(curXp);
-        mRaf = requestAnimationFrame(loopM);
-      } else {
-        curXp = tXp;
-        paintM(curXp);
-        if (curXp >= 1) {
+    var mRaf = 0;
+    function onScrollM() {
+      if (mRaf) return;
+      mRaf = requestAnimationFrame(function () {
+        mRaf = 0;
+        var x = clamp01((getSP() - 0.1) / 0.65);
+        paintM(x);
+        if (x >= 1) {
           trackTop.style.willChange = 'auto';
           trackBot.style.willChange = 'auto';
           title.style.willChange    = 'auto';
+          window.removeEventListener('scroll', onScrollM);
         }
-      }
-    }
-    function schedM() { if (!mRaf) mRaf = requestAnimationFrame(loopM); }
-
-    function onMTStart(e) { mTy = e.touches[0].clientY; }
-    function onMTMove(e) {
-      const dy = mTy - e.touches[0].clientY;
-      mTy = e.touches[0].clientY;
-      if (getSP() < LOCK_AT_SP) return;
-      if (!mLocked) {
-        if (dy > 0 && tXp < 1) mLocked = true;
-        else if (dy < 0 && tXp > 0) mLocked = true;
-      }
-      if (mLocked) {
-        e.preventDefault();
-        const d = Math.max(-STEP_CAP, Math.min(STEP_CAP, dy * TOUCH_FACTOR * 2.5));
-        tXp = clamp01(tXp + d);
-        if ((tXp >= 1 && dy > 0) || (tXp <= 0 && dy < 0)) mLocked = false;
-        schedM();
-      }
+      });
     }
 
-    document.querySelectorAll('a[href^="#"], [data-nm]').forEach(a => {
-      a.addEventListener('click', () => { mLocked = false; });
-    });
-    window.addEventListener('focus',      () => { mLocked = false; });
-    window.addEventListener('touchstart', onMTStart, { passive: true  });
-    window.addEventListener('touchmove',  onMTMove,  { passive: false });
+    paintM(clamp01((getSP() - 0.1) / 0.65));
+    window.addEventListener('scroll', onScrollM, { passive: true });
     return;
   }
 
