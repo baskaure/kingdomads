@@ -2463,7 +2463,7 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
   onScroll();
 })();
 
-/* services — scroll-driven card reveal mobile (GPU composité, zéro reflow) */
+/* services — reveal au scroll : les cartes glissent depuis les côtés sans toucher au scroll */
 (function () {
   if (window.innerWidth > 640) return;
   const section = document.getElementById('services');
@@ -2471,70 +2471,29 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
   const cards = Array.from(section.querySelectorAll('.srv-card'));
   if (!cards.length) return;
 
-  function clampS(x) { return Math.max(0, Math.min(1, x)); }
-  function getSPS() {
-    const rect = section.getBoundingClientRect();
-    return clampS((window.innerHeight - rect.top) / (rect.height + window.innerHeight));
-  }
-
-  const LOCK_SP = 0.1;
-  const TOUCH_F = 0.003;
-  const STEP_C  = 0.022;
-
-  let tXp = 0, curXp = 0, locked = false, raf = 0, ty = 0;
-
-  /* bypass fade-up, état initial hors-écran */
-  cards.forEach(c => { c.style.opacity = '1'; c.style.transition = 'none'; c.style.willChange = 'transform'; });
-
-  function paintS(x) {
-    /* card 1 : vient de gauche */
-    cards[0].style.transform = 'translateX(' + (-(1 - clampS(x / 0.55)) * 100).toFixed(1) + '%)';
-    /* card 2 : vient de droite */
-    cards[1].style.transform = 'translateX(' + ( (1 - clampS((x - 0.15) / 0.55)) * 100).toFixed(1) + '%)';
-    /* card 3 wide : vient de gauche, décalée */
-    cards[2].style.transform = 'translateX(' + (-(1 - clampS((x - 0.45) / 0.55)) * 100).toFixed(1) + '%)';
-  }
-  paintS(0);
-
-  function loopS() {
-    raf = 0;
-    const d = tXp - curXp;
-    if (Math.abs(d) > 0.001) {
-      curXp += d * 0.3;
-      paintS(curXp);
-      raf = requestAnimationFrame(loopS);
-    } else {
-      curXp = tXp;
-      paintS(curXp);
-      if (curXp >= 1) cards.forEach(c => { c.style.willChange = 'auto'; c.style.transition = ''; });
-    }
-  }
-  function schedS() { if (!raf) raf = requestAnimationFrame(loopS); }
-
-  function onSTStart(e) { ty = e.touches[0].clientY; }
-  function onSTMove(e) {
-    const dy = ty - e.touches[0].clientY;
-    ty = e.touches[0].clientY;
-    if (getSPS() < LOCK_SP) return;
-    if (!locked) {
-      if (dy > 0 && tXp < 1) locked = true;
-      else if (dy < 0 && tXp > 0) locked = true;
-    }
-    if (locked) {
-      e.preventDefault();
-      const d = Math.max(-STEP_C, Math.min(STEP_C, dy * TOUCH_F));
-      tXp = clampS(tXp + d);
-      if ((tXp >= 1 && dy > 0) || (tXp <= 0 && dy < 0)) locked = false;
-      schedS();
-    }
-  }
-
-  document.querySelectorAll('a[href^="#"], [data-nm]').forEach(a => {
-    a.addEventListener('click', () => { locked = false; });
+  /* état initial : cartes hors-écran, bypass fade-up */
+  const dirs = ['left', 'right', 'left'];
+  cards.forEach((c, i) => {
+    c.style.opacity    = '1';
+    c.style.transform  = dirs[i] === 'left' ? 'translateX(-110%)' : 'translateX(110%)';
+    c.style.willChange = 'transform';
+    c.style.transition = 'none';
   });
-  window.addEventListener('focus',      () => { locked = false; });
-  window.addEventListener('touchstart', onSTStart, { passive: true  });
-  window.addEventListener('touchmove',  onSTMove,  { passive: false });
+
+  new IntersectionObserver(function (entries, obs) {
+    if (!entries[0].isIntersecting) return;
+    obs.disconnect();
+    cards.forEach((c, i) => {
+      setTimeout(function () {
+        c.style.transition = 'transform 0.65s cubic-bezier(0.23,1,0.32,1)';
+        c.style.transform  = 'translateX(0)';
+        c.addEventListener('transitionend', function () {
+          c.style.willChange = 'auto';
+          c.style.transition = '';
+        }, { once: true });
+      }, i * 130);
+    });
+  }, { threshold: 0.1 }).observe(section);
 })();
 </script>
 <!-- ══ TWEAKS PANEL ══ -->
