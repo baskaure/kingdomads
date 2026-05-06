@@ -1327,7 +1327,7 @@ body[data-atmosphere="maximal"] .btn-gold { box-shadow: 0 6px 32px rgba(115,92,0
     <div class="orb hero-orb3"></div>
 
     <div class="hero-expand-card" id="heroCard">
-      <video class="hc-video" autoplay loop muted playsinline webkit-playsinline x5-playsinline disablepictureinpicture preload="none" id="heroVideo" data-mp4="input/hero.mp4" data-mov="input/hero.MOV" onerror="this.style.display='none'"></video>
+      <video class="hc-video" autoplay loop muted playsinline webkit-playsinline x5-playsinline disablepictureinpicture preload="metadata" id="heroVideo" data-mp4="input/hero.mp4" onerror="this.style.display='none'"></video>
       <div class="hc-overlay"></div>
 
       <div class="hc-content" id="heroContent">
@@ -1804,48 +1804,65 @@ body[data-atmosphere="maximal"] .btn-gold { box-shadow: 0 6px 32px rgba(115,92,0
 </footer>
 
 <script>
-/* vidéo hero — chargement différé après l'event load (évite la concurrence avec FCP/LCP).
-   Mobile inclus : muted + playsinline = autoplay autorisé sur iOS/Android. */
+/* vidéo hero — autoplay desktop + mobile.
+   Mobile : muted + playsinline = autoplay autorisé sur iOS 10+ / Android.
+   Sources attachées tôt (DOMContentLoaded) pour que le navigateur les voie avant le 1er render. */
 (function () {
   function tryPlay(v) {
+    if (!v) return;
+    v.muted = true;
     const p = v.play();
-    if (p && typeof p.catch === 'function') {
-      p.catch(() => {
-        const resume = () => { v.play().catch(() => {}); cleanup(); };
-        const cleanup = () => {
-          document.removeEventListener('touchstart', resume);
-          document.removeEventListener('click', resume);
-          document.removeEventListener('scroll', resume);
-        };
-        document.addEventListener('touchstart', resume, { once: true, passive: true });
-        document.addEventListener('click', resume, { once: true });
-        document.addEventListener('scroll', resume, { once: true, passive: true });
-      });
-    }
+    if (p && typeof p.catch === 'function') p.catch(() => {});
+  }
+  function bindFallback(v) {
+    const resume = () => { tryPlay(v); cleanup(); };
+    const cleanup = () => {
+      document.removeEventListener('touchstart', resume);
+      document.removeEventListener('touchend', resume);
+      document.removeEventListener('click', resume);
+      document.removeEventListener('scroll', resume);
+    };
+    document.addEventListener('touchstart', resume, { once: true, passive: true });
+    document.addEventListener('touchend', resume, { once: true, passive: true });
+    document.addEventListener('click', resume, { once: true });
+    document.addEventListener('scroll', resume, { once: true, passive: true });
   }
   function attach() {
     const v = document.getElementById('heroVideo');
     if (!v) return;
     v.muted = true;
+    v.defaultMuted = true;
     v.setAttribute('muted', '');
     v.setAttribute('playsinline', '');
     v.setAttribute('webkit-playsinline', '');
-    if (v.dataset.mp4) {
+    if (!v.querySelector('source') && v.dataset.mp4) {
       const s = document.createElement('source');
       s.src = v.dataset.mp4; s.type = 'video/mp4';
       v.appendChild(s);
+      v.load();
     }
-    if (v.dataset.mov) {
-      const s = document.createElement('source');
-      s.src = v.dataset.mov; s.type = 'video/quicktime';
-      v.appendChild(s);
+    ['loadedmetadata', 'loadeddata', 'canplay', 'canplaythrough'].forEach(ev => {
+      v.addEventListener(ev, () => tryPlay(v));
+    });
+    v.addEventListener('pause', () => {
+      if (!v.ended && document.visibilityState === 'visible') tryPlay(v);
+    });
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'visible') tryPlay(v);
+    });
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(es => {
+        es.forEach(e => { if (e.isIntersecting) tryPlay(v); });
+      }, { threshold: 0.1 }).observe(v);
     }
-    v.load();
-    v.addEventListener('loadeddata', () => tryPlay(v), { once: true });
     tryPlay(v);
+    bindFallback(v);
   }
-  if (document.readyState === 'complete') attach();
-  else window.addEventListener('load', attach, { once: true });
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', attach, { once: true });
+  } else {
+    attach();
+  }
 })();
 
 /* nav scroll — sentinelle + IntersectionObserver (zéro lecture de scrollY, zéro reflow forcé) */
