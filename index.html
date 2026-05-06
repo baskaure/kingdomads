@@ -1054,8 +1054,8 @@ footer {
 
   /* will-change permanent = mémoire GPU bloquée pour rien : on enlève hors animation */
   .hc-content,
-  .team-content,
-  .team-track { will-change: auto !important; }
+  .team-content { will-change: auto !important; }
+  /* team-track : will-change géré par JS pour l'animation mobile — pas de reset CSS ici */
   /* hero-expand-card : géré par JS (clip-path sur mobile) — pas de reset CSS ici */
 
   /* skip rendering des sections hors écran — gros gain SI / TBT.
@@ -1316,7 +1316,7 @@ body[data-atmosphere="maximal"] .btn-gold { box-shadow: 0 6px 32px rgba(115,92,0
     <div class="orb hero-orb3"></div>
 
     <div class="hero-expand-card" id="heroCard">
-      <video class="hc-video" autoplay loop muted playsinline webkit-playsinline x5-playsinline disablepictureinpicture preload="metadata" id="heroVideo" data-mp4="input/hero.mp4" onerror="this.style.display='none'">
+      <video class="hc-video" autoplay loop muted playsinline webkit-playsinline x5-playsinline disablepictureinpicture preload="metadata" id="heroVideo" data-mp4="input/hero.mp4">
         <source src="input/hero.mp4" type="video/mp4">
       </video>
       <div class="hc-overlay"></div>
@@ -2267,16 +2267,32 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
       title.style.transform    = 'scale(' + (1.2 - 0.2 * clamp01(x * 2)).toFixed(3) + ')';
     }
 
-    var mRaf = 0;
-    function onScrollM() {
-      if (mRaf) return;
-      mRaf = requestAnimationFrame(function () {
-        mRaf = 0;
-        paintM(clamp01((getSP() - 0.1) / 0.65));
-      });
+    /* cache la position de la section — évite getBoundingClientRect() à chaque frame */
+    var mSectionH = section.offsetHeight;
+    var mSectionY = section.getBoundingClientRect().top + window.scrollY;
+    window.addEventListener('resize', function () {
+      mSectionH = section.offsetHeight;
+      mSectionY = section.getBoundingClientRect().top + window.scrollY;
+    }, { passive: true });
+
+    function getX() {
+      var top = mSectionY - window.scrollY;
+      var sp  = Math.max(0, Math.min(1, (window.innerHeight - top) / (mSectionH + window.innerHeight)));
+      return Math.max(0, Math.min(1, (sp - 0.1) / 0.65));
     }
 
-    paintM(clamp01((getSP() - 0.1) / 0.65));
+    /* IntersectionObserver guard — le handler scroll est inactif hors de la zone */
+    var mInView = false;
+    new IntersectionObserver(function (es) { mInView = es[0].isIntersecting; },
+      { rootMargin: '200px 0px' }).observe(section);
+
+    var mRaf = 0;
+    function onScrollM() {
+      if (!mInView || mRaf) return;
+      mRaf = requestAnimationFrame(function () { mRaf = 0; paintM(getX()); });
+    }
+
+    paintM(getX());
     window.addEventListener('scroll', onScrollM, { passive: true });
     return;
   }
