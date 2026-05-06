@@ -2244,30 +2244,18 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
   const title    = document.getElementById('teamTitle');
   if (!section || !content || !trackTop || !trackBot || !title) return;
 
-  /* ── constantes et helpers partagés mobile + desktop ── */
-  const LOCK_AT_SP = 0.28;
-  const STEP_CAP   = 0.018;
-  const TOUCH_FACTOR = 0.0012;
-
-  function clamp01(x) { return Math.max(0, Math.min(1, x)); }
+  function clamp01(x) { return x < 0 ? 0 : x > 1 ? 1 : x; }
   function getSP() {
     const rect = section.getBoundingClientRect();
     return clamp01((window.innerHeight - rect.top) / (rect.height + window.innerHeight));
   }
 
-  /* ── mobile : scroll-driven, zéro interception — les tracks suivent le scroll naturel ── */
+  /* ── mobile : scroll-driven, zéro interception ── */
   if (window.innerWidth <= 640) {
     trackTop.style.willChange = 'transform';
     trackBot.style.willChange = 'transform';
     title.style.willChange    = 'transform';
 
-    function paintM(x) {
-      trackTop.style.transform = 'translateX(' + (-200 + 200 * x).toFixed(2) + '%)';
-      trackBot.style.transform = 'translateX(' + (100 - 150 * x).toFixed(2) + '%)';
-      title.style.transform    = 'scale(' + (1.2 - 0.2 * clamp01(x * 2)).toFixed(3) + ')';
-    }
-
-    /* cache la position de la section — évite getBoundingClientRect() à chaque frame */
     var mSectionH = section.offsetHeight;
     var mSectionY = section.getBoundingClientRect().top + window.scrollY;
     window.addEventListener('resize', function () {
@@ -2276,12 +2264,22 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
     }, { passive: true });
 
     function getX() {
-      var top = mSectionY - window.scrollY;
-      var sp  = Math.max(0, Math.min(1, (window.innerHeight - top) / (mSectionH + window.innerHeight)));
-      return Math.max(0, Math.min(1, (sp - 0.1) / 0.65));
+      var sp = (window.innerHeight - (mSectionY - window.scrollY)) / (mSectionH + window.innerHeight);
+      return sp < 0.1 ? 0 : sp > 0.75 ? 1 : (sp - 0.1) / 0.65;
     }
 
-    /* IntersectionObserver guard — le handler scroll est inactif hors de la zone */
+    var mLastT1 = null;
+    function paintM(x) {
+      var t1 = (-200 + 200 * x) | 0;
+      if (t1 === mLastT1) return;
+      mLastT1 = t1;
+      var t2 = (100 - 150 * x) | 0;
+      var sc = x < 0.5 ? (1.2 - 0.4 * x) : 1;
+      trackTop.style.transform = 'translate3d(' + t1 + '%,0,0)';
+      trackBot.style.transform = 'translate3d(' + t2 + '%,0,0)';
+      title.style.transform    = 'scale(' + sc.toFixed(3) + ')';
+    }
+
     var mInView = false;
     new IntersectionObserver(function (es) { mInView = es[0].isIntersecting; },
       { rootMargin: '200px 0px' }).observe(section);
@@ -2296,6 +2294,11 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
     window.addEventListener('scroll', onScrollM, { passive: true });
     return;
   }
+
+  /* ── desktop uniquement ── */
+  const LOCK_AT_SP   = 0.28;
+  const STEP_CAP     = 0.018;
+  const TOUCH_FACTOR = 0.0012;
 
   const LOCK_UP_AT_SP = 0.6;   /* remontée : lock seulement quand la section est bien rentrée */
   const WHEEL_FACTOR  = 0.0006; /* ≈ 17 crans pour tout voir (≈ 2/card) */
