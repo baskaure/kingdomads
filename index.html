@@ -1914,9 +1914,18 @@ document.querySelectorAll('[data-target]').forEach(el => {
 
   /* ── mobile : animation clip-path (GPU-composité, zéro reflow) ──
      clip-path ne touche pas au layout → pas de reflow à chaque frame.
-     On garde la carte en 100%×100% et on masque les bords via inset(). */
+     On garde la carte en 100%×100% et on masque les bords via inset().
+     Le padding du contenu suit l'inset pour que le texte reste dans la zone visible.
+     Les boutons apparaissent progressivement une fois la carte assez grande. */
   if (window.innerWidth <= 640) {
-    card.style.cssText = 'width:100%;height:100%;border-radius:0;will-change:clip-path;clip-path:inset(20% 17.5% round 24px);';
+    const dw   = window.innerWidth;
+    const btns = content.querySelector('.hero-btns');
+    const initPad = Math.round(dw * 0.175);
+
+    card.style.cssText         = 'width:100%;height:100%;border-radius:0;will-change:clip-path;clip-path:inset(20% 17.5% round 24px);';
+    content.style.paddingLeft  = initPad + 'px';
+    content.style.paddingRight = initPad + 'px';
+    if (btns) { btns.style.opacity = '0'; btns.style.pointerEvents = 'none'; }
     if (hint) hint.style.display = 'none';
 
     let mp = 0, mLocked = true, mMet = false, mCnt = false, mRaf = false, mTy = 0;
@@ -1926,12 +1935,30 @@ document.querySelectorAll('[data-target]').forEach(el => {
       requestAnimationFrame(() => {
         mRaf = false;
         const p  = mp;
+
+        /* clip-path */
         const ix = (17.5 * (1 - p)).toFixed(2);
         const iy = (20   * (1 - p)).toFixed(2);
         const r  = (24   * (1 - p)).toFixed(1);
         card.style.clipPath = `inset(${iy}% ${ix}% round ${r}px)`;
+
+        /* padding contenu : suit l'inset pour que le texte reste dans la zone visible */
+        const sp = Math.max(22, Math.round(dw * 0.175 * (1 - p)));
+        content.style.paddingLeft  = sp + 'px';
+        content.style.paddingRight = sp + 'px';
+
+        /* boutons : apparaissent à partir de p = 0.4 */
+        if (btns) {
+          const bo = Math.max(0, Math.min(1, (p - 0.4) / 0.25));
+          btns.style.opacity       = bo;
+          btns.style.pointerEvents = bo > 0 ? '' : 'none';
+        }
+
+        /* décalage vertical du contenu (laisse place aux metrics) */
         const shift = -52 * Math.max(0, Math.min(1, (p - 0.55) / 0.45));
         content.style.transform = `translateY(${shift}px)`;
+
+        /* metrics */
         const show = p >= 0.75;
         if (show !== mMet) {
           mMet = show;
