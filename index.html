@@ -1055,10 +1055,10 @@ footer {
   .metric-card { background: rgba(10, 7, 22, 0.55); }
 
   /* will-change permanent = mémoire GPU bloquée pour rien : on enlève hors animation */
-  .hero-expand-card,
   .hc-content,
   .team-content,
   .team-track { will-change: auto !important; }
+  /* hero-expand-card : géré par JS (clip-path sur mobile) — pas de reset CSS ici */
 
   /* skip rendering des sections hors écran — gros gain SI / TBT.
      contain-intrinsic-size réserve la place verticale pour éviter les sauts. */
@@ -1912,14 +1912,54 @@ document.querySelectorAll('[data-target]').forEach(el => {
   const metrics  = document.getElementById('heroMetrics');
   const hint     = document.getElementById('heroScrollHint');
 
-  /* ── mobile : plein écran immédiat, zéro scroll-jacking ──
-     Les animations width/height déclenchent du reflow à chaque frame
-     ce qui est trop lourd sur mobile. On affiche directement plein écran. */
+  /* ── mobile : animation clip-path (GPU-composité, zéro reflow) ──
+     clip-path ne touche pas au layout → pas de reflow à chaque frame.
+     On garde la carte en 100%×100% et on masque les bords via inset(). */
   if (window.innerWidth <= 640) {
-    card.style.cssText = 'width:100%;height:100%;border-radius:0;will-change:auto;';
+    card.style.cssText = 'width:100%;height:100%;border-radius:0;will-change:clip-path;clip-path:inset(20% 17.5% round 24px);';
     if (hint) hint.style.display = 'none';
-    metrics.classList.add('visible');
-    metrics.querySelectorAll('[data-target]').forEach(animateCounter);
+
+    let mp = 0, mLocked = true, mMet = false, mCnt = false, mRaf = false, mTy = 0;
+
+    function applyMp() {
+      if (mRaf) return; mRaf = true;
+      requestAnimationFrame(() => {
+        mRaf = false;
+        const p  = mp;
+        const ix = (17.5 * (1 - p)).toFixed(2);
+        const iy = (20   * (1 - p)).toFixed(2);
+        const r  = (24   * (1 - p)).toFixed(1);
+        card.style.clipPath = `inset(${iy}% ${ix}% round ${r}px)`;
+        const shift = -52 * Math.max(0, Math.min(1, (p - 0.55) / 0.45));
+        content.style.transform = `translateY(${shift}px)`;
+        const show = p >= 0.75;
+        if (show !== mMet) {
+          mMet = show;
+          metrics.classList.toggle('visible', show);
+          if (show && !mCnt) { mCnt = true; metrics.querySelectorAll('[data-target]').forEach(animateCounter); }
+        }
+      });
+    }
+    function setMp(v) { mp = Math.max(0, Math.min(1, v)); applyMp(); }
+    function onMWheel(e) {
+      if (mLocked) { e.preventDefault(); setMp(mp + e.deltaY * 0.001); if (mp >= 1) { mLocked = false; card.style.willChange = 'auto'; } }
+      else if (e.deltaY < 0 && window.scrollY <= 1) { e.preventDefault(); mLocked = true; card.style.willChange = 'clip-path'; setMp(mp + e.deltaY * 0.001); }
+    }
+    function onMTStart(e) { mTy = e.touches[0].clientY; }
+    function onMTMove(e) {
+      const dy = mTy - e.touches[0].clientY; mTy = e.touches[0].clientY;
+      if (mLocked) { e.preventDefault(); setMp(mp + dy * 0.005); if (mp >= 1) { mLocked = false; card.style.willChange = 'auto'; } }
+      else if (dy < 0 && window.scrollY <= 1) { e.preventDefault(); mLocked = true; card.style.willChange = 'clip-path'; setMp(mp + dy * 0.005); }
+    }
+    document.querySelectorAll('a[href^="#"], [data-nm]').forEach(a => {
+      a.addEventListener('click', () => {
+        const href = a.getAttribute('href');
+        if (href && href !== '#hero' && href !== '#') { mp = 1; applyMp(); mLocked = false; card.style.willChange = 'auto'; }
+      });
+    });
+    window.addEventListener('wheel',      onMWheel,  { passive: false });
+    window.addEventListener('touchstart', onMTStart, { passive: true  });
+    window.addEventListener('touchmove',  onMTMove,  { passive: false });
     return;
   }
 
