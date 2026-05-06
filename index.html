@@ -1007,10 +1007,6 @@ footer {
   .footer-inner { flex-direction: column; align-items: center; text-align: center; gap: 16px; }
   .footer-links { flex-wrap: wrap; justify-content: center; gap: 12px 20px; }
 
-  /* tweaks panel */
-  #tweaksPanel { width: calc(100vw - 32px); right: 16px; bottom: 16px; left: 16px; }
-  #tweaksLauncher { bottom: 16px; right: 16px; }
-
   /* buttons */
   .btn-gold, .btn-ghost { padding: 13px 28px; font-size: 0.88rem; }
 }
@@ -1030,8 +1026,6 @@ footer {
   .cform,
   #navbar,
   .nav-mobile,
-  #tweaksPanel,
-  #tweaksLauncher,
   .btn-ghost,
   .metric-card {
     backdrop-filter: none !important;
@@ -1043,9 +1037,7 @@ footer {
   .srv-card,
   .insta-card,
   .cform,
-  .nav-mobile,
-  #tweaksPanel,
-  #tweaksLauncher {
+  .nav-mobile {
     background: rgba(15, 12, 32, 0.78);
   }
   #navbar { background: rgba(6, 4, 18, 0.92); }
@@ -1091,185 +1083,27 @@ footer {
 }
 
 
-/* ══════════════════════════════════════════════════════════════
-   TWEAKS — three expressive controls
-   1. AURA   (color mood)   — recolors secondary palette globally
-   2. VOICE  (typography)   — swaps font + heading personality
-   3. ATMOSPHERE (intensity)— scales orbs/glow density + saturation
-═══════════════════════════════════════════════════════════════ */
-
-/* Aura sets two semantic accent colors (a + b).
-   Defaults are violet/blue — overridden per body[data-aura].   */
+/* palette accent vars (violet/blue — orbs, avatars, gradients) */
 body { --aux-a: #7040CC; --aux-b: #3A80FF; --aux-a-lt: #9060DD; --aux-b-lt: #60B0FF;
        --aux-a-rgb: 112,64,204; --aux-b-rgb: 58,128,255; }
 
-body[data-aura="sunset"]  { --aux-a:#E04088; --aux-b:#FF8030; --aux-a-lt:#FF60A8; --aux-b-lt:#FFA050; --aux-a-rgb:224,64,136; --aux-b-rgb:255,128,48; }
-body[data-aura="forest"]  { --aux-a:#1FB888; --aux-b:#00B4C8; --aux-a-lt:#3FD8A8; --aux-b-lt:#40D8E8; --aux-a-rgb:31,184,136;  --aux-b-rgb:0,180,200; }
-body[data-aura="royale"]  { --aux-a:#8B6914; --aux-b:#C9A84C; --aux-a-lt:#B8921E; --aux-b-lt:#E8C96A; --aux-a-rgb:139,105,20; --aux-b-rgb:201,168,76; }
-
-/* override class- + element-level usages with !important so inline styles flip too */
 body .grad-violet { background: linear-gradient(135deg, var(--aux-a-lt), var(--aux-b)) !important; -webkit-background-clip: text !important; -webkit-text-fill-color: transparent !important; }
 body .hero-orb1 { background: radial-gradient(circle, rgba(var(--aux-a-rgb),0.4) 0%, transparent 70%) !important; }
 body .hero-orb2 { background: radial-gradient(circle, rgba(var(--aux-b-rgb),0.32) 0%, transparent 70%) !important; }
-
-/* metric card #2 + #3 */
 body .hero-metrics .metric-card:nth-child(2) .top-line { background: linear-gradient(90deg,transparent,var(--aux-a-lt),transparent) !important; }
 body .hero-metrics .metric-card:nth-child(3) .top-line { background: linear-gradient(90deg,transparent,var(--aux-b),transparent) !important; }
 body .hero-metrics .metric-card:nth-child(3) .num { background: linear-gradient(135deg,var(--aux-b),var(--aux-b-lt)) !important; -webkit-background-clip: text !important; -webkit-text-fill-color: transparent !important; }
-
-/* values orb + pillar icons 2,3 */
 body #values > .orb { background: radial-gradient(circle, rgba(var(--aux-a-rgb),0.18) 0%, transparent 70%) !important; }
 body #values .pillars .pillar:nth-child(2) .pillar-ico { background: rgba(var(--aux-a-rgb),0.14) !important; }
 body #values .pillars .pillar:nth-child(3) .pillar-ico { background: rgba(var(--aux-b-rgb),0.14) !important; }
-
-/* features section orb */
 body #features > .orb { background: radial-gradient(circle, rgba(var(--aux-a-rgb),0.22) 0%, transparent 70%) !important; }
-
-/* team avatars 2,3 + role colors */
 body #team .team-grid .team-card:nth-child(2) .team-avatar { background: linear-gradient(135deg, rgba(var(--aux-a-rgb),0.32), rgba(var(--aux-b-rgb),0.32)) !important; }
 body #team .team-grid .team-card:nth-child(3) .team-avatar { background: linear-gradient(135deg, rgba(var(--aux-b-rgb),0.32), rgba(var(--aux-a-rgb),0.32)) !important; }
 body #team .team-grid .team-card:nth-child(3) .team-role { background: linear-gradient(90deg,var(--aux-b),var(--aux-b-lt)) !important; -webkit-background-clip: text !important; -webkit-text-fill-color: transparent !important; }
-
-/* stat #2 + #3 */
 body #stats .stat-item:nth-child(3) .stat-num { background: linear-gradient(135deg,var(--aux-b),var(--aux-b-lt)) !important; -webkit-background-clip: text !important; -webkit-text-fill-color: transparent !important; }
-
-/* blog cats 2,3 */
 body #blog .blog-grid .blog-card:nth-child(2) .blog-cat { background: linear-gradient(135deg, rgba(var(--aux-a-rgb),0.92), rgba(var(--aux-b-rgb),0.92)) !important; }
 body #blog .blog-grid .blog-card:nth-child(3) .blog-cat { background: linear-gradient(135deg, rgba(var(--aux-b-rgb),0.92), rgba(var(--aux-b-rgb),0.6)) !important; }
-
-/* contact orb */
 body #contact > .orb { background: radial-gradient(circle, rgba(var(--aux-a-rgb),0.16) 0%, transparent 70%) !important; }
-
-/* ─── FOND HERO ─── */
-body[data-hero-bg="blanc"] #hero .hero-sticky {
-  background: #f5f4f8;
-}
-body[data-hero-bg="blanc"] #hero .hero-orb1,
-body[data-hero-bg="blanc"] #hero .hero-orb2,
-body[data-hero-bg="blanc"] #hero .hero-orb3 { opacity: 0; }
-
-/* For 'royale' (mono gold) — also dim violet text accents to gold */
-body[data-aura="royale"] .grad-violet { background: linear-gradient(135deg, var(--gold-pale), var(--gold-lt)) !important; -webkit-background-clip: text !important; -webkit-text-fill-color: transparent !important; }
-
-/* ─── VOICE — typography ─── */
-body[data-voice="editorial"] {
-  --font: 'DM Sans', sans-serif;
-}
-body[data-voice="editorial"] h1,
-body[data-voice="editorial"] h2,
-body[data-voice="editorial"] .nav-logo,
-body[data-voice="editorial"] .footer-logo {
-  font-family: 'Playfair Display', serif !important;
-  font-weight: 700;
-  letter-spacing: -0.015em;
-}
-body[data-voice="editorial"] h1 { font-style: italic; font-weight: 400; }
-body[data-voice="editorial"] .grad-gold,
-body[data-voice="editorial"] .grad-violet { font-style: italic; font-weight: 700; }
-body[data-voice="editorial"] h3 { font-family: 'Playfair Display', serif !important; font-weight: 700; }
-body[data-voice="editorial"] .pill { font-family: 'DM Sans', sans-serif; }
-body[data-voice="editorial"] .btn { font-family: 'DM Sans', sans-serif; letter-spacing: 0.05em; font-weight: 600; }
-
-body[data-voice="bold"] {
-  --font: 'DM Sans', sans-serif;
-}
-body[data-voice="bold"] h1,
-body[data-voice="bold"] h2,
-body[data-voice="bold"] h3,
-body[data-voice="bold"] .nav-logo,
-body[data-voice="bold"] .footer-logo,
-body[data-voice="bold"] .stat-num,
-body[data-voice="bold"] .num {
-  font-family: 'Barlow Condensed', sans-serif !important;
-  font-weight: 800 !important;
-  letter-spacing: -0.02em;
-  text-transform: uppercase;
-}
-body[data-voice="bold"] h1 { font-weight: 900 !important; line-height: 0.95; }
-body[data-voice="bold"] .btn { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; }
-body[data-voice="bold"] .pill { font-weight: 600; }
-
-/* ─── ATMOSPHERE — orb intensity + density ─── */
-body[data-atmosphere="calm"] .orb { opacity: 0.35 !important; filter: blur(90px) !important; transform: scale(0.75); }
-body[data-atmosphere="calm"] section { padding: 88px 0; }
-body[data-atmosphere="calm"] body::after { opacity: 0.5; }
-
-body[data-atmosphere="maximal"] .orb { opacity: 1.1 !important; filter: blur(60px) !important; transform: scale(1.25); }
-body[data-atmosphere="maximal"] section { padding: 132px 0; }
-body[data-atmosphere="maximal"] .grad-gold,
-body[data-atmosphere="maximal"] .grad-violet { filter: drop-shadow(0 0 30px rgba(201,168,76,0.55)) drop-shadow(0 0 60px rgba(var(--aux-a-rgb),0.25)); }
-body[data-atmosphere="maximal"] body::after { background-size: 24px 24px; opacity: 1; }
-body[data-atmosphere="maximal"] .btn-gold { box-shadow: 0 6px 32px rgba(115,92,0,0.7), 0 0 80px rgba(115,92,0,0.35) !important; }
-
-/* ══════════════════════════════════════════════════════════════
-   TWEAKS PANEL
-═══════════════════════════════════════════════════════════════ */
-#tweaksPanel {
-  display: none;
-  position: fixed; bottom: 24px; right: 24px;
-  z-index: 200;
-  width: 320px;
-  background: rgba(8,6,22,0.92);
-  backdrop-filter: blur(28px);
-  border: 1px solid rgba(255,255,255,0.1);
-  border-radius: 16px;
-  padding: 22px 22px 24px;
-  box-shadow: 0 24px 60px rgba(0,0,0,0.6), 0 0 1px rgba(201,168,76,0.3);
-  font-family: 'Space Grotesk', sans-serif;
-  color: #E8E6FF;
-}
-#tweaksPanel.open { display: block; }
-.tp-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
-.tp-title { font-size: 13px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #C9A84C; }
-.tp-close {
-  width: 24px; height: 24px; border-radius: 6px;
-  background: rgba(255,255,255,0.06);
-  border: 1px solid rgba(255,255,255,0.08);
-  color: rgba(232,230,255,0.5);
-  cursor: pointer; font-size: 12px;
-  display: flex; align-items: center; justify-content: center;
-}
-.tp-close:hover { color: #fff; background: rgba(255,255,255,0.12); }
-.tp-section { margin-bottom: 18px; }
-.tp-section:last-child { margin-bottom: 0; }
-.tp-label { font-size: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(232,230,255,0.4); margin-bottom: 8px; }
-.tp-desc { font-size: 11px; color: rgba(232,230,255,0.5); line-height: 1.5; margin-top: 8px; }
-.tp-radio { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
-.tp-radio.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
-.tp-radio button {
-  background: rgba(255,255,255,0.04);
-  border: 1px solid rgba(255,255,255,0.08);
-  color: rgba(232,230,255,0.7);
-  padding: 9px 10px; border-radius: 8px;
-  font-family: inherit; font-size: 12px; font-weight: 500;
-  cursor: pointer;
-  transition: background 0.15s, border-color 0.15s, color 0.15s;
-  display: flex; align-items: center; justify-content: center; gap: 6px;
-}
-.tp-radio button:hover { background: rgba(255,255,255,0.08); color: #fff; }
-.tp-radio button.active {
-  background: linear-gradient(135deg, rgba(115,92,0,0.35), rgba(184,146,30,0.25));
-  border-color: rgba(201,168,76,0.5);
-  color: #E8C96A;
-}
-.tp-swatch { width: 10px; height: 10px; border-radius: 999px; flex-shrink: 0; }
-
-/* Floating launcher (when panel closed) — only visible when tweaks mode is on */
-#tweaksLauncher {
-  display: none;
-  position: fixed; bottom: 24px; right: 24px;
-  z-index: 200;
-  width: 48px; height: 48px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #735C00, #B8921E);
-  border: 1px solid rgba(201,168,76,0.5);
-  box-shadow: 0 8px 28px rgba(115,92,0,0.5);
-  cursor: pointer;
-  align-items: center; justify-content: center;
-  color: #fff; font-size: 18px;
-}
-#tweaksLauncher.show { display: flex; }
-#tweaksLauncher:hover { transform: translateY(-3px); box-shadow: 0 14px 40px rgba(115,92,0,0.65); }
 </style>
 </head>
 <body>
@@ -2480,145 +2314,6 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
   }, { threshold: 0.1 }).observe(section);
 })();
 </script>
-<!-- ══ TWEAKS PANEL ══ -->
-<button id="tweaksLauncher" title="Ouvrir les tweaks"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg></button>
-
-<div id="tweaksPanel">
-  <div class="tp-head">
-    <div class="tp-title">Tweaks</div>
-    <button class="tp-close" id="tpClose">×</button>
-  </div>
-
-  <div class="tp-section">
-    <div class="tp-label">Aura</div>
-    <div class="tp-radio cols-3" data-key="aura">
-      <button data-val="night"><span class="tp-swatch" style="background:linear-gradient(135deg,#7040CC,#3A80FF);"></span>Night</button>
-      <button data-val="sunset"><span class="tp-swatch" style="background:linear-gradient(135deg,#E04088,#FF8030);"></span>Sunset</button>
-      <button data-val="forest"><span class="tp-swatch" style="background:linear-gradient(135deg,#1FB888,#00B4C8);"></span>Forest</button>
-    </div>
-    <div class="tp-radio" data-key="aura" style="margin-top:6px;grid-template-columns:1fr;">
-      <button data-val="royale"><span class="tp-swatch" style="background:linear-gradient(135deg,#8B6914,#E8C96A);"></span>Royale (mono gold)</button>
-    </div>
-    <div class="tp-desc">Recolore l'ensemble de la palette secondaire.</div>
-  </div>
-
-  <div class="tp-section">
-    <div class="tp-label">Voice</div>
-    <div class="tp-radio cols-3" data-key="voice">
-      <button data-val="modern" style="font-family:'Space Grotesk',sans-serif;">Modern</button>
-      <button data-val="editorial" style="font-family:'Playfair Display',serif;font-style:italic;">Editorial</button>
-      <button data-val="bold" style="font-family:'Barlow Condensed',sans-serif;text-transform:uppercase;letter-spacing:0.08em;">Bold</button>
-    </div>
-    <div class="tp-desc">Personnalité typographique des titres.</div>
-  </div>
-
-  <div class="tp-section">
-    <div class="tp-label">Atmosphere</div>
-    <div class="tp-radio cols-3" data-key="atmosphere">
-      <button data-val="calm">Calm</button>
-      <button data-val="vivid">Vivid</button>
-      <button data-val="maximal">Maximal</button>
-    </div>
-    <div class="tp-desc">Intensité des halos lumineux et de l'espace.</div>
-  </div>
-
-  <div class="tp-section">
-    <div class="tp-label">Fond Hero</div>
-    <div class="tp-radio" data-key="hero-bg" style="grid-template-columns:1fr 1fr;">
-      <button data-val="sombre"><span class="tp-swatch" style="background:#060412;border:1px solid rgba(255,255,255,0.2);"></span>Sombre</button>
-      <button data-val="blanc"><span class="tp-swatch" style="background:#f5f4f8;border:1px solid rgba(0,0,0,0.1);"></span>Blanc</button>
-    </div>
-    <div class="tp-desc">Couleur de fond derrière la hero card.</div>
-  </div>
-</div>
-
-<script>
-(function() {
-  const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
-    "aura": "night",
-    "voice": "modern",
-    "atmosphere": "vivid",
-    "hero-bg": "sombre"
-  }/*EDITMODE-END*/;
-
-  let state = { ...TWEAK_DEFAULTS };
-
-  function apply() {
-    document.body.dataset.aura = state.aura;
-    document.body.dataset.voice = state.voice;
-    document.body.dataset.atmosphere = state.atmosphere;
-    document.body.dataset.heroBg = state['hero-bg'];
-    // sync active button states
-    document.querySelectorAll('.tp-radio').forEach(group => {
-      const key = group.dataset.key;
-      group.querySelectorAll('button').forEach(b => {
-        b.classList.toggle('active', b.dataset.val === state[key]);
-      });
-    });
-  }
-
-  function setKey(key, val) {
-    state[key] = val;
-    apply();
-    try {
-      window.parent.postMessage({ type:'__edit_mode_set_keys', edits: { [key]: val } }, '*');
-    } catch(e) {}
-  }
-
-  // Wire radio buttons
-  document.querySelectorAll('.tp-radio button').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const key = btn.parentElement.dataset.key;
-      setKey(key, btn.dataset.val);
-    });
-  });
-
-  // Panel open/close
-  const panel = document.getElementById('tweaksPanel');
-  const launcher = document.getElementById('tweaksLauncher');
-  const closeBtn = document.getElementById('tpClose');
-
-  let _tweakFonts = false;
-  function loadTweakFonts() {
-    if (_tweakFonts) return; _tweakFonts = true;
-    const l = document.createElement('link');
-    l.rel = 'stylesheet';
-    l.href = 'https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Barlow+Condensed:wght@400;600;700;800;900&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap';
-    document.head.appendChild(l);
-  }
-  function openPanel() { loadTweakFonts(); panel.classList.add('open'); launcher.classList.remove('show'); }
-  function closePanel() {
-    panel.classList.remove('open');
-    launcher.classList.add('show');
-    try { window.parent.postMessage({ type:'__edit_mode_dismissed' }, '*'); } catch(e){}
-  }
-
-  launcher.addEventListener('click', openPanel);
-  closeBtn.addEventListener('click', closePanel);
-
-  // Host protocol
-  window.addEventListener('message', (e) => {
-    const d = e.data || {};
-    if (d.type === '__activate_edit_mode') {
-      panel.classList.add('open');
-      launcher.classList.remove('show');
-    } else if (d.type === '__deactivate_edit_mode') {
-      panel.classList.remove('open');
-      launcher.classList.remove('show');
-    }
-  });
-
-  // Show launcher immediately when running standalone (not in a parent frame)
-  try {
-    if (window.self === window.top) launcher.classList.add('show');
-  } catch(e) { launcher.classList.add('show'); }
-
-  // Initial apply + announce
-  apply();
-  try { window.parent.postMessage({ type:'__edit_mode_available' }, '*'); } catch(e){}
-})();
-</script>
-
 <script>
 (function () {
   const blog = document.getElementById('blog');
