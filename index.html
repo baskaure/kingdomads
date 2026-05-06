@@ -934,7 +934,7 @@ footer {
   .hero-sticky { height: 100svh; height: 100vh; }
   .hero-expand-card { width: 100%; height: 100%; border-radius: 0; will-change: auto; }
   .hc-content { padding: 28px 22px 80px; }
-  .hero-title { font-size: clamp(1.85rem, 7.5vw, 2.8rem); margin-bottom: 18px; }
+  .hero-title { font-size: clamp(2.2rem, 9vw, 3.2rem); margin-bottom: 18px; }
   .hero-sub { font-size: 0.95rem; margin-bottom: 28px; }
   .hero-btns { flex-direction: column; align-items: stretch; gap: 10px; width: 100%; }
   .hero-btns .btn { justify-content: center; padding: 14px 24px; font-size: 0.9rem; }
@@ -1075,7 +1075,7 @@ footer {
 /* ── very small screens ── */
 @media (max-width: 380px) {
   .container { padding: 0 16px; }
-  .hero-title { font-size: 1.7rem; }
+  .hero-title { font-size: 1.95rem; }
   .hc-content { padding: 22px 16px 56px; }
   .hc-metrics { gap: 4px; }
   .hc-metrics .metric-card .num { font-size: 1.2rem; }
@@ -1327,7 +1327,9 @@ body[data-atmosphere="maximal"] .btn-gold { box-shadow: 0 6px 32px rgba(115,92,0
     <div class="orb hero-orb3"></div>
 
     <div class="hero-expand-card" id="heroCard">
-      <video class="hc-video" autoplay loop muted playsinline webkit-playsinline x5-playsinline disablepictureinpicture preload="metadata" id="heroVideo" data-mp4="input/hero.mp4" onerror="this.style.display='none'"></video>
+      <video class="hc-video" autoplay loop muted playsinline webkit-playsinline x5-playsinline disablepictureinpicture preload="auto" id="heroVideo" data-mp4="input/hero.mp4" onerror="this.style.display='none'">
+        <source src="input/hero.mp4" type="video/mp4">
+      </video>
       <div class="hc-overlay"></div>
 
       <div class="hc-content" id="heroContent">
@@ -1337,7 +1339,7 @@ body[data-atmosphere="maximal"] .btn-gold { box-shadow: 0 6px 32px rgba(115,92,0
             Experts en publicité sur les réseaux sociaux
           </div>
           <h1 class="hero-title">
-            Améliorez votre <span class="grad-gold">notoriété</span> et <span class="grad-violet">rentabilité</span><br>grâce à la publicité en ligne
+            Améliorez votre <span class="grad-gold">notoriété</span> et <span class="grad-violet">rentabilité</span> <br>grâce à la publicité en ligne
           </h1>
           <div class="hero-btns">
             <a href="#services" class="btn btn-flow">
