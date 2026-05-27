@@ -3,7 +3,12 @@
 /marketwins/*              https://pub-kads.netlify.app/:splat       200!
 
 # Assets du site pub-kads (build Vite) servis en transparence
+# (dossiers absents de kingdomads, donc on peut forcer le proxy avec 200!)
 /assets/*                  https://pub-kads.netlify.app/assets/:splat    200!
-/images/*                  https://pub-kads.netlify.app/images/:splat    200!
 /fonts/*                   https://pub-kads.netlify.app/fonts/:splat     200!
+/images/*                  https://pub-kads.netlify.app/images/:splat    200!
 /vite.svg                  https://pub-kads.netlify.app/vite.svg         200!
+
+# Dossier input partagé entre kingdomads et pub-kads :
+# 200 (sans !) -> fichier local servi en priorité, fallback vers pub-kads s'il manque
+/input/*                   https://pub-kads.netlify.app/input/:splat     200
