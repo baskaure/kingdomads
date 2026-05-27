@@ -1,1 +1,9 @@
-/marketwins/*    https://pub-kads.netlify.app/:splat    200!
+# Page marketwins : proxy vers pub-kads.netlify.app
+/marketwins                https://pub-kads.netlify.app/             200!
+/marketwins/*              https://pub-kads.netlify.app/:splat       200!
+
+# Assets du site pub-kads (build Vite) servis en transparence
+/assets/*                  https://pub-kads.netlify.app/assets/:splat    200!
+/images/*                  https://pub-kads.netlify.app/images/:splat    200!
+/fonts/*                   https://pub-kads.netlify.app/fonts/:splat     200!
+/vite.svg                  https://pub-kads.netlify.app/vite.svg         200!
