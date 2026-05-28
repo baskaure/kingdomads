@@ -328,70 +328,151 @@ h3 { font-size: 1.25rem; font-weight: 600; }
 .nav-cta:hover .nav-cta-arr-r { right: -25%; }
 
 /* ══════════════════════════════════
-   HERO
+   HERO — scroll-expansion (21st.dev style)
 ══════════════════════════════════ */
 #hero {
-  /* Le hero ne prend qu'un seul écran. L'animation est pilotée par
-     scroll-jacking (la molette/touch est interceptée tant que p<1). */
+  /* Un seul écran. Scroll-jacking : la molette/touch est interceptée tant que p<1. */
   height: 100vh;
   padding: 0;
   overflow: hidden;
 }
 
-/* ── scroll-expand system ── */
 .hero-sticky {
   position: relative; top: 0; height: 100vh;
   display: flex; align-items: center; justify-content: center;
   overflow: hidden;
 }
+
+/* couche orbes — fade au scroll */
+.hero-bg-layer {
+  position: absolute; inset: 0; z-index: 0;
+  will-change: opacity;
+}
+
+/* stage centré */
+.hero-stage {
+  position: relative; z-index: 1;
+  width: 100%; height: 100%;
+  display: flex; align-items: center; justify-content: center;
+}
+
+/* carte vidéo : part petite, grandit jusqu'à plein écran */
 .hero-expand-card {
-  position: relative; overflow: hidden;
-  width: 65vw; height: 60vh; border-radius: 24px;
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 380px; height: 500px;
+  max-width: 100vw; max-height: 100vh;
+  border-radius: 24px;
   background: #0A0614;
   will-change: width, height, border-radius;
   box-shadow: 0 0 80px rgba(112,64,204,0.14), 0 32px 80px rgba(0,0,0,0.55);
+  z-index: 2;
 }
 .hc-video {
   position: absolute; inset: 0;
   width: 100%; height: 100%; object-fit: cover; object-position: center;
+  border-radius: inherit;
 }
 .hc-overlay {
   position: absolute; inset: 0;
-  background: rgba(6,4,18,0.52);
+  background: rgba(6,4,18,0.42);
+  border-radius: inherit;
 }
-.hc-content {
-  position: absolute; inset: 0; z-index: 5;
-  display: flex; flex-direction: column;
-  align-items: center; justify-content: center;
-  text-align: center; padding: 60px 80px;
-  will-change: transform;
+
+/* reveal de marque — centre, fade-in en fin d'expansion */
+.hero-brand {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%) scale(0.92);
+  z-index: 15;
+  pointer-events: none;
+  opacity: 0;
+  will-change: opacity, transform;
+  transition: opacity 0.5s ease, transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  text-align: center;
 }
-.hc-text-wrap { display: flex; flex-direction: column; align-items: center; }
-.hc-text-wrap .pill        { margin-bottom: 26px; }
-.hc-text-wrap .hero-title  { margin-bottom: 22px; }
-.hc-text-wrap .hero-sub    { margin-bottom: 38px; }
-.hc-text-wrap .hero-btns   { margin-bottom: 0; }
+.hero-brand.visible {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
+.hero-brand-text {
+  font-family: var(--font);
+  font-size: clamp(3.2rem, 9vw, 8rem);
+  font-weight: 700;
+  letter-spacing: -0.045em;
+  line-height: 1;
+  display: inline-block;
+  filter: drop-shadow(0 8px 40px rgba(0,0,0,0.55));
+}
+.hb-white { color: #fff; }
+.hb-gold { /* couleur gérée par .grad-gold (background-clip:text) */ }
+
+/* overlay : pill + titre split + boutons devant la vidéo */
+.hero-overlay-content {
+  position: relative; z-index: 10;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 22px;
+  text-align: center;
+  width: 100%;
+  pointer-events: none;
+  padding: 0 24px;
+}
+.hero-overlay-content > * { pointer-events: auto; }
+
+.hero-overlay-content .hero-pill {
+  margin-bottom: 0;
+  opacity: 0;
+  pointer-events: none;
+  will-change: opacity, transform;
+}
+
+.hero-title-split {
+  display: flex; flex-direction: column; align-items: center;
+  gap: 6px; width: 100%;
+}
+.hero-title-line {
+  font-family: var(--font);
+  font-size: clamp(1.8rem, 4.4vw, 4rem);
+  font-weight: 700; line-height: 1.08;
+  letter-spacing: -0.03em;
+  color: var(--white);
+  text-wrap: balance;
+  will-change: transform, opacity;
+  filter: drop-shadow(0 4px 24px rgba(0,0,0,0.6));
+}
+
+.hero-btns {
+  display: flex; gap: 14px; flex-wrap: wrap; justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  will-change: opacity, transform;
+}
+
+/* metrics — fade-in après expansion */
 .hc-metrics {
   position: absolute; bottom: 44px; left: 0; right: 0;
-  display: flex; gap: 14px; justify-content: center; z-index: 6;
+  display: flex; gap: 14px; justify-content: center; z-index: 7;
   opacity: 0; transform: translateY(18px); pointer-events: none;
   transition: opacity 0.45s ease, transform 0.45s ease;
 }
 .hc-metrics.visible { opacity: 1; transform: translateY(0); pointer-events: all; }
 .hc-metrics .metric-card { width: 180px; padding: 18px 16px; }
+
+/* scroll hint en bas */
 .hc-scroll-hint {
   position: absolute; bottom: 26px; left: 0; right: 0; z-index: 7;
   display: flex; flex-direction: column; align-items: center; gap: 6px;
   font-size: 10px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase;
   color: rgba(232,230,255,0.32); pointer-events: none;
   animation: hcBounce 2s ease-in-out infinite;
+  will-change: opacity;
 }
 @keyframes hcBounce {
   0%, 100% { transform: translateY(0); }
   50%       { transform: translateY(5px); }
 }
 @media (max-width: 960px) {
-  .hc-content { padding: 40px 28px; }
   .hc-metrics { flex-wrap: wrap; gap: 10px; bottom: 14px; }
   .hc-metrics .metric-card { width: 150px; padding: 14px 12px; }
 }
@@ -399,13 +480,6 @@ h3 { font-size: 1.25rem; font-weight: 600; }
 .hero-orb1 { width: 900px; height: 700px; top: -200px; left: -200px; background: radial-gradient(circle, rgba(120,40,220,0.4) 0%, transparent 70%); }
 .hero-orb2 { width: 800px; height: 700px; top: -100px; right: -200px; background: radial-gradient(circle, rgba(20,90,220,0.32) 0%, transparent 70%); }
 .hero-orb3 { width: 700px; height: 500px; bottom: -100px; left: 30%; background: radial-gradient(circle, rgba(115,92,0,0.38) 0%, transparent 70%); }
-
-.hero-title { margin-bottom: 28px; text-wrap: balance; max-width: 920px; }
-.hero-sub {
-  font-size: 1.1rem; color: var(--muted); font-weight: 300;
-  max-width: 520px; line-height: 1.8; margin-bottom: 48px;
-}
-.hero-btns { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; margin-bottom: 80px; }
 
 /* hero metric cards */
 .hero-metrics { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; }
@@ -929,23 +1003,21 @@ footer {
   #navbar { width: calc(100% - 24px); padding: 0 16px; }
   .nav-cta { display: none; }
 
-  /* hero — plein écran immédiat sur mobile */
+  /* hero mobile : carte plus petite, titre plus compact */
   #hero { height: 100svh; height: 100vh; }
   .hero-sticky { height: 100svh; height: 100vh; }
-  .hero-expand-card { width: 100%; height: 100%; border-radius: 0; will-change: auto; }
-  .hc-content { padding: 28px 22px 80px; }
-  .hero-title { font-size: clamp(2.2rem, 9vw, 3.2rem); margin-bottom: 18px; }
-  .hero-sub { font-size: 0.95rem; margin-bottom: 28px; }
-  .hero-btns { flex-direction: column; align-items: stretch; gap: 10px; width: 100%; }
-  .hero-btns .btn { justify-content: center; padding: 14px 24px; font-size: 0.9rem; }
+  .hero-expand-card { width: 78vw; height: 50vh; border-radius: 20px; }
+  .hero-overlay-content { gap: 16px; padding: 0 16px; }
+  .hero-title-line { font-size: clamp(1.5rem, 7vw, 2.4rem); }
+  .hero-btns { flex-direction: row; gap: 8px; }
+  .hero-btns .btn { padding: 11px 18px; font-size: 0.85rem; }
+  .hero-date-text { font-size: 0.9rem; }
+  .hero-scroll-text { font-size: 0.7rem; }
   .hc-metrics { flex-wrap: nowrap; gap: 6px; bottom: 12px; padding: 0 8px; }
   .hc-metrics .metric-card { width: 0; flex: 1; padding: 10px 6px; min-width: 0; }
   .hc-metrics .metric-card .num { font-size: 1.35rem; white-space: nowrap; }
   .hc-metrics .metric-card .lbl { font-size: 8.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .hc-scroll-hint { bottom: 20px; }
-
-  /* hero titre — supprime le <br> forcé */
-  .hero-title br { display: none; }
 
   /* pill */
   .pill { font-size: 10px; padding: 5px 14px; margin-bottom: 18px; }
@@ -1045,7 +1117,6 @@ footer {
   .metric-card { background: rgba(10, 7, 22, 0.55); }
 
   /* will-change permanent = mémoire GPU bloquée pour rien : on enlève hors animation */
-  .hc-content,
   .team-content { will-change: auto !important; }
   /* team-track : will-change géré par JS pour l'animation mobile — pas de reset CSS ici */
   /* hero-expand-card : géré par JS (clip-path sur mobile) — pas de reset CSS ici */
@@ -1065,8 +1136,8 @@ footer {
 /* ── very small screens ── */
 @media (max-width: 380px) {
   .container { padding: 0 16px; }
-  .hero-title { font-size: 1.95rem; }
-  .hc-content { padding: 22px 16px 56px; }
+  .hero-title-line { font-size: clamp(1.3rem, 6.5vw, 1.9rem); }
+  .hero-overlay-content { gap: 12px; padding: 0 12px; }
   .hc-metrics { gap: 4px; }
   .hc-metrics .metric-card .num { font-size: 1.2rem; }
   .hc-metrics .metric-card .lbl { font-size: 7.5px; }
@@ -1145,59 +1216,76 @@ body #contact > .orb { background: radial-gradient(circle, rgba(var(--aux-a-rgb)
 <!-- ══ HERO ══ -->
 <section id="hero">
   <div class="hero-sticky">
-    <div class="orb hero-orb1"></div>
-    <div class="orb hero-orb2"></div>
-    <div class="orb hero-orb3"></div>
+    <!-- couche d'orbes (fade au scroll) -->
+    <div class="hero-bg-layer" id="heroBg">
+      <div class="orb hero-orb1"></div>
+      <div class="orb hero-orb2"></div>
+      <div class="orb hero-orb3"></div>
+    </div>
 
-    <div class="hero-expand-card" id="heroCard">
-      <video class="hc-video" autoplay loop muted playsinline webkit-playsinline x5-playsinline disablepictureinpicture preload="metadata" id="heroVideo" data-mp4="input/hero.mp4">
-        <source src="input/hero.mp4" type="video/mp4">
-      </video>
-      <div class="hc-overlay"></div>
+    <!-- scène centrée -->
+    <div class="hero-stage">
+      <!-- carte vidéo (z=2, grandit au scroll) -->
+      <div class="hero-expand-card" id="heroCard">
+        <video class="hc-video" autoplay loop muted playsinline webkit-playsinline x5-playsinline disablepictureinpicture preload="metadata" id="heroVideo" data-mp4="input/hero.mp4">
+          <source src="input/hero.mp4" type="video/mp4">
+        </video>
+        <div class="hc-overlay"></div>
+      </div>
 
-      <div class="hc-content" id="heroContent">
-        <div class="hc-text-wrap">
-          <div class="pill">
-            <span class="pill-dot"></span>
-            Experts en publicité sur les réseaux sociaux
-          </div>
-          <h1 class="hero-title">
-            Améliorez votre <span class="grad-gold">notoriété</span> et <span class="grad-violet">rentabilité</span> <br>grâce à la publicité en ligne
+      <!-- overlay devant la vidéo : pill + titre split + boutons -->
+      <div class="hero-overlay-content" id="heroOverlay">
+        <div class="pill hero-pill" id="heroPill">
+          <span class="pill-dot"></span>
+          Experts en publicité sur les réseaux sociaux
+        </div>
+        <div class="hero-title-split">
+          <h1 class="hero-title-line" id="heroLine1">
+            Améliorez votre <span class="grad-gold">notoriété</span> et <span class="grad-violet">rentabilité</span>
           </h1>
-          <div class="hero-btns">
-            <a href="#services" class="btn btn-flow">
-              <span class="flow-arr-l"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
-              <span class="flow-text">En savoir plus</span>
-              <span class="flow-bg"></span>
-              <span class="flow-arr-r"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
-            </a>
-            <a href="#contact" class="btn btn-ghost">Faire une interview</a>
-          </div>
+          <h1 class="hero-title-line" id="heroLine2">
+            grâce à la publicité en ligne
+          </h1>
+        </div>
+        <div class="hero-btns" id="heroBtns">
+          <a href="#services" class="btn btn-flow">
+            <span class="flow-arr-l"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
+            <span class="flow-text">En savoir plus</span>
+            <span class="flow-bg"></span>
+            <span class="flow-arr-r"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
+          </a>
+          <a href="#contact" class="btn btn-ghost">Faire une interview</a>
         </div>
       </div>
+    </div>
 
-      <div class="hc-metrics" id="heroMetrics">
-        <div class="glass metric-card" style="--col:var(--gold-lt)">
-          <div class="top-line"></div>
-          <div class="num grad-gold" data-target="30" data-suffix="+">0+</div>
-          <div class="lbl">Entreprises</div>
-        </div>
-        <div class="glass metric-card" style="--col:#9060DD">
-          <div class="top-line" style="background:linear-gradient(90deg,transparent,#9060DD,transparent)"></div>
-          <div class="num grad-violet" data-target="5" data-suffix="M€+">0M€+</div>
-          <div class="lbl">CA généré</div>
-        </div>
-        <div class="glass metric-card" style="--col:var(--blue)">
-          <div class="top-line" style="background:linear-gradient(90deg,transparent,#3A80FF,transparent)"></div>
-          <div class="num" style="background:linear-gradient(135deg,#3A80FF,#60B0FF);-webkit-background-clip:text;-webkit-text-fill-color:transparent;" data-target="100" data-suffix="+">0+</div>
-          <div class="lbl">Projets traités</div>
-        </div>
-      </div>
+    <!-- reveal de marque : apparaît une fois l'expansion terminée -->
+    <div class="hero-brand" id="heroBrand" aria-hidden="true">
+      <span class="hero-brand-text"><span class="hb-white">kingdom</span><span class="hb-gold grad-gold">Ads</span></span>
+    </div>
 
-      <div class="hc-scroll-hint" id="heroScrollHint">
-        <span>Défiler pour explorer</span>
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>
+    <!-- metrics : fade-in après expansion -->
+    <div class="hc-metrics" id="heroMetrics">
+      <div class="glass metric-card" style="--col:var(--gold-lt)">
+        <div class="top-line"></div>
+        <div class="num grad-gold" data-target="30" data-suffix="+">0+</div>
+        <div class="lbl">Entreprises</div>
       </div>
+      <div class="glass metric-card" style="--col:#9060DD">
+        <div class="top-line" style="background:linear-gradient(90deg,transparent,#9060DD,transparent)"></div>
+        <div class="num grad-violet" data-target="5" data-suffix="M€+">0M€+</div>
+        <div class="lbl">CA généré</div>
+      </div>
+      <div class="glass metric-card" style="--col:var(--blue)">
+        <div class="top-line" style="background:linear-gradient(90deg,transparent,#3A80FF,transparent)"></div>
+        <div class="num" style="background:linear-gradient(135deg,#3A80FF,#60B0FF);-webkit-background-clip:text;-webkit-text-fill-color:transparent;" data-target="100" data-suffix="+">0+</div>
+        <div class="lbl">Projets traités</div>
+      </div>
+    </div>
+
+    <div class="hc-scroll-hint" id="heroScrollHint">
+      <span>Défiler pour explorer</span>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>
     </div>
   </div>
 </section>
@@ -1728,103 +1816,33 @@ document.querySelectorAll('[data-target]').forEach(el => {
   if (!el.closest('#heroMetrics')) cio.observe(el);
 });
 
-/* scroll-expand hero — scroll-jacking (no empty section, smooth pacing) */
+/* scroll-expand hero — scroll-jacking façon 21st.dev :
+   carte vidéo qui grandit + titre qui se sépare horizontalement +
+   pill/boutons qui fade-out + metrics qui fade-in à la fin */
 (function () {
   const card     = document.getElementById('heroCard');
-  const content  = document.getElementById('heroContent');
+  const bg       = document.getElementById('heroBg');
+  const pill     = document.getElementById('heroPill');
+  const line1    = document.getElementById('heroLine1');
+  const line2    = document.getElementById('heroLine2');
+  const btns     = document.getElementById('heroBtns');
+  const brand    = document.getElementById('heroBrand');
   const metrics  = document.getElementById('heroMetrics');
   const hint     = document.getElementById('heroScrollHint');
+  if (!card) return;
 
-  /* ── mobile : animation clip-path (GPU-composité, zéro reflow) ──
-     clip-path ne touche pas au layout → pas de reflow à chaque frame.
-     On garde la carte en 100%×100% et on masque les bords via inset().
-     Le padding du contenu suit l'inset pour que le texte reste dans la zone visible.
-     Les boutons apparaissent progressivement une fois la carte assez grande. */
-  if (window.innerWidth <= 640) {
-    const dw   = window.innerWidth;
-    const btns = content.querySelector('.hero-btns');
-    const pill = content.querySelector('.pill');
-    const initPad = Math.round(dw * 0.175);
-
-    card.style.cssText         = 'width:100%;height:100%;border-radius:0;will-change:clip-path;clip-path:inset(20% 17.5% round 24px);';
-    content.style.paddingLeft  = initPad + 'px';
-    content.style.paddingRight = initPad + 'px';
-    if (pill) { pill.style.opacity = '0'; pill.style.pointerEvents = 'none'; }
-    if (btns) { btns.style.opacity = '0'; btns.style.pointerEvents = 'none'; }
-    if (hint) hint.style.display = 'none';
-
-    let mp = 0, mLocked = true, mMet = false, mCnt = false, mRaf = false, mTy = 0;
-
-    function applyMp() {
-      if (mRaf) return; mRaf = true;
-      requestAnimationFrame(() => {
-        mRaf = false;
-        const p  = mp;
-
-        /* clip-path */
-        const ix = (17.5 * (1 - p)).toFixed(2);
-        const iy = (20   * (1 - p)).toFixed(2);
-        const r  = (24   * (1 - p)).toFixed(1);
-        card.style.clipPath = `inset(${iy}% ${ix}% round ${r}px)`;
-
-        /* padding contenu : suit l'inset pour que le texte reste dans la zone visible */
-        const sp = Math.max(22, Math.round(dw * 0.175 * (1 - p)));
-        content.style.paddingLeft  = sp + 'px';
-        content.style.paddingRight = sp + 'px';
-
-        /* pill : apparaît à partir de p = 0.25 */
-        if (pill) {
-          const po = Math.max(0, Math.min(1, (p - 0.25) / 0.2));
-          pill.style.opacity       = po;
-          pill.style.pointerEvents = po > 0 ? '' : 'none';
-        }
-
-        /* boutons : apparaissent à partir de p = 0.4 */
-        if (btns) {
-          const bo = Math.max(0, Math.min(1, (p - 0.4) / 0.25));
-          btns.style.opacity       = bo;
-          btns.style.pointerEvents = bo > 0 ? '' : 'none';
-        }
-
-        /* décalage vertical du contenu (laisse place aux metrics) */
-        const shift = -52 * Math.max(0, Math.min(1, (p - 0.55) / 0.45));
-        content.style.transform = `translateY(${shift}px)`;
-
-        /* metrics */
-        const show = p >= 0.75;
-        if (show !== mMet) {
-          mMet = show;
-          metrics.classList.toggle('visible', show);
-          if (show && !mCnt) { mCnt = true; metrics.querySelectorAll('[data-target]').forEach(animateCounter); }
-        }
-      });
-    }
-    function setMp(v) { mp = Math.max(0, Math.min(1, v)); applyMp(); }
-    function onMWheel(e) {
-      if (mLocked) { e.preventDefault(); setMp(mp + e.deltaY * 0.001); if (mp >= 1) { mLocked = false; card.style.willChange = 'auto'; } }
-      else if (e.deltaY < 0 && window.scrollY <= 1) { e.preventDefault(); mLocked = true; card.style.willChange = 'clip-path'; setMp(mp + e.deltaY * 0.001); }
-    }
-    function onMTStart(e) { mTy = e.touches[0].clientY; }
-    function onMTMove(e) {
-      const dy = mTy - e.touches[0].clientY; mTy = e.touches[0].clientY;
-      if (mLocked) { e.preventDefault(); setMp(mp + dy * 0.005); if (mp >= 1) { mLocked = false; card.style.willChange = 'auto'; } }
-      else if (dy < 0 && window.scrollY <= 1) { e.preventDefault(); mLocked = true; card.style.willChange = 'clip-path'; setMp(mp + dy * 0.005); }
-    }
-    document.querySelectorAll('a[href^="#"], [data-nm]').forEach(a => {
-      a.addEventListener('click', () => {
-        const href = a.getAttribute('href');
-        if (href && href !== '#hero' && href !== '#') { mp = 1; applyMp(); mLocked = false; card.style.willChange = 'auto'; }
-      });
-    });
-    window.addEventListener('wheel',      onMWheel,  { passive: false });
-    window.addEventListener('touchstart', onMTStart, { passive: true  });
-    window.addEventListener('touchmove',  onMTMove,  { passive: false });
-    return;
-  }
+  const isMobile = window.innerWidth < 768;
+  /* dimensions : à p=1 la carte couvre exactement le viewport (pleine immersion) */
+  const initW = isMobile ? Math.round(window.innerWidth * 0.78) : 380;
+  const initH = isMobile ? Math.round(window.innerHeight * 0.5) : 500;
+  const dW    = Math.max(0, window.innerWidth  - initW);
+  const dH    = Math.max(0, window.innerHeight - initH);
+  const titleShift = isMobile ? 100 : 90;   /* vw */
 
   let progress = 0;
   let locked = true;
   let metricsShown = false;
+  let brandShown = false;
   let counted = false;
   let rafPending = false;
   let touchStartY = 0;
@@ -1836,28 +1854,51 @@ document.querySelectorAll('[data-target]').forEach(el => {
       rafPending = false;
       const p = progress;
 
-      card.style.width        = (65 + 35 * p) + 'vw';
-      card.style.height       = (60 + 40 * p) + 'vh';
+      /* carte vidéo : grandit jusqu'à plein écran */
+      card.style.width        = (initW + dW * p) + 'px';
+      card.style.height       = (initH + dH * p) + 'px';
       card.style.borderRadius = (24 - 24 * p) + 'px';
 
-      const shift = -52 * Math.max(0, Math.min(1, (p - 0.55) / 0.45));
-      content.style.transform = 'translateY(' + shift + 'px)';
+      /* orbes : fade léger */
+      if (bg) bg.style.opacity = (1 - p * 0.6).toFixed(3);
 
-      hint.style.opacity = Math.max(0, 1 - p * 7);
+      /* titre split : ligne 1 vers la gauche, ligne 2 vers la droite */
+      const titleTx = (titleShift * p).toFixed(2);
+      if (line1) line1.style.transform = `translateX(-${titleTx}vw)`;
+      if (line2) line2.style.transform = `translateX(${titleTx}vw)`;
+      const titleOp = Math.max(0, 1 - p * 1.25).toFixed(3);
+      if (line1) line1.style.opacity = titleOp;
+      if (line2) line2.style.opacity = titleOp;
 
+      /* pill + boutons : cachés jusqu'à p=0.85, fade-in avec "kingdomads" */
+      const pillOp = Math.max(0, Math.min(1, (p - 0.85) / 0.15)).toFixed(3);
+      if (pill) { pill.style.opacity = pillOp; pill.style.pointerEvents = +pillOp > 0 ? '' : 'none'; }
+      if (btns) { btns.style.opacity = pillOp; btns.style.pointerEvents = +pillOp > 0 ? '' : 'none'; }
+
+      /* scroll-hint */
+      if (hint) hint.style.opacity = Math.max(0, 1 - p * 7).toFixed(3);
+
+      /* reveal "kingdomads" : apparaît une fois le titre parti (p >= 0.85) */
+      const brandOn = p >= 0.85;
+      if (brandOn !== brandShown) {
+        brandShown = brandOn;
+        if (brand) brand.classList.toggle('visible', brandOn);
+      }
+
+      /* metrics : fade-in à 75 % */
       const show = p >= 0.75;
       if (show !== metricsShown) {
         metricsShown = show;
-        metrics.classList.toggle('visible', show);
-        if (show && !counted) {
+        if (metrics) metrics.classList.toggle('visible', show);
+        if (show && !counted && metrics) {
           counted = true;
           metrics.querySelectorAll('[data-target]').forEach(animateCounter);
         }
       }
     });
   }
-  /* L'état initial (p=0) correspond exactement aux valeurs CSS de .hero-expand-card,
-     donc on n'écrit aucun inline style ici : évite une invalidation de layout au démarrage. */
+  /* on applique une fois pour figer les dimensions inline et éviter le flash CSS→inline */
+  applyProgress();
 
   function setProgress(next) {
     progress = Math.max(0, Math.min(1, next));
