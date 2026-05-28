@@ -433,13 +433,22 @@ h3 { font-size: 1.25rem; font-weight: 600; }
 }
 .hero-title-line {
   font-family: var(--font);
-  font-size: clamp(1.8rem, 4.4vw, 4rem);
+  font-size: clamp(2.6rem, 5.6vw, 5.4rem);
   font-weight: 700; line-height: 1.08;
   letter-spacing: -0.03em;
-  color: var(--white);
+  color: #fff;
   text-wrap: balance;
   will-change: transform, opacity;
   filter: drop-shadow(0 4px 24px rgba(0,0,0,0.6));
+}
+.hero-title-line .grad-gold,
+.hero-title-line .grad-violet {
+  background: none !important;
+  -webkit-background-clip: initial !important;
+  background-clip: initial !important;
+  -webkit-text-fill-color: #fff !important;
+  color: #fff !important;
+  filter: none !important;
 }
 
 .hero-btns {
@@ -695,17 +704,24 @@ body .hc-metrics .metric-card .num {
   background: var(--bg);
   padding: 0;
   position: relative;
+  height: 100vh;
   overflow: hidden;
 }
 .team-content {
-  min-height: 100vh;
+  width: 100%;
+  height: 100%;
   display: flex; flex-direction: column;
   align-items: center; justify-content: center;
   gap: 28px;
-  will-change: transform;
 }
-.team-spacer { height: 24rem; }
-.team-row { width: 100%; overflow: hidden; }
+.team-row {
+  width: 100%;
+  overflow: hidden;
+  /* flex-shrink:0 → les rangées ne se compressent pas si .team-content (100vh)
+     est plus court que le contenu cumulé ; sinon team-row se rétrécit et clippe
+     le bas des cartes (donc les noms). */
+  flex-shrink: 0;
+}
 .team-track {
   display: flex; flex-wrap: nowrap; gap: 16px;
   padding: 0 16px;
@@ -725,7 +741,7 @@ body .hc-metrics .metric-card .num {
 /* horizontal team card */
 .thc {
   flex: 0 0 auto;
-  width: 17vw;
+  width: 15vw;
   background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: 16px;
@@ -742,11 +758,11 @@ body .hc-metrics .metric-card .num {
   position: relative; overflow: hidden;
 }
 .thc-photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-.thc-info { padding: 18px 22px 22px; }
-.thc-info .thc-name { font-size: 1.05rem; font-weight: 600; margin-bottom: 4px; }
-.thc-role { font-size: 0.8rem; font-weight: 500; }
+.thc-info { padding: 16px 18px 18px; }
+.thc-info .thc-name { font-size: 1rem; font-weight: 600; margin-bottom: 3px; }
+.thc-role { font-size: 0.78rem; font-weight: 500; }
 @media (max-width: 768px) {
-  .thc { width: 44vw; }
+  .thc { width: 30vw; }
   .thc-photo { font-size: 3rem; }
 }
 
@@ -1003,16 +1019,14 @@ footer {
   #navbar { width: calc(100% - 24px); padding: 0 16px; }
   .nav-cta { display: none; }
 
-  /* hero mobile : carte plus petite, titre plus compact */
+  /* hero mobile : carte plus petite, titre plus impactant */
   #hero { height: 100svh; height: 100vh; }
   .hero-sticky { height: 100svh; height: 100vh; }
   .hero-expand-card { width: 78vw; height: 50vh; border-radius: 20px; }
-  .hero-overlay-content { gap: 16px; padding: 0 16px; }
-  .hero-title-line { font-size: clamp(1.5rem, 7vw, 2.4rem); }
+  .hero-overlay-content { gap: 18px; padding: 0 12px; }
+  .hero-title-line { font-size: clamp(2.1rem, 9.2vw, 3.6rem); }
   .hero-btns { flex-direction: row; gap: 8px; }
   .hero-btns .btn { padding: 11px 18px; font-size: 0.85rem; }
-  .hero-date-text { font-size: 0.9rem; }
-  .hero-scroll-text { font-size: 0.7rem; }
   .hc-metrics { flex-wrap: nowrap; gap: 6px; bottom: 12px; padding: 0 8px; }
   .hc-metrics .metric-card { width: 0; flex: 1; padding: 10px 6px; min-width: 0; }
   .hc-metrics .metric-card .num { font-size: 1.35rem; white-space: nowrap; }
@@ -1051,12 +1065,15 @@ footer {
   .pillar:hover { transform: none; }
   .values-left .btn { width: 100%; justify-content: center; }
 
-  /* team */
-  #team { padding: 72px 0; }
-  .team-spacer { display: none; }
-  .team-content { min-height: auto; transform: none !important; gap: 22px; }
+  /* team mobile : cartes resserrées pour que tout (2 rangées + titre) tienne en 100vh */
+  #team { height: 100vh; }
+  .team-content { gap: 14px; }
   .team-title-anim { font-size: clamp(1.3rem, 5.5vw, 1.9rem); max-width: 94vw; }
-  .thc { width: 56vw; }
+  .thc { width: 38vw; }
+  .thc-info { padding: 11px 13px 13px; }
+  .thc-info .thc-name { font-size: 0.9rem; margin-bottom: 2px; }
+  .thc-role { font-size: 0.7rem; }
+  .team-track { gap: 12px; padding: 0 12px; }
 
   /* stats */
   #stats { padding: 48px 0; }
@@ -1116,9 +1133,7 @@ footer {
   /* la metric-card hero garde sa transparence pour laisser voir la vidéo */
   .metric-card { background: rgba(10, 7, 22, 0.55); }
 
-  /* will-change permanent = mémoire GPU bloquée pour rien : on enlève hors animation */
-  .team-content { will-change: auto !important; }
-  /* team-track : will-change géré par JS pour l'animation mobile — pas de reset CSS ici */
+  /* team-track : will-change géré par JS pendant l'animation, pas de reset CSS ici */
   /* hero-expand-card : géré par JS (clip-path sur mobile) — pas de reset CSS ici */
 
   /* skip rendering des sections hors écran — gros gain SI / TBT.
@@ -1126,7 +1141,7 @@ footer {
   #features  { content-visibility: auto; contain-intrinsic-size: 0 1100px; }
   #services  { content-visibility: auto; contain-intrinsic-size: 0 2400px; }
   #values    { content-visibility: auto; contain-intrinsic-size: 0 1300px; }
-  #team      { content-visibility: auto; contain-intrinsic-size: 0 900px; }
+  /* #team : pas de content-visibility — interfère avec position:sticky */
   #blog      { content-visibility: auto; contain-intrinsic-size: 0 1200px; }
   #stats     { content-visibility: auto; contain-intrinsic-size: 0 700px; }
   #contact   { content-visibility: auto; contain-intrinsic-size: 0 1500px; }
@@ -1136,12 +1151,12 @@ footer {
 /* ── very small screens ── */
 @media (max-width: 380px) {
   .container { padding: 0 16px; }
-  .hero-title-line { font-size: clamp(1.3rem, 6.5vw, 1.9rem); }
-  .hero-overlay-content { gap: 12px; padding: 0 12px; }
+  .hero-title-line { font-size: clamp(1.85rem, 9vw, 2.6rem); }
+  .hero-overlay-content { gap: 14px; padding: 0 10px; }
   .hc-metrics { gap: 4px; }
   .hc-metrics .metric-card .num { font-size: 1.2rem; }
   .hc-metrics .metric-card .lbl { font-size: 7.5px; }
-  .thc { width: 66vw; }
+  .thc { width: 50vw; }
   .srv-card { padding: 22px 16px; }
   .pillar { padding: 14px 16px; }
   h2 { font-size: clamp(1.55rem, 6.5vw, 2rem); }
@@ -1554,7 +1569,6 @@ body #contact > .orb { background: radial-gradient(circle, rgba(var(--aux-a-rgb)
     </div>
 
   </div>
-  <div class="team-spacer"></div>
 </section>
 
 <!-- ══ STATS ══ -->
@@ -2105,221 +2119,138 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
   tick();
 })();
 
-/* team — scroll-jacking propre : body en overflow:hidden pendant le lock
-   pour bloquer physiquement le scroll, peu importe le device.
-   Phases :
-   1. sp 0 → 0.4 : scroll naturel (le wrapper monte, le titre scale)
-   2. sp = 0.4 : LOCK → body overflow:hidden, la molette drive xProgress
-   3. xProgress = 1 : UNLOCK → body overflow restauré, scroll naturel reprend */
+/* team — hard scroll-lock : quand la section atteint le haut du viewport,
+   on bloque physiquement le scroll (overflow:hidden sur html+body) et on
+   drive la progression de l'animation via wheel/touch.
+   • engage dans les 2 directions : descente → progress 0, remontée → progress 1
+     (le user peut re-déclencher l'anim en scrollant vers le haut)
+   • snap à section.top = 0 à l'engage pour un cadrage net
+   • à la release, scrollBy de 100px hors de la zone d'engage pour éviter que
+     le wheel event suivant ne re-arme immédiatement le lock
+   • anchor links relâchent immédiatement (navigation propre) */
 (function () {
   const section  = document.getElementById('team');
-  const content  = document.getElementById('teamContent');
   const trackTop = document.getElementById('teamTrackTop');
   const trackBot = document.getElementById('teamTrackBot');
   const title    = document.getElementById('teamTitle');
-  if (!section || !content || !trackTop || !trackBot || !title) return;
+  if (!section || !trackTop || !trackBot || !title) return;
 
-  function clamp01(x) { return x < 0 ? 0 : x > 1 ? 1 : x; }
-  function getSP() {
-    const rect = section.getBoundingClientRect();
-    return clamp01((window.innerHeight - rect.top) / (rect.height + window.innerHeight));
+  const clamp01 = x => x < 0 ? 0 : x > 1 ? 1 : x;
+
+  let progress = 0;
+  let locked   = false;
+  let touchY   = 0;
+  let suppress = false;
+  let suppressTimer = 0;
+
+  function paint(p) {
+    const tp = clamp01(p / 0.5);
+    title.style.transform = `scale(${(1.4 - 0.4 * tp).toFixed(3)})`;
+    const xp = clamp01((p - 0.1) / 0.85);
+    trackTop.style.transform = `translate3d(${(-200 + 200 * xp).toFixed(2)}%, 0, 0)`;
+    trackBot.style.transform = `translate3d(${( 100 - 150 * xp).toFixed(2)}%, 0, 0)`;
   }
+  paint(0);
 
-  /* ── mobile : scroll-driven, zéro interception ── */
-  if (window.innerWidth <= 640) {
-    trackTop.style.willChange = 'transform';
-    trackBot.style.willChange = 'transform';
-    title.style.willChange    = 'transform';
-
-    var mSectionH = section.offsetHeight;
-    var mSectionY = section.getBoundingClientRect().top + window.scrollY;
-    window.addEventListener('resize', function () {
-      mSectionH = section.offsetHeight;
-      mSectionY = section.getBoundingClientRect().top + window.scrollY;
-    }, { passive: true });
-
-    function getX() {
-      var sp = (window.innerHeight - (mSectionY - window.scrollY)) / (mSectionH + window.innerHeight);
-      return sp < 0.1 ? 0 : sp > 0.75 ? 1 : (sp - 0.1) / 0.65;
-    }
-
-    var mLastT1 = null;
-    function paintM(x) {
-      var t1 = (-200 + 200 * x) | 0;
-      if (t1 === mLastT1) return;
-      mLastT1 = t1;
-      var t2 = (100 - 150 * x) | 0;
-      var sc = x < 0.5 ? (1.2 - 0.4 * x) : 1;
-      trackTop.style.transform = 'translate3d(' + t1 + '%,0,0)';
-      trackBot.style.transform = 'translate3d(' + t2 + '%,0,0)';
-      title.style.transform    = 'scale(' + sc.toFixed(3) + ')';
-    }
-
-    var mInView = false;
-    new IntersectionObserver(function (es) { mInView = es[0].isIntersecting; },
-      { rootMargin: '200px 0px' }).observe(section);
-
-    var mRaf = 0;
-    function onScrollM() {
-      if (!mInView || mRaf) return;
-      mRaf = requestAnimationFrame(function () { mRaf = 0; paintM(getX()); });
-    }
-
-    paintM(getX());
-    window.addEventListener('scroll', onScrollM, { passive: true });
-    return;
-  }
-
-  /* ── desktop uniquement ── */
-  const LOCK_AT_SP   = 0.28;
-  const STEP_CAP     = 0.018;
-  const TOUCH_FACTOR = 0.0012;
-
-  const LOCK_UP_AT_SP = 0.6;   /* remontée : lock seulement quand la section est bien rentrée */
-  const WHEEL_FACTOR  = 0.0006; /* ≈ 17 crans pour tout voir (≈ 2/card) */
-
-  let xProgress = 0;
-  let locked    = false;
-  let lockedY   = 0;
-  let raf       = 0;
-  let curSp     = 0;
-  let curXp     = 0;
-  let touchStartY = 0;
-  let lastScrollY = window.scrollY;
-  let navigating  = false;
-  let navTimer    = 0;
-
-  /* on évite le saut de layout quand la scrollbar disparaît */
-  document.documentElement.style.scrollbarGutter = 'stable';
-
-  function paint(sp, xp) {
-    content.style.transform  = 'translateY(' + (sp * 384).toFixed(2) + 'px)';
-    const tp = clamp01(sp / 0.5);
-    title.style.transform    = 'scale(' + (1.4 - 0.4 * tp).toFixed(3) + ')';
-    trackTop.style.transform = 'translateX(' + (-200 + 200 * xp).toFixed(2) + '%)';
-    trackBot.style.transform = 'translateX(' + ( 100 - 150 * xp).toFixed(2) + '%)';
-  }
-  paint(0, 0);
-
-  function loop() {
-    raf = 0;
-    const targetSp = getSP();
-    const targetXp = xProgress;
-    const nextSp = curSp + (targetSp - curSp) * 0.3;
-    const nextXp = curXp + (targetXp - curXp) * 0.3;
-
-    if (Math.abs(nextSp - curSp) > 0.0005 || Math.abs(nextXp - curXp) > 0.0005) {
-      curSp = nextSp;
-      curXp = nextXp;
-      paint(curSp, curXp);
-      raf = requestAnimationFrame(loop);
-    } else {
-      curSp = targetSp;
-      curXp = targetXp;
-      paint(curSp, curXp);
-    }
-  }
-  function schedule() { if (!raf) raf = requestAnimationFrame(loop); }
-
-  /* hard-lock du scroll via overflow hidden + maintien du scrollY */
-  function engageLock() {
+  /* lock dur : on fige l'overflow ; le navigateur ne peut plus scroller du tout,
+     quelle que soit la source (molette, touch, clavier, scrollbar, smooth-scroll). */
+  function engage(initial) {
     if (locked) return;
     locked = true;
-    lockedY = window.scrollY;
-    document.documentElement.style.overflow = 'hidden';
+    progress = initial;
+    paint(progress);
+    /* snap instantané : la section colle pile au haut du viewport
+       (on override scroll-behavior:smooth du CSS pour éviter l'easing). */
+    const top = section.getBoundingClientRect().top + window.scrollY;
+    const html = document.documentElement;
+    const prevBehavior = html.style.scrollBehavior;
+    html.style.scrollBehavior = 'auto';
+    window.scrollTo({ top: top, left: 0, behavior: 'instant' });
+    html.style.scrollBehavior = prevBehavior;
+    html.style.overflow = 'hidden';
     document.body.style.overflow = 'hidden';
   }
-  function releaseLock() {
+  function release() {
     if (!locked) return;
     locked = false;
     document.documentElement.style.overflow = '';
     document.body.style.overflow = '';
   }
 
-  function advanceX(rawDelta) {
-    const d = Math.max(-STEP_CAP, Math.min(STEP_CAP, rawDelta));
-    xProgress = clamp01(xProgress + d);
-    if (xProgress >= 1 && d > 0) releaseLock();
-    if (xProgress <= 0 && d < 0) releaseLock();
+  /* engage quand le haut de la section est près du haut du viewport, dans
+     les deux directions : en descendant on part de 0, en remontant de 1
+     (l'utilisateur revient par le bas → re-trigger possible) */
+  function tryEngage(deltaY) {
+    if (locked || suppress || deltaY === 0) return;
+    const top = section.getBoundingClientRect().top;
+    if (top > 50 || top < -50) return;
+    engage(deltaY > 0 ? 0 : 1);
   }
 
-  /* doit-on engager le lock vu où on est et la direction du scroll ?
-     • descente : sp ∈ [LOCK_AT_SP, 1)
-     • remontée : sp ∈ [LOCK_AT_SP, LOCK_UP_AT_SP] — on laisse remonter
-       librement depuis le footer jusqu'à ce que la section soit bien rentrée. */
-  function shouldLock(direction) {
-    if (locked) return false;
-    const sp = getSP();
-    if (sp < LOCK_AT_SP) return false;
-    if (direction > 0) {
-      if (sp >= 1 || xProgress >= 1) return false;
-      return true;
-    }
-    if (direction < 0) {
-      if (sp > LOCK_UP_AT_SP) return false;
-      if (xProgress <= 0)     return false;
-      return true;
-    }
-    return false;
+  const WHEEL_F  = 0.0009;
+  const TOUCH_F  = 0.0035;
+  const STEP_CAP = 0.04;
+
+  function step(raw) {
+    const d = Math.max(-STEP_CAP, Math.min(STEP_CAP, raw));
+    progress = clamp01(progress + d);
+    paint(progress);
+    if (progress >= 1 && d > 0) finish(1);
+    else if (progress <= 0 && d < 0) finish(-1);
+  }
+
+  /* Sortie propre du lock :
+     1. release : on retire overflow:hidden
+     2. suppress 700ms : aucun nouvel engage le temps que la page bouge
+     3. scrollBy instantané (behavior:'instant' + override de scroll-behavior:smooth
+        sur html) : sans ça, scroll-behavior:smooth du CSS easait le bump sur
+        ~400ms et les wheel events suivants retombaient dans la zone d'engage
+        avec section.top toujours à 0 → re-lock en boucle. */
+  function finish(dir) {
+    release();
+    suppress = true;
+    clearTimeout(suppressTimer);
+    suppressTimer = setTimeout(() => { suppress = false; }, 700);
+    const html = document.documentElement;
+    const prevBehavior = html.style.scrollBehavior;
+    html.style.scrollBehavior = 'auto';
+    window.scrollBy({ top: dir * 200, left: 0, behavior: 'instant' });
+    html.style.scrollBehavior = prevBehavior;
   }
 
   function onWheel(e) {
-    if (navigating) return;
-    if (shouldLock(e.deltaY)) engageLock();
-    if (locked) {
-      e.preventDefault();
-      advanceX(e.deltaY * WHEEL_FACTOR);
-      schedule();
-    }
+    if (!locked) tryEngage(e.deltaY);
+    if (!locked) return;
+    e.preventDefault();
+    step(e.deltaY * WHEEL_F);
   }
 
-  function onTouchStart(e) { touchStartY = e.touches[0].clientY; }
+  function onTouchStart(e) { touchY = e.touches[0].clientY; }
   function onTouchMove(e) {
-    const dy = touchStartY - e.touches[0].clientY;
-    touchStartY = e.touches[0].clientY;
-    if (shouldLock(dy)) engageLock();
-    if (locked) {
-      e.preventDefault();
-      advanceX(dy * TOUCH_FACTOR);
-      schedule();
-    }
+    const dy = touchY - e.touches[0].clientY;
+    touchY = e.touches[0].clientY;
+    if (!locked) tryEngage(dy);
+    if (!locked) return;
+    e.preventDefault();
+    step(dy * TOUCH_F);
   }
 
-  /* filet de sécurité : si on franchit le seuil par un autre moyen
-     (clavier, scrollbar, smooth-scroll JS), on engage le lock quand même.
-     On détecte la direction via la variation de scrollY pour gérer les deux sens. */
-  function onScroll() {
-    if (!locked && !navigating) {
-      const sp = getSP();
-      const dir = window.scrollY - lastScrollY;
-      if (sp >= LOCK_AT_SP) {
-        if (dir > 0 && sp < 1 && xProgress < 1)                    engageLock();
-        else if (dir < 0 && sp <= LOCK_UP_AT_SP && xProgress > 0)  engageLock();
-      }
-    }
-    lastScrollY = window.scrollY;
-    schedule();
-  }
-
-  /* libère le lock sur navigation par ancre (empêche le scroll-lock de couper le smooth scroll) */
+  /* clic sur lien d'ancre → libère et désactive l'engage pendant la nav */
   document.querySelectorAll('a[href^="#"], [data-nm]').forEach(a => {
     a.addEventListener('click', () => {
-      if (locked) releaseLock();
-      navigating = true;
-      clearTimeout(navTimer);
-      navTimer = setTimeout(() => { navigating = false; }, 1200);
+      release();
+      suppress = true;
+      clearTimeout(suppressTimer);
+      suppressTimer = setTimeout(() => { suppress = false; }, 1500);
     });
   });
 
-  /* filet de sécurité : libère si la fenêtre reprend le focus (ex: retour depuis un iframe) */
-  window.addEventListener('focus', () => { if (locked) releaseLock(); });
+  /* filet : si la fenêtre perd le focus pendant le lock, on libère */
+  window.addEventListener('blur', release);
 
-  window.addEventListener('scroll',     onScroll,     { passive: true  });
-  window.addEventListener('resize',     onScroll,     { passive: true  });
   window.addEventListener('wheel',      onWheel,      { passive: false });
   window.addEventListener('touchstart', onTouchStart, { passive: true  });
   window.addEventListener('touchmove',  onTouchMove,  { passive: false });
-  onScroll();
 })();
 
 /* services — reveal au scroll : les cartes glissent depuis les côtés sans toucher au scroll */
