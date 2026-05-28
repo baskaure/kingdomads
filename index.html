@@ -433,11 +433,14 @@ h3 { font-size: 1.25rem; font-weight: 600; }
 }
 .hero-title-line {
   font-family: var(--font);
-  font-size: clamp(2.6rem, 5.6vw, 5.4rem);
+  /* taille calibrée pour que chaque h1 tienne pile sur 1 ligne en desktop
+     (≥1280px). La 1ère ligne « Améliorez votre notoriété et rentabilité »
+     fait 40 caractères : à 3.6vw, ça rentre dans 1232px @1280 et 1680px @1920. */
+  font-size: clamp(2.6rem, 3.6vw, 4.4rem);
   font-weight: 700; line-height: 1.08;
   letter-spacing: -0.03em;
   color: #fff;
-  text-wrap: balance;
+  white-space: nowrap;
   will-change: transform, opacity;
   filter: drop-shadow(0 4px 24px rgba(0,0,0,0.6));
 }
@@ -1024,7 +1027,11 @@ footer {
   .hero-sticky { height: 100svh; height: 100vh; }
   .hero-expand-card { width: 78vw; height: 50vh; border-radius: 20px; }
   .hero-overlay-content { gap: 18px; padding: 0 12px; }
-  .hero-title-line { font-size: clamp(2.1rem, 9.2vw, 3.6rem); }
+  .hero-title-line {
+    font-size: clamp(2.1rem, 9.2vw, 3.6rem);
+    white-space: normal; /* annule le nowrap desktop : le mobile peut wrapper */
+    text-wrap: balance;
+  }
   .hero-btns { flex-direction: row; gap: 8px; }
   .hero-btns .btn { padding: 11px 18px; font-size: 0.85rem; }
   .hc-metrics { flex-wrap: nowrap; gap: 6px; bottom: 12px; padding: 0 8px; }
@@ -1151,7 +1158,7 @@ footer {
 /* ── very small screens ── */
 @media (max-width: 380px) {
   .container { padding: 0 16px; }
-  .hero-title-line { font-size: clamp(1.85rem, 9vw, 2.6rem); }
+  .hero-title-line { font-size: clamp(1.85rem, 9vw, 2.6rem); white-space: normal; }
   .hero-overlay-content { gap: 14px; padding: 0 10px; }
   .hc-metrics { gap: 4px; }
   .hc-metrics .metric-card .num { font-size: 1.2rem; }
