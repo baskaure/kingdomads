@@ -24,7 +24,19 @@
       "Bash(timeout 420 ffmpeg -y -i hero.mp4.orig -c:v libopenh264 -b:v 1700k -pix_fmt yuv420p -an -movflags +faststart -vf \"scale='min\\(1280,iw\\)':-2\" hero.opt.mp4)",
       "Bash(ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 hero.opt.mp4)",
       "Bash(ffmpeg -hide_banner -decoders)",
-      "Bash(ffmpeg -hide_banner -y -c:v h264 -i hero.mp4.orig -t 0.1 -f null -)"
+      "Bash(ffmpeg -hide_banner -y -c:v h264 -i hero.mp4.orig -t 0.1 -f null -)",
+      "Bash(git reset *)",
+      "Bash(git push *)",
+      "Bash(node -e \"const s=require\\('sharp'\\);s\\('input/Or_blanc-petit-160.webp'\\).metadata\\(\\).then\\(m=>console.log\\(m.width+'x'+m.height,m.format\\)\\).catch\\(e=>console.log\\('ERR',e.message\\)\\)\")",
+      "Bash(command -v convert magick)",
+      "Bash(convert -version)",
+      "Bash(ffmpeg -hide_banner -y -i input/Or_blanc-petit-160.webp -frames:v 1 /tmp/_fav_test.png)",
+      "Bash(rm -f /tmp/_fav_test.png)",
+      "Bash(magick input/Or_blanc-petit-160.webp -resize 16x16   input/favicon-16.png)",
+      "Bash(magick input/Or_blanc-petit-160.webp -resize 32x32   input/favicon-32.png)",
+      "Bash(magick input/Or_blanc-petit-160.webp -resize 180x180 input/apple-touch-icon.png)",
+      "Bash(magick input/Or_blanc-petit-160.webp -background none -define icon:auto-resize=48,32,16 input/favicon.ico)",
+      "Bash(magick identify *)"
     ]
   }
 }
