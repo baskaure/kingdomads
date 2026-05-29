@@ -30,24 +30,31 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --bg:        #060412;
-  --bg2:       #080616;
-  --bg-card:   rgba(255,255,255,0.03);
-  --border:    rgba(255,255,255,0.07);
+  --bg:        #050310;
+  --bg2:       #07051a;
+  --bg-card:   rgba(255,255,255,0.04);
+  --border:    rgba(255,255,255,0.09);
   --gold:      #735C00;
   --gold-mid:  #B8921E;
   --gold-lt:   #C9A84C;
   --gold-pale: #E8C96A;
-  --violet:    #7040CC;
-  --blue:      #3A80FF;
-  --white:     #E8E6FF;
-  --muted:     rgba(232,230,255,0.38);
+  --white:     #EDEBFF;
+  --muted:     rgba(232,230,255,0.56);
+  --muted-dim: rgba(232,230,255,0.40);
+  --radius:    22px;
+  --radius-lg: 28px;
   --font:      'Space Grotesk', 'SG Fallback', sans-serif;
 }
 
 html { scroll-behavior: smooth; overflow-x: hidden; }
 body {
-  background: var(--bg);
+  background:
+    radial-gradient(1100px 760px at 12% -8%,  rgba(201,168,76,0.18), transparent 60%),
+    radial-gradient(1000px 720px at 92% 2%,   rgba(232,201,106,0.10), transparent 58%),
+    radial-gradient(900px 640px at 50% 110%,  rgba(115,92,0,0.16),  transparent 60%),
+    radial-gradient(700px 600px at 80% 90%,   rgba(190,195,225,0.05), transparent 60%),
+    var(--bg);
+  background-attachment: fixed;
   color: var(--white);
   font-family: var(--font);
   font-size: 16px;
@@ -55,14 +62,27 @@ body {
   overflow-x: hidden;
 }
 
-/* ── dot grid ── */
+/* ── mesh glow + dot grid ── */
 body::after {
   content: '';
   position: fixed; inset: 0;
-  background-image: radial-gradient(rgba(255,255,255,0.055) 1px, transparent 1px);
-  background-size: 28px 28px;
+  background-image: radial-gradient(rgba(255,255,255,0.05) 1px, transparent 1px);
+  background-size: 30px 30px;
   pointer-events: none;
   z-index: 0;
+  mask-image: radial-gradient(ellipse 100% 100% at 50% 0%, #000 35%, transparent 80%);
+  -webkit-mask-image: radial-gradient(ellipse 100% 100% at 50% 0%, #000 35%, transparent 80%);
+}
+
+/* ── grain overlay : profondeur premium ── */
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.5;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.6'/%3E%3C/svg%3E");
 }
 
 /* ── shared ── */
@@ -70,28 +90,28 @@ body::after {
 section { padding: 112px 0; position: relative; }
 
 h1,h2,h3,h4 { font-family: var(--font); line-height: 1.05; }
-h1 { font-size: clamp(3rem,5.5vw,5.2rem); font-weight: 700; letter-spacing: -0.04em; }
-h2 { font-size: clamp(2rem,3.8vw,3.2rem); font-weight: 700; letter-spacing: -0.03em; }
+h1 { font-size: clamp(3rem,5.5vw,5.4rem); font-weight: 700; letter-spacing: -0.05em; }
+h2 { font-size: clamp(2.1rem,4vw,3.4rem); font-weight: 700; letter-spacing: -0.045em; }
 h3 { font-size: 1.25rem; font-weight: 600; }
 
 .grad-gold {
-  background: linear-gradient(135deg, var(--gold-lt) 0%, var(--gold-pale) 45%, var(--gold) 100%);
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-  filter: drop-shadow(0 0 28px rgba(201,168,76,0.35));
-}
-.grad-violet {
-  background: linear-gradient(135deg, #9060DD, #4090FF);
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background: linear-gradient(180deg, #F2D687 0%, #DBBA63 52%, #C9A84C 100%);
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 1px 14px rgba(201,168,76,0.22));
 }
 
 /* pill tag */
 .pill {
   display: inline-flex; align-items: center; gap: 8px;
-  padding: 6px 18px; border-radius: 999px;
-  background: rgba(255,255,255,0.045);
-  border: 1px solid rgba(255,255,255,0.1);
-  font-size: 11px; font-weight: 500; letter-spacing: 0.09em;
-  text-transform: uppercase; color: rgba(232,230,255,0.6);
+  padding: 7px 18px; border-radius: 999px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
+  border: 1px solid rgba(255,255,255,0.12);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.12), 0 4px 18px rgba(0,0,0,0.25);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  font-size: 11px; font-weight: 500; letter-spacing: 0.1em;
+  text-transform: uppercase; color: rgba(232,230,255,0.72);
   margin-bottom: 28px;
 }
 .pill-dot {
@@ -111,13 +131,19 @@ h3 { font-size: 1.25rem; font-weight: 600; }
   transition: transform 0.25s, box-shadow 0.25s;
 }
 .btn-gold {
-  background: linear-gradient(135deg, var(--gold), var(--gold-mid));
+  background: linear-gradient(135deg, var(--gold-mid), var(--gold) 55%, var(--gold-mid));
   color: #fff;
-  box-shadow: 0 6px 28px rgba(115,92,0,0.5), 0 0 50px rgba(115,92,0,0.15);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.28),
+    0 6px 28px rgba(115,92,0,0.5),
+    0 0 50px rgba(184,146,30,0.18);
 }
 .btn-gold:hover {
   transform: translateY(-4px);
-  box-shadow: 0 14px 44px rgba(115,92,0,0.65), 0 0 80px rgba(115,92,0,0.2);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.34),
+    0 16px 48px rgba(115,92,0,0.65),
+    0 0 90px rgba(184,146,30,0.28);
 }
 
 /* FlowButton variant — hero primary CTA */
@@ -198,11 +224,19 @@ h3 { font-size: 1.25rem; font-weight: 600; }
 
 /* glass card */
 .glass {
-  background: var(--bg-card);
+  background:
+    linear-gradient(160deg, rgba(255,255,255,0.06), rgba(255,255,255,0.015) 55%),
+    var(--bg-card);
   border: 1px solid var(--border);
-  border-radius: 18px;
-  backdrop-filter: blur(16px);
+  border-radius: var(--radius);
+  backdrop-filter: blur(22px) saturate(1.5);
+  -webkit-backdrop-filter: blur(22px) saturate(1.5);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.10),
+    inset 0 0 0 1px rgba(255,255,255,0.015),
+    0 18px 50px rgba(0,0,0,0.35);
   position: relative; overflow: hidden;
+  transition: border-color 0.3s, box-shadow 0.3s, transform 0.3s;
 }
 .glass-line::before {
   content: '';
@@ -210,9 +244,16 @@ h3 { font-size: 1.25rem; font-weight: 600; }
   background: linear-gradient(90deg, transparent, var(--gold-lt), transparent);
   opacity: 0;
   transition: opacity 0.3s;
+  z-index: 4;
 }
 .glass-line:hover::before { opacity: 1; }
-.glass:hover { border-color: rgba(255,255,255,0.13); }
+.glass:hover {
+  border-color: rgba(255,255,255,0.18);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.14),
+    inset 0 0 0 1px rgba(255,255,255,0.02),
+    0 28px 70px rgba(0,0,0,0.5);
+}
 
 /* glow orb helper */
 .orb {
@@ -241,18 +282,18 @@ h3 { font-size: 1.25rem; font-weight: 600; }
   height: 52px;
   display: flex; align-items: center;
   padding: 0 20px;
-  border-radius: 14px;
-  background: rgba(6,4,18,0.6);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255,255,255,0.08);
-  box-shadow: 0 2px 16px rgba(0,0,0,0.25);
+  border-radius: 16px;
+  background: rgba(8,5,24,0.55);
+  backdrop-filter: blur(22px) saturate(1.6);
+  -webkit-backdrop-filter: blur(22px) saturate(1.6);
+  border: 1px solid rgba(255,255,255,0.1);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.1), 0 4px 24px rgba(0,0,0,0.3);
   transition: background 0.3s, border-color 0.3s, box-shadow 0.3s;
 }
 #navbar.scrolled {
-  background: rgba(6,4,18,0.9);
-  border-color: rgba(255,255,255,0.13);
-  box-shadow: 0 8px 32px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.04);
+  background: rgba(8,5,24,0.82);
+  border-color: rgba(255,255,255,0.15);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.12), 0 10px 36px rgba(0,0,0,0.55), 0 0 0 1px rgba(255,255,255,0.04);
 }
 .nav-inner {
   display: flex; align-items: center; justify-content: space-between;
@@ -366,7 +407,7 @@ h3 { font-size: 1.25rem; font-weight: 600; }
   border-radius: 24px;
   background: #0A0614;
   will-change: width, height, border-radius;
-  box-shadow: 0 0 80px rgba(112,64,204,0.14), 0 32px 80px rgba(0,0,0,0.55);
+  box-shadow: 0 0 80px rgba(201,168,76,0.16), 0 32px 80px rgba(0,0,0,0.55);
   z-index: 2;
 }
 .hc-video {
@@ -383,8 +424,10 @@ h3 { font-size: 1.25rem; font-weight: 600; }
 /* reveal de marque — centre, fade-in en fin d'expansion */
 .hero-brand {
   position: absolute;
+  /* centré entre la navbar (haut) et les métriques (bas) : offset constant en px
+     → marges égales au-dessus/en-dessous quelle que soit la hauteur du viewport */
   top: 50%; left: 50%;
-  transform: translate(-50%, -50%) scale(0.92);
+  transform: translate(-50%, calc(-50% - 33px)) scale(0.92);
   z-index: 15;
   pointer-events: none;
   opacity: 0;
@@ -394,7 +437,7 @@ h3 { font-size: 1.25rem; font-weight: 600; }
 }
 .hero-brand.visible {
   opacity: 1;
-  transform: translate(-50%, -50%) scale(1);
+  transform: translate(-50%, calc(-50% - 33px)) scale(1);
 }
 .hero-brand-text {
   font-family: var(--font);
@@ -444,8 +487,7 @@ h3 { font-size: 1.25rem; font-weight: 600; }
   will-change: transform, opacity;
   filter: drop-shadow(0 4px 24px rgba(0,0,0,0.6));
 }
-.hero-title-line .grad-gold,
-.hero-title-line .grad-violet {
+.hero-title-line .grad-gold {
   background: none !important;
   -webkit-background-clip: initial !important;
   background-clip: initial !important;
@@ -460,6 +502,9 @@ h3 { font-size: 1.25rem; font-weight: 600; }
   pointer-events: none;
   will-change: opacity, transform;
 }
+
+/* swap desktop/mobile : par défaut on affiche les variantes desktop */
+.hl-m, .hp-m, .hero-sub { display: none; }
 
 /* metrics — fade-in après expansion */
 .hc-metrics {
@@ -489,8 +534,8 @@ h3 { font-size: 1.25rem; font-weight: 600; }
   .hc-metrics .metric-card { width: 150px; padding: 14px 12px; }
 }
 
-.hero-orb1 { width: 900px; height: 700px; top: -200px; left: -200px; background: radial-gradient(circle, rgba(120,40,220,0.4) 0%, transparent 70%); }
-.hero-orb2 { width: 800px; height: 700px; top: -100px; right: -200px; background: radial-gradient(circle, rgba(20,90,220,0.32) 0%, transparent 70%); }
+.hero-orb1 { width: 900px; height: 700px; top: -200px; left: -200px; background: radial-gradient(circle, rgba(201,168,76,0.26) 0%, transparent 70%); }
+.hero-orb2 { width: 800px; height: 700px; top: -100px; right: -200px; background: radial-gradient(circle, rgba(232,201,106,0.14) 0%, transparent 70%); }
 .hero-orb3 { width: 700px; height: 500px; bottom: -100px; left: 30%; background: radial-gradient(circle, rgba(115,92,0,0.38) 0%, transparent 70%); }
 
 /* hero metric cards */
@@ -501,8 +546,6 @@ h3 { font-size: 1.25rem; font-weight: 600; }
 }
 .metric-card .top-line { display: none !important; }
 .metric-card .num,
-body .metric-card .num.grad-gold,
-body .metric-card .num.grad-violet,
 body .hero-metrics .metric-card .num,
 body .hc-metrics .metric-card .num {
   font-size: 2.2rem; font-weight: 700; line-height: 1; margin-bottom: 7px;
@@ -521,29 +564,45 @@ body .hc-metrics .metric-card .num {
    TICKER
 ══════════════════════════════════ */
 .ticker-wrap {
-  padding: 16px 0;
-  border-top: 1px solid var(--border);
-  border-bottom: 1px solid var(--border);
+  padding: 20px 0;
   background: rgba(255,255,255,0.02);
   overflow: hidden;
   position: relative; z-index: 1;
 }
+/* viewport : masque le contenu + fond les items dans le décor aux deux bords */
+.ticker-viewport {
+  position: relative;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 9%, #000 91%, transparent);
+          mask-image: linear-gradient(to right, transparent, #000 9%, #000 91%, transparent);
+}
 .ticker-track {
   display: flex; width: max-content;
-  animation: ticker 32s linear infinite;
+  animation: ticker 46s linear infinite;
 }
 .ticker-item {
-  padding: 0 36px; font-size: 11px; font-weight: 500;
+  padding: 0 32px; font-size: 13.5px; font-weight: 500;
   color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase;
-  white-space: nowrap; display: flex; align-items: center; gap: 14px;
+  white-space: nowrap; display: flex; align-items: center;
 }
-.ticker-item::after { content: '◆'; color: var(--gold-lt); font-size: 7px; opacity: 0.7; }
 @keyframes ticker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+/* ── PROGRESSIVE BLUR (ibelick / 21st.dev) — conteneurs des bords du ticker.
+   Les 8 couches de chaque conteneur sont générées en JS (formule exacte du
+   composant : blur(index × intensity) + masque dégradé fenêtré par couche). */
+.tk-blur {
+  position: absolute; top: 0; bottom: 0;
+  width: 200px; max-width: 38%;
+  pointer-events: none; z-index: 3;
+}
+.tk-blur-l { left: 0; }
+.tk-blur-r { right: 0; }
+.tk-blur > div { position: absolute; inset: 0; pointer-events: none; }
 
 /* ══════════════════════════════════
    FEATURES
 ══════════════════════════════════ */
-#features { background: var(--bg2); }
+#features { background: rgba(7,5,26,0.55); }
 .features-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; }
 .feat-card { padding: 38px 34px; transition: transform 0.3s, border-color 0.3s; }
 .feat-card:hover { transform: translateY(-5px); }
@@ -577,7 +636,10 @@ body .hc-metrics .metric-card .num {
   padding-bottom: 0;
   align-items: stretch;
 }
-.fgc-grad { position: absolute; inset: 0; }
+.fgc-grad {
+  position: absolute; inset: 0;
+  background: linear-gradient(150deg, rgba(201,168,76,0.34) 0%, rgba(115,92,0,0.10) 100%);
+}
 .fgc-avatar {
   position: relative; z-index: 2;
   width: 86px; height: 86px; border-radius: 50%;
@@ -592,6 +654,7 @@ body .hc-metrics .metric-card .num {
   width: 36px; height: 36px; border-radius: 10px;
   background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.12);
   display: flex; align-items: center; justify-content: center;
+  color: rgba(237,235,255,0.82);
 }
 .fgc-body { padding: 20px 26px 28px; border-top: 1px solid rgba(255,255,255,0.07); }
 .fgc-tag {
@@ -599,6 +662,7 @@ body .hc-metrics .metric-card .num {
   padding: 3px 11px; border-radius: 999px;
   font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
   margin-bottom: 12px;
+  background: rgba(255,255,255,0.07); color: rgba(237,235,255,0.70);
 }
 .fgc-body h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 8px; }
 .fgc-body p { color: var(--muted); font-size: 0.875rem; line-height: 1.75; font-weight: 300; }
@@ -606,7 +670,7 @@ body .hc-metrics .metric-card .num {
 /* ══════════════════════════════════
    SERVICES
 ══════════════════════════════════ */
-#services { background: var(--bg); }
+#services { background: transparent; }
 .services-grid { display: grid; gap: 20px; }
 .srv-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
 .srv-card {
@@ -636,6 +700,7 @@ body .hc-metrics .metric-card .num {
   z-index: 0;
   display: flex; align-items: flex-end;
   padding: 20px 22px 24px;
+  background: linear-gradient(135deg, rgba(184,146,30,0.85), rgba(115,92,0,0.78));
 }
 .srv-card:hover .srv-bounce-bg {
   transform: translateY(58%) rotate(2deg);
@@ -678,7 +743,7 @@ body .hc-metrics .metric-card .num {
    VALUES
 ══════════════════════════════════ */
 #values {
-  background: var(--bg2);
+  background: rgba(7,5,26,0.55);
   overflow: hidden;
 }
 .values-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
@@ -696,6 +761,7 @@ body .hc-metrics .metric-card .num {
   width: 42px; height: 42px; border-radius: 10px;
   display: flex; align-items: center; justify-content: center;
   font-size: 1.2rem; flex-shrink: 0;
+  background: rgba(255,255,255,0.06); color: rgba(237,235,255,0.82);
 }
 .pillar h3 { font-size: 0.97rem; font-weight: 700; margin-bottom: 5px; }
 .pillar p { color: var(--muted); font-size: 0.85rem; line-height: 1.6; font-weight: 300; }
@@ -704,7 +770,7 @@ body .hc-metrics .metric-card .num {
    TEAM — scroll-driven horizontal slide
 ══════════════════════════════════ */
 #team {
-  background: var(--bg);
+  background: transparent;
   padding: 0;
   position: relative;
   height: 100vh;
@@ -763,7 +829,7 @@ body .hc-metrics .metric-card .num {
 .thc-photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 .thc-info { padding: 16px 18px 18px; }
 .thc-info .thc-name { font-size: 1rem; font-weight: 600; margin-bottom: 3px; }
-.thc-role { font-size: 0.78rem; font-weight: 500; }
+.thc-role { font-size: 0.78rem; font-weight: 500; color: rgba(237,235,255,0.62); }
 @media (max-width: 768px) {
   .thc { width: 30vw; }
   .thc-photo { font-size: 3rem; }
@@ -787,13 +853,14 @@ body .hc-metrics .metric-card .num {
 .stat-num {
   font-size: clamp(3rem,5vw,4.8rem); font-weight: 700;
   line-height: 1; letter-spacing: -0.04em; margin-bottom: 10px;
+  color: #fff;
 }
 .stat-lbl { font-size: 11px; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; font-weight: 500; }
 
 /* ══════════════════════════════════
    BLOG
 ══════════════════════════════════ */
-#blog { background: var(--bg2); }
+#blog { background: rgba(7,5,26,0.55); }
 .blog-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; }
 .blog-card { overflow: hidden; transition: transform 0.3s, border-color 0.3s; cursor: pointer; }
 .blog-card:hover { transform: translateY(-5px); border-color: rgba(255,255,255,0.13); }
@@ -828,7 +895,7 @@ body .hc-metrics .metric-card .num {
 /* ══════════════════════════════════
    CONTACT
 ══════════════════════════════════ */
-#contact { background: var(--bg); }
+#contact { background: transparent; }
 .contact-grid { display: grid; grid-template-columns: 1fr 1.1fr; gap: 72px; align-items: start; }
 .contact-left h2 { margin-bottom: 18px; }
 .contact-left > p { color: var(--muted); line-height: 1.8; font-weight: 300; margin-bottom: 40px; }
@@ -843,6 +910,7 @@ body .hc-metrics .metric-card .num {
   border: 1px solid var(--border);
   display: flex; align-items: center; justify-content: center;
   font-size: 1rem; flex-shrink: 0;
+  color: rgba(237,235,255,0.70);
 }
 
 /* form */
@@ -1025,15 +1093,33 @@ footer {
   /* hero mobile : carte plus petite, titre plus impactant */
   #hero { height: 100svh; height: 100vh; }
   .hero-sticky { height: 100svh; height: 100vh; }
-  .hero-expand-card { width: 78vw; height: 50vh; border-radius: 20px; }
-  .hero-overlay-content { gap: 18px; padding: 0 12px; }
+  .hero-expand-card { width: 82vw; height: 56vh; border-radius: 20px; }
+  .hero-overlay-content { gap: 16px; padding: 0 14px; }
+
+  /* swap : on bascule sur les variantes mobile (titre court + sous-titre) */
+  .hl-d, .hp-d { display: none; }
+  .hl-m, .hp-m { display: inline; }
+  .hero-sub {
+    display: block;
+    font-size: clamp(0.92rem, 3.7vw, 1.05rem);
+    line-height: 1.4;
+    font-weight: 400;
+    color: rgba(232,230,255,0.78);
+    max-width: 86vw;
+    margin: 0 auto;
+    text-wrap: balance;
+    filter: drop-shadow(0 2px 14px rgba(0,0,0,0.6));
+    will-change: opacity, transform;
+  }
+
   .hero-title-line {
-    font-size: clamp(2.1rem, 9.2vw, 3.6rem);
-    white-space: normal; /* annule le nowrap desktop : le mobile peut wrapper */
+    font-size: clamp(2.6rem, 12vw, 4rem);
+    line-height: 1.02;
+    white-space: nowrap;     /* texte court mobile = 1 ligne propre */
     text-wrap: balance;
   }
-  .hero-btns { flex-direction: row; gap: 8px; }
-  .hero-btns .btn { padding: 11px 18px; font-size: 0.85rem; }
+  .hero-btns { flex-direction: row; gap: 10px; }
+  .hero-btns .btn { padding: 12px 20px; font-size: 0.88rem; }
   .hc-metrics { flex-wrap: nowrap; gap: 6px; bottom: 12px; padding: 0 8px; }
   .hc-metrics .metric-card { width: 0; flex: 1; padding: 10px 6px; min-width: 0; }
   .hc-metrics .metric-card .num { font-size: 1.35rem; white-space: nowrap; }
@@ -1105,8 +1191,11 @@ footer {
 
 /* ── perf mobile : skip layout/paint des sections hors écran + coupe les effets coûteux ── */
 @media (max-width: 768px) {
-  /* le dot-grid full-screen est repeint à chaque scroll : on le retire sur mobile */
+  /* le dot-grid + grain full-screen sont repeints à chaque scroll : on les retire sur mobile.
+     le mesh fixe (background-attachment:fixed) est mal géré par iOS : on repasse en scroll. */
   body::after { display: none; }
+  body::before { display: none; }
+  body { background-attachment: scroll; }
 
   /* backdrop-filter est très coûteux sur GPU mobile : on le coupe et on opacifie le fond
      pour garder un rendu lisible */
@@ -1133,6 +1222,11 @@ footer {
     background: rgba(15, 12, 32, 0.78);
   }
   #navbar { background: rgba(6, 4, 18, 0.92); }
+
+  /* ticker : on coupe le progressive blur (backdrop-filter coûteux) — le fondu
+     des bords via mask-image sur .ticker-viewport reste, lui, gratuit */
+  .tk-blur { display: none; }
+
   /* la metric-card hero garde sa transparence pour laisser voir la vidéo */
   .metric-card { background: rgba(10, 7, 22, 0.55); }
 
@@ -1154,8 +1248,10 @@ footer {
 /* ── very small screens ── */
 @media (max-width: 380px) {
   .container { padding: 0 16px; }
-  .hero-title-line { font-size: clamp(1.85rem, 9vw, 2.6rem); white-space: normal; }
-  .hero-overlay-content { gap: 14px; padding: 0 10px; }
+  .hero-title-line { font-size: clamp(2.1rem, 11.5vw, 2.8rem); }
+  .hero-sub { font-size: 0.88rem; max-width: 90vw; }
+  .hero-overlay-content { gap: 12px; padding: 0 10px; }
+  .hero-btns .btn { padding: 10px 16px; font-size: 0.82rem; }
   .hc-metrics { gap: 4px; }
   .hc-metrics .metric-card .num { font-size: 1.2rem; }
   .hc-metrics .metric-card .lbl { font-size: 7.5px; }
@@ -1171,28 +1267,6 @@ footer {
   .nav-hamburger { display: none !important; }
 }
 
-
-/* palette accent vars (violet/blue — orbs, avatars, gradients) */
-body { --aux-a: #7040CC; --aux-b: #3A80FF; --aux-a-lt: #9060DD; --aux-b-lt: #60B0FF;
-       --aux-a-rgb: 112,64,204; --aux-b-rgb: 58,128,255; }
-
-body .grad-violet { background: linear-gradient(135deg, var(--aux-a-lt), var(--aux-b)) !important; -webkit-background-clip: text !important; -webkit-text-fill-color: transparent !important; }
-body .hero-orb1 { background: radial-gradient(circle, rgba(var(--aux-a-rgb),0.4) 0%, transparent 70%) !important; }
-body .hero-orb2 { background: radial-gradient(circle, rgba(var(--aux-b-rgb),0.32) 0%, transparent 70%) !important; }
-body .hero-metrics .metric-card:nth-child(2) .top-line { background: linear-gradient(90deg,transparent,var(--aux-a-lt),transparent) !important; }
-body .hero-metrics .metric-card:nth-child(3) .top-line { background: linear-gradient(90deg,transparent,var(--aux-b),transparent) !important; }
-body .hero-metrics .metric-card:nth-child(3) .num { background: linear-gradient(135deg,var(--aux-b),var(--aux-b-lt)) !important; -webkit-background-clip: text !important; -webkit-text-fill-color: transparent !important; }
-body #values > .orb { background: radial-gradient(circle, rgba(var(--aux-a-rgb),0.18) 0%, transparent 70%) !important; }
-body #values .pillars .pillar:nth-child(2) .pillar-ico { background: rgba(var(--aux-a-rgb),0.14) !important; }
-body #values .pillars .pillar:nth-child(3) .pillar-ico { background: rgba(var(--aux-b-rgb),0.14) !important; }
-body #features > .orb { background: radial-gradient(circle, rgba(var(--aux-a-rgb),0.22) 0%, transparent 70%) !important; }
-body #team .team-grid .team-card:nth-child(2) .team-avatar { background: linear-gradient(135deg, rgba(var(--aux-a-rgb),0.32), rgba(var(--aux-b-rgb),0.32)) !important; }
-body #team .team-grid .team-card:nth-child(3) .team-avatar { background: linear-gradient(135deg, rgba(var(--aux-b-rgb),0.32), rgba(var(--aux-a-rgb),0.32)) !important; }
-body #team .team-grid .team-card:nth-child(3) .team-role { background: linear-gradient(90deg,var(--aux-b),var(--aux-b-lt)) !important; -webkit-background-clip: text !important; -webkit-text-fill-color: transparent !important; }
-body #stats .stat-item:nth-child(3) .stat-num { background: linear-gradient(135deg,var(--aux-b),var(--aux-b-lt)) !important; -webkit-background-clip: text !important; -webkit-text-fill-color: transparent !important; }
-body #blog .blog-grid .blog-card:nth-child(2) .blog-cat { background: linear-gradient(135deg, rgba(var(--aux-a-rgb),0.92), rgba(var(--aux-b-rgb),0.92)) !important; }
-body #blog .blog-grid .blog-card:nth-child(3) .blog-cat { background: linear-gradient(135deg, rgba(var(--aux-b-rgb),0.92), rgba(var(--aux-b-rgb),0.6)) !important; }
-body #contact > .orb { background: radial-gradient(circle, rgba(var(--aux-a-rgb),0.16) 0%, transparent 70%) !important; }
 </style>
 </head>
 <body>
@@ -1255,16 +1329,20 @@ body #contact > .orb { background: radial-gradient(circle, rgba(var(--aux-a-rgb)
       <div class="hero-overlay-content" id="heroOverlay">
         <div class="pill hero-pill" id="heroPill">
           <span class="pill-dot"></span>
-          Experts en publicité sur les réseaux sociaux
+          <span class="hp-d">Experts en publicité sur les réseaux sociaux</span>
+          <span class="hp-m">Experts en publicité digitale</span>
         </div>
         <div class="hero-title-split">
           <h1 class="hero-title-line" id="heroLine1">
-            Améliorez votre <span class="grad-gold">notoriété</span> et <span class="grad-violet">rentabilité</span>
+            <span class="hl-d">Améliorez votre <span class="grad-gold">notoriété</span> et <span class="grad-gold">rentabilité</span></span>
+            <span class="hl-m">Plus <span class="grad-gold">visible</span>,</span>
           </h1>
           <h1 class="hero-title-line" id="heroLine2">
-            grâce à la publicité en ligne
+            <span class="hl-d">grâce à la publicité en ligne</span>
+            <span class="hl-m">plus <span class="grad-gold">rentable</span></span>
           </h1>
         </div>
+        <p class="hero-sub" id="heroSub">Meta, Google &amp; TikTok Ads — la pub qui convertit.</p>
         <div class="hero-btns" id="heroBtns">
           <a href="#services" class="btn btn-flow">
             <span class="flow-arr-l"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
@@ -1284,19 +1362,16 @@ body #contact > .orb { background: radial-gradient(circle, rgba(var(--aux-a-rgb)
 
     <!-- metrics : fade-in après expansion -->
     <div class="hc-metrics" id="heroMetrics">
-      <div class="glass metric-card" style="--col:var(--gold-lt)">
-        <div class="top-line"></div>
-        <div class="num grad-gold" data-target="30" data-suffix="+">0+</div>
+      <div class="glass metric-card">
+        <div class="num" data-target="30" data-suffix="+">0+</div>
         <div class="lbl">Entreprises</div>
       </div>
-      <div class="glass metric-card" style="--col:#9060DD">
-        <div class="top-line" style="background:linear-gradient(90deg,transparent,#9060DD,transparent)"></div>
-        <div class="num grad-violet" data-target="5" data-suffix="M€+">0M€+</div>
+      <div class="glass metric-card">
+        <div class="num" data-target="5" data-suffix="M€+">0M€+</div>
         <div class="lbl">CA généré</div>
       </div>
-      <div class="glass metric-card" style="--col:var(--blue)">
-        <div class="top-line" style="background:linear-gradient(90deg,transparent,#3A80FF,transparent)"></div>
-        <div class="num" style="background:linear-gradient(135deg,#3A80FF,#60B0FF);-webkit-background-clip:text;-webkit-text-fill-color:transparent;" data-target="100" data-suffix="+">0+</div>
+      <div class="glass metric-card">
+        <div class="num" data-target="100" data-suffix="+">0+</div>
         <div class="lbl">Projets traités</div>
       </div>
     </div>
@@ -1310,31 +1385,37 @@ body #contact > .orb { background: radial-gradient(circle, rgba(var(--aux-a-rgb)
 
 <!-- ══ TICKER ══ -->
 <div class="ticker-wrap">
-  <div class="ticker-track">
-    <span class="ticker-item">Publicité Facebook & Instagram</span>
-    <span class="ticker-item">Google Ads</span>
-    <span class="ticker-item">Création de Contenu</span>
-    <span class="ticker-item">Tunnel de Vente</span>
-    <span class="ticker-item">Site Internet</span>
-    <span class="ticker-item">Stratégie Digitale</span>
-    <span class="ticker-item">Interview & Personal Branding</span>
-    <span class="ticker-item">ROI Optimisé</span>
-    <span class="ticker-item">TikTok Ads</span>
-    <span class="ticker-item">Publicité Facebook & Instagram</span>
-    <span class="ticker-item">Google Ads</span>
-    <span class="ticker-item">Création de Contenu</span>
-    <span class="ticker-item">Tunnel de Vente</span>
-    <span class="ticker-item">Site Internet</span>
-    <span class="ticker-item">Stratégie Digitale</span>
-    <span class="ticker-item">Interview & Personal Branding</span>
-    <span class="ticker-item">ROI Optimisé</span>
-    <span class="ticker-item">TikTok Ads</span>
+  <div class="ticker-viewport">
+    <div class="ticker-track">
+      <span class="ticker-item">Publicité Facebook & Instagram</span>
+      <span class="ticker-item">Google Ads</span>
+      <span class="ticker-item">Création de Contenu</span>
+      <span class="ticker-item">Tunnel de Vente</span>
+      <span class="ticker-item">Site Internet</span>
+      <span class="ticker-item">Stratégie Digitale</span>
+      <span class="ticker-item">Interview & Personal Branding</span>
+      <span class="ticker-item">ROI Optimisé</span>
+      <span class="ticker-item">TikTok Ads</span>
+      <span class="ticker-item">Publicité Facebook & Instagram</span>
+      <span class="ticker-item">Google Ads</span>
+      <span class="ticker-item">Création de Contenu</span>
+      <span class="ticker-item">Tunnel de Vente</span>
+      <span class="ticker-item">Site Internet</span>
+      <span class="ticker-item">Stratégie Digitale</span>
+      <span class="ticker-item">Interview & Personal Branding</span>
+      <span class="ticker-item">ROI Optimisé</span>
+      <span class="ticker-item">TikTok Ads</span>
+    </div>
+    <!-- ProgressiveBlur (ibelick / 21st.dev) — port fidèle en JS vanilla : 8 couches/bord
+         générées avec la formule exacte du composant (cf. script en bas de page) -->
+    <div class="tk-blur tk-blur-l" data-dir="left"  aria-hidden="true"></div>
+    <div class="tk-blur tk-blur-r" data-dir="right" aria-hidden="true"></div>
   </div>
 </div>
 
 <!-- ══ FEATURES ══ -->
 <section id="features">
-  <div class="orb" style="width:500px;height:400px;top:-100px;right:-100px;background:radial-gradient(circle,rgba(80,20,180,0.2) 0%,transparent 70%);"></div>
+  <div class="orb" style="width:500px;height:400px;top:-100px;right:-100px;background:radial-gradient(circle,rgba(201,168,76,0.18) 0%,transparent 70%);"></div>
   <div class="container">
     <div class="sec-header center fu">
       <div class="pill" style="margin-bottom:20px;">Pourquoi nous choisir</div>
@@ -1346,8 +1427,8 @@ body #contact > .orb { background: radial-gradient(circle, rgba(var(--aux-a-rgb)
       <!-- Card 1 — Handshake · Équipe -->
       <div class="glass glass-line feat-gcard fu d1">
         <div class="fgc-visual" style="height:260px;padding-bottom:0;align-items:stretch;">
-          <div class="fgc-grad" style="background:linear-gradient(145deg,rgba(115,92,0,0.6) 0%,rgba(232,201,106,0.18) 100%);"></div>
-          <div class="fgc-ico" style="color:var(--gold-lt);">
+          <div class="fgc-grad"></div>
+          <div class="fgc-ico">
             <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
           </div>
           <model-viewer
@@ -1364,7 +1445,7 @@ body #contact > .orb { background: radial-gradient(circle, rgba(var(--aux-a-rgb)
           ></model-viewer>
         </div>
         <div class="fgc-body">
-          <div class="fgc-tag" style="background:rgba(115,92,0,0.18);color:var(--gold-lt);">William · Fondateur</div>
+          <div class="fgc-tag">William · Fondateur</div>
           <h3>Équipe Expérimentée</h3>
           <p>Experts certifiés Meta & Google Ads avec des années de track record sur des budgets publicitaires à fort volume.</p>
         </div>
@@ -1373,8 +1454,8 @@ body #contact > .orb { background: radial-gradient(circle, rgba(var(--aux-a-rgb)
       <!-- Card 2 — Cible 3D · Solutions -->
       <div class="glass glass-line feat-gcard fu d2">
         <div class="fgc-visual">
-          <div class="fgc-grad" style="background:linear-gradient(145deg,rgba(112,64,204,0.6) 0%,rgba(58,128,255,0.18) 100%);"></div>
-          <div class="fgc-ico" style="color:#9060DD;">
+          <div class="fgc-grad"></div>
+          <div class="fgc-ico">
             <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
           </div>
           <model-viewer
@@ -1391,7 +1472,7 @@ body #contact > .orb { background: radial-gradient(circle, rgba(var(--aux-a-rgb)
           ></model-viewer>
         </div>
         <div class="fgc-body">
-          <div class="fgc-tag" style="background:rgba(112,64,204,0.18);color:#9060DD;">Sur mesure · Précision</div>
+          <div class="fgc-tag">Sur mesure · Précision</div>
           <h3>Solutions Sur Mesure</h3>
           <p>Chaque stratégie est construite autour de vos objectifs, votre marché et votre audience cible. Zéro solution générique.</p>
         </div>
@@ -1400,8 +1481,8 @@ body #contact > .orb { background: radial-gradient(circle, rgba(var(--aux-a-rgb)
       <!-- Card 3 — Headphones · Support 24/7 -->
       <div class="glass glass-line feat-gcard fu d3">
         <div class="fgc-visual" style="height:260px;padding-bottom:0;align-items:stretch;">
-          <div class="fgc-grad" style="background:linear-gradient(145deg,rgba(58,128,255,0.6) 0%,rgba(96,176,255,0.18) 100%);"></div>
-          <div class="fgc-ico" style="color:#3A80FF;">
+          <div class="fgc-grad"></div>
+          <div class="fgc-ico">
             <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
           </div>
           <model-viewer
@@ -1418,7 +1499,7 @@ body #contact > .orb { background: radial-gradient(circle, rgba(var(--aux-a-rgb)
           ></model-viewer>
         </div>
         <div class="fgc-body">
-          <div class="fgc-tag" style="background:rgba(58,128,255,0.15);color:#60B0FF;">Disponible · 24/7</div>
+          <div class="fgc-tag">Disponible · 24/7</div>
           <h3>Support 24/7</h3>
           <p>Votre compte manager est disponible en permanence pour ajuster, optimiser et garantir des résultats en continu.</p>
         </div>
@@ -1451,12 +1532,12 @@ body #contact > .orb { background: radial-gradient(circle, rgba(var(--aux-a-rgb)
             <li>Retargeting & audiences personnalisées</li>
           </ul>
           <a href="#contact" class="srv-cta">Démarrer une campagne →</a>
-          <div class="srv-bounce-bg" style="background:linear-gradient(135deg,rgba(115,92,0,0.9),rgba(184,146,30,0.82));"><span class="srv-bounce-label">Meta · Google · TikTok</span></div>
+          <div class="srv-bounce-bg"><span class="srv-bounce-label">Meta · Google · TikTok</span></div>
         </div>
         <!-- Service 2 -->
         <div class="glass glass-line srv-card fu d1">
           <span class="srv-num">02 — Site Internet</span>
-          <h3>Élargissez votre <span class="grad-violet">portée</span> & acquérez</h3>
+          <h3>Élargissez votre <span class="grad-gold">portée</span> & acquérez</h3>
           <p>Sites web modernes, rapides et optimisés SEO pour transformer vos visiteurs en clients. Du site vitrine au tunnel de vente complet.</p>
           <ul class="srv-list">
             <li>Design premium & responsive</li>
@@ -1465,7 +1546,7 @@ body #contact > .orb { background: radial-gradient(circle, rgba(var(--aux-a-rgb)
             <li>Intégration CRM & automatisations</li>
           </ul>
           <a href="#contact" class="srv-cta">Créer mon site →</a>
-          <div class="srv-bounce-bg" style="background:linear-gradient(135deg,rgba(112,64,204,0.9),rgba(58,128,255,0.82));"><span class="srv-bounce-label">Web · SEO · Tunnel</span></div>
+          <div class="srv-bounce-bg"><span class="srv-bounce-label">Web · SEO · Tunnel</span></div>
         </div>
       </div>
       <!-- Service 3 — wide -->
@@ -1485,7 +1566,7 @@ body #contact > .orb { background: radial-gradient(circle, rgba(var(--aux-a-rgb)
           </ul>
           <a href="#contact" class="srv-cta" style="margin-top:24px;display:inline-flex;">Créer mon contenu →</a>
         </div>
-        <div class="srv-bounce-bg" style="background:linear-gradient(135deg,rgba(115,92,0,0.85),rgba(112,64,204,0.78));"><span class="srv-bounce-label">Vidéo · Interview · Branding</span></div>
+        <div class="srv-bounce-bg"><span class="srv-bounce-label">Vidéo · Interview · Branding</span></div>
       </div>
     </div>
   </div>
@@ -1493,7 +1574,7 @@ body #contact > .orb { background: radial-gradient(circle, rgba(var(--aux-a-rgb)
 
 <!-- ══ VALUES ══ -->
 <section id="values">
-  <div class="orb" style="width:700px;height:500px;top:0;right:-200px;background:radial-gradient(circle,rgba(112,64,204,0.18) 0%,transparent 70%);"></div>
+  <div class="orb" style="width:700px;height:500px;top:0;right:-200px;background:radial-gradient(circle,rgba(201,168,76,0.14) 0%,transparent 70%);"></div>
   <div class="container">
     <div class="values-wrap">
       <div class="values-left fu">
@@ -1505,21 +1586,21 @@ body #contact > .orb { background: radial-gradient(circle, rgba(var(--aux-a-rgb)
       </div>
       <div class="pillars fu d2">
         <div class="glass pillar">
-          <div class="pillar-ico" style="background:rgba(201,168,76,0.12);color:var(--gold-lt);"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg></div>
+          <div class="pillar-ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg></div>
           <div>
             <h3>Passionné</h3>
             <p>Nous vivons et respirons le marketing digital. Chaque projet est traité avec une énergie et un engagement total.</p>
           </div>
         </div>
         <div class="glass pillar">
-          <div class="pillar-ico" style="background:rgba(112,64,204,0.12);color:#9060DD;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12l4 6-10 13L2 9z"/><path d="M11 3L8 9l4 13 4-13-3-6"/><path d="M2 9h20"/></svg></div>
+          <div class="pillar-ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12l4 6-10 13L2 9z"/><path d="M11 3L8 9l4 13 4-13-3-6"/><path d="M2 9h20"/></svg></div>
           <div>
             <h3>Dévoué</h3>
             <p>Vos objectifs deviennent les nôtres. Nous ne nous arrêtons pas tant que les résultats ne sont pas au rendez-vous.</p>
           </div>
         </div>
         <div class="glass pillar">
-          <div class="pillar-ico" style="background:rgba(58,128,255,0.12);color:#3A80FF;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m2 4 3 12h14l3-12-6 5-4-5-4 5-6-5zm3 16h14"/></svg></div>
+          <div class="pillar-ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m2 4 3 12h14l3-12-6 5-4-5-4 5-6-5zm3 16h14"/></svg></div>
           <div>
             <h3>Professionnel</h3>
             <p>Processus rigoureux, communication claire et livrables de qualité premium pour chaque client, sans exception.</p>
@@ -1537,16 +1618,16 @@ body #contact > .orb { background: radial-gradient(circle, rgba(var(--aux-a-rgb)
     <!-- top row : slides from left to right -->
     <div class="team-row">
       <div class="team-track" id="teamTrackTop">
-        <div class="thc"><div class="thc-photo"><img src="input/optim/satiana-300.webp" srcset="input/optim/satiana-300.webp 1x, input/optim/satiana-600.webp 2x" alt="Satiana" width="300" height="300" loading="lazy" decoding="async"></div><div class="thc-info"><p class="thc-name">Satiana</p><div class="thc-role grad-gold">Content & Vidéo</div></div></div>
-        <div class="thc"><div class="thc-photo"><img src="input/optim/aurel-300.webp" srcset="input/optim/aurel-300.webp 1x, input/optim/aurel-600.webp 2x" alt="Aurélien" width="300" height="300" loading="lazy" decoding="async"></div><div class="thc-info"><p class="thc-name">Aurélien</p><div class="thc-role" style="background:linear-gradient(90deg,#3A80FF,#60B0FF);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Développeur</div></div></div>
-        <div class="thc"><div class="thc-photo"><img src="input/optim/ket-300.webp" srcset="input/optim/ket-300.webp 1x, input/optim/ket-600.webp 2x" alt="Ketline" width="300" height="300" loading="lazy" decoding="async"></div><div class="thc-info"><p class="thc-name">Ketline</p><div class="thc-role grad-violet">Vidéaste</div></div></div>
-        <div class="thc"><div class="thc-photo"><img src="input/optim/will-300.webp" srcset="input/optim/will-300.webp 1x, input/optim/will-600.webp 2x" alt="William" width="300" height="300" loading="lazy" decoding="async" style="object-position:center 25%"></div><div class="thc-info"><p class="thc-name">William Adamsha</p><div class="thc-role grad-gold">Co-fondateur & CEO</div></div></div>
-        <div class="thc"><div class="thc-photo"><img src="input/optim/Alex-300.webp" srcset="input/optim/Alex-300.webp 1x, input/optim/Alex-600.webp 2x" alt="Alexandre" width="300" height="300" loading="lazy" decoding="async" style="object-position:center 25%"></div><div class="thc-info"><p class="thc-name">Alexandre Adamsha</p><div class="thc-role grad-gold">Co-fondateur & CEO</div></div></div>
-        <div class="thc"><div class="thc-photo"><img src="input/optim/satiana-300.webp" srcset="input/optim/satiana-300.webp 1x, input/optim/satiana-600.webp 2x" alt="Satiana" width="300" height="300" loading="lazy" decoding="async"></div><div class="thc-info"><p class="thc-name">Satiana</p><div class="thc-role grad-gold">Content & Vidéo</div></div></div>
-        <div class="thc"><div class="thc-photo"><img src="input/optim/aurel-300.webp" srcset="input/optim/aurel-300.webp 1x, input/optim/aurel-600.webp 2x" alt="Aurélien" width="300" height="300" loading="lazy" decoding="async"></div><div class="thc-info"><p class="thc-name">Aurélien</p><div class="thc-role" style="background:linear-gradient(90deg,#3A80FF,#60B0FF);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Développeur</div></div></div>
-        <div class="thc"><div class="thc-photo"><img src="input/optim/ket-300.webp" srcset="input/optim/ket-300.webp 1x, input/optim/ket-600.webp 2x" alt="Ketline" width="300" height="300" loading="lazy" decoding="async"></div><div class="thc-info"><p class="thc-name">Ketline</p><div class="thc-role grad-violet">Vidéaste</div></div></div>
-        <div class="thc"><div class="thc-photo"><img src="input/optim/will-300.webp" srcset="input/optim/will-300.webp 1x, input/optim/will-600.webp 2x" alt="William" width="300" height="300" loading="lazy" decoding="async" style="object-position:center 5%"></div><div class="thc-info"><p class="thc-name">William Adamsha</p><div class="thc-role grad-gold">Co-fondateur & CEO</div></div></div>
-        <div class="thc"><div class="thc-photo"><img src="input/optim/Alex-300.webp" srcset="input/optim/Alex-300.webp 1x, input/optim/Alex-600.webp 2x" alt="Alexandre" width="300" height="300" loading="lazy" decoding="async" style="object-position:center 25%"></div><div class="thc-info"><p class="thc-name">Alexandre Adamsha</p><div class="thc-role grad-gold">Co-fondateur & CEO</div></div></div>
+        <div class="thc"><div class="thc-photo"><img src="input/optim/satiana-300.webp" srcset="input/optim/satiana-300.webp 1x, input/optim/satiana-600.webp 2x" alt="Satiana" width="300" height="300" loading="lazy" decoding="async"></div><div class="thc-info"><p class="thc-name">Satiana</p><div class="thc-role">Content & Vidéo</div></div></div>
+        <div class="thc"><div class="thc-photo"><img src="input/optim/aurel-300.webp" srcset="input/optim/aurel-300.webp 1x, input/optim/aurel-600.webp 2x" alt="Aurélien" width="300" height="300" loading="lazy" decoding="async"></div><div class="thc-info"><p class="thc-name">Aurélien</p><div class="thc-role">Développeur</div></div></div>
+        <div class="thc"><div class="thc-photo"><img src="input/optim/ket-300.webp" srcset="input/optim/ket-300.webp 1x, input/optim/ket-600.webp 2x" alt="Ketline" width="300" height="300" loading="lazy" decoding="async"></div><div class="thc-info"><p class="thc-name">Ketline</p><div class="thc-role">Vidéaste</div></div></div>
+        <div class="thc"><div class="thc-photo"><img src="input/optim/will-300.webp" srcset="input/optim/will-300.webp 1x, input/optim/will-600.webp 2x" alt="William" width="300" height="300" loading="lazy" decoding="async" style="object-position:center 25%"></div><div class="thc-info"><p class="thc-name">William Adamsha</p><div class="thc-role">Co-fondateur & CEO</div></div></div>
+        <div class="thc"><div class="thc-photo"><img src="input/optim/Alex-300.webp" srcset="input/optim/Alex-300.webp 1x, input/optim/Alex-600.webp 2x" alt="Alexandre" width="300" height="300" loading="lazy" decoding="async" style="object-position:center 25%"></div><div class="thc-info"><p class="thc-name">Alexandre Adamsha</p><div class="thc-role">Co-fondateur & CEO</div></div></div>
+        <div class="thc"><div class="thc-photo"><img src="input/optim/satiana-300.webp" srcset="input/optim/satiana-300.webp 1x, input/optim/satiana-600.webp 2x" alt="Satiana" width="300" height="300" loading="lazy" decoding="async"></div><div class="thc-info"><p class="thc-name">Satiana</p><div class="thc-role">Content & Vidéo</div></div></div>
+        <div class="thc"><div class="thc-photo"><img src="input/optim/aurel-300.webp" srcset="input/optim/aurel-300.webp 1x, input/optim/aurel-600.webp 2x" alt="Aurélien" width="300" height="300" loading="lazy" decoding="async"></div><div class="thc-info"><p class="thc-name">Aurélien</p><div class="thc-role">Développeur</div></div></div>
+        <div class="thc"><div class="thc-photo"><img src="input/optim/ket-300.webp" srcset="input/optim/ket-300.webp 1x, input/optim/ket-600.webp 2x" alt="Ketline" width="300" height="300" loading="lazy" decoding="async"></div><div class="thc-info"><p class="thc-name">Ketline</p><div class="thc-role">Vidéaste</div></div></div>
+        <div class="thc"><div class="thc-photo"><img src="input/optim/will-300.webp" srcset="input/optim/will-300.webp 1x, input/optim/will-600.webp 2x" alt="William" width="300" height="300" loading="lazy" decoding="async" style="object-position:center 5%"></div><div class="thc-info"><p class="thc-name">William Adamsha</p><div class="thc-role">Co-fondateur & CEO</div></div></div>
+        <div class="thc"><div class="thc-photo"><img src="input/optim/Alex-300.webp" srcset="input/optim/Alex-300.webp 1x, input/optim/Alex-600.webp 2x" alt="Alexandre" width="300" height="300" loading="lazy" decoding="async" style="object-position:center 25%"></div><div class="thc-info"><p class="thc-name">Alexandre Adamsha</p><div class="thc-role">Co-fondateur & CEO</div></div></div>
       </div>
     </div>
 
@@ -1558,16 +1639,16 @@ body #contact > .orb { background: radial-gradient(circle, rgba(var(--aux-a-rgb)
     <!-- bottom row : slides from right to left -->
     <div class="team-row">
       <div class="team-track" id="teamTrackBot">
-        <div class="thc"><div class="thc-photo"><img src="input/optim/Alex-300.webp" srcset="input/optim/Alex-300.webp 1x, input/optim/Alex-600.webp 2x" alt="Alexandre" width="300" height="300" loading="lazy" decoding="async" style="object-position:center 25%"></div><div class="thc-info"><p class="thc-name">Alexandre Adamsha</p><div class="thc-role grad-gold">Co-fondateur & CEO</div></div></div>
-        <div class="thc"><div class="thc-photo"><img src="input/optim/will-300.webp" srcset="input/optim/will-300.webp 1x, input/optim/will-600.webp 2x" alt="William" width="300" height="300" loading="lazy" decoding="async" style="object-position:center 5%"></div><div class="thc-info"><p class="thc-name">William Adamsha</p><div class="thc-role grad-gold">Co-fondateur & CEO</div></div></div>
-        <div class="thc"><div class="thc-photo"><img src="input/optim/ket-300.webp" srcset="input/optim/ket-300.webp 1x, input/optim/ket-600.webp 2x" alt="Ketline" width="300" height="300" loading="lazy" decoding="async"></div><div class="thc-info"><p class="thc-name">Ketline Elisa Lola</p><div class="thc-role grad-violet">Directrice Créative</div></div></div>
-        <div class="thc"><div class="thc-photo"><img src="input/optim/aurel-300.webp" srcset="input/optim/aurel-300.webp 1x, input/optim/aurel-600.webp 2x" alt="Aurélien" width="300" height="300" loading="lazy" decoding="async"></div><div class="thc-info"><p class="thc-name">Aurélien</p><div class="thc-role" style="background:linear-gradient(90deg,#3A80FF,#60B0FF);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Expert Web & Tunnels</div></div></div>
-        <div class="thc"><div class="thc-photo"><img src="input/optim/satiana-300.webp" srcset="input/optim/satiana-300.webp 1x, input/optim/satiana-600.webp 2x" alt="Satiana" width="300" height="300" loading="lazy" decoding="async"></div><div class="thc-info"><p class="thc-name">Satiana</p><div class="thc-role grad-gold">Content & Vidéo</div></div></div>
-        <div class="thc"><div class="thc-photo"><img src="input/optim/Alex-300.webp" srcset="input/optim/Alex-300.webp 1x, input/optim/Alex-600.webp 2x" alt="Alexandre" width="300" height="300" loading="lazy" decoding="async" style="object-position:center 25%"></div><div class="thc-info"><p class="thc-name">Alexandre Adamsha</p><div class="thc-role grad-gold">Co-fondateur & CEO</div></div></div>
-        <div class="thc"><div class="thc-photo"><img src="input/optim/will-300.webp" srcset="input/optim/will-300.webp 1x, input/optim/will-600.webp 2x" alt="William" width="300" height="300" loading="lazy" decoding="async" style="object-position:center 5%"></div><div class="thc-info"><p class="thc-name">William Adamsha</p><div class="thc-role grad-gold">Co-fondateur & CEO</div></div></div>
-        <div class="thc"><div class="thc-photo"><img src="input/optim/ket-300.webp" srcset="input/optim/ket-300.webp 1x, input/optim/ket-600.webp 2x" alt="Ketline" width="300" height="300" loading="lazy" decoding="async"></div><div class="thc-info"><p class="thc-name">Ketline Elisa Lola</p><div class="thc-role grad-violet">Directrice Créative</div></div></div>
-        <div class="thc"><div class="thc-photo"><img src="input/optim/aurel-300.webp" srcset="input/optim/aurel-300.webp 1x, input/optim/aurel-600.webp 2x" alt="Aurélien" width="300" height="300" loading="lazy" decoding="async"></div><div class="thc-info"><p class="thc-name">Aurélien</p><div class="thc-role" style="background:linear-gradient(90deg,#3A80FF,#60B0FF);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Expert Web & Tunnels</div></div></div>
-        <div class="thc"><div class="thc-photo"><img src="input/optim/satiana-300.webp" srcset="input/optim/satiana-300.webp 1x, input/optim/satiana-600.webp 2x" alt="Satiana" width="300" height="300" loading="lazy" decoding="async"></div><div class="thc-info"><p class="thc-name">Satiana</p><div class="thc-role grad-gold">Content & Vidéo</div></div></div>
+        <div class="thc"><div class="thc-photo"><img src="input/optim/Alex-300.webp" srcset="input/optim/Alex-300.webp 1x, input/optim/Alex-600.webp 2x" alt="Alexandre" width="300" height="300" loading="lazy" decoding="async" style="object-position:center 25%"></div><div class="thc-info"><p class="thc-name">Alexandre Adamsha</p><div class="thc-role">Co-fondateur & CEO</div></div></div>
+        <div class="thc"><div class="thc-photo"><img src="input/optim/will-300.webp" srcset="input/optim/will-300.webp 1x, input/optim/will-600.webp 2x" alt="William" width="300" height="300" loading="lazy" decoding="async" style="object-position:center 5%"></div><div class="thc-info"><p class="thc-name">William Adamsha</p><div class="thc-role">Co-fondateur & CEO</div></div></div>
+        <div class="thc"><div class="thc-photo"><img src="input/optim/ket-300.webp" srcset="input/optim/ket-300.webp 1x, input/optim/ket-600.webp 2x" alt="Ketline" width="300" height="300" loading="lazy" decoding="async"></div><div class="thc-info"><p class="thc-name">Ketline Elisa Lola</p><div class="thc-role">Directrice Créative</div></div></div>
+        <div class="thc"><div class="thc-photo"><img src="input/optim/aurel-300.webp" srcset="input/optim/aurel-300.webp 1x, input/optim/aurel-600.webp 2x" alt="Aurélien" width="300" height="300" loading="lazy" decoding="async"></div><div class="thc-info"><p class="thc-name">Aurélien</p><div class="thc-role">Expert Web & Tunnels</div></div></div>
+        <div class="thc"><div class="thc-photo"><img src="input/optim/satiana-300.webp" srcset="input/optim/satiana-300.webp 1x, input/optim/satiana-600.webp 2x" alt="Satiana" width="300" height="300" loading="lazy" decoding="async"></div><div class="thc-info"><p class="thc-name">Satiana</p><div class="thc-role">Content & Vidéo</div></div></div>
+        <div class="thc"><div class="thc-photo"><img src="input/optim/Alex-300.webp" srcset="input/optim/Alex-300.webp 1x, input/optim/Alex-600.webp 2x" alt="Alexandre" width="300" height="300" loading="lazy" decoding="async" style="object-position:center 25%"></div><div class="thc-info"><p class="thc-name">Alexandre Adamsha</p><div class="thc-role">Co-fondateur & CEO</div></div></div>
+        <div class="thc"><div class="thc-photo"><img src="input/optim/will-300.webp" srcset="input/optim/will-300.webp 1x, input/optim/will-600.webp 2x" alt="William" width="300" height="300" loading="lazy" decoding="async" style="object-position:center 5%"></div><div class="thc-info"><p class="thc-name">William Adamsha</p><div class="thc-role">Co-fondateur & CEO</div></div></div>
+        <div class="thc"><div class="thc-photo"><img src="input/optim/ket-300.webp" srcset="input/optim/ket-300.webp 1x, input/optim/ket-600.webp 2x" alt="Ketline" width="300" height="300" loading="lazy" decoding="async"></div><div class="thc-info"><p class="thc-name">Ketline Elisa Lola</p><div class="thc-role">Directrice Créative</div></div></div>
+        <div class="thc"><div class="thc-photo"><img src="input/optim/aurel-300.webp" srcset="input/optim/aurel-300.webp 1x, input/optim/aurel-600.webp 2x" alt="Aurélien" width="300" height="300" loading="lazy" decoding="async"></div><div class="thc-info"><p class="thc-name">Aurélien</p><div class="thc-role">Expert Web & Tunnels</div></div></div>
+        <div class="thc"><div class="thc-photo"><img src="input/optim/satiana-300.webp" srcset="input/optim/satiana-300.webp 1x, input/optim/satiana-600.webp 2x" alt="Satiana" width="300" height="300" loading="lazy" decoding="async"></div><div class="thc-info"><p class="thc-name">Satiana</p><div class="thc-role">Content & Vidéo</div></div></div>
       </div>
     </div>
 
@@ -1580,15 +1661,15 @@ body #contact > .orb { background: radial-gradient(circle, rgba(var(--aux-a-rgb)
   <div class="container">
     <div class="stats-grid">
       <div class="stat-item fu">
-        <div class="stat-num grad-gold" data-target="30" data-suffix="+">0+</div>
+        <div class="stat-num" data-target="30" data-suffix="+">0+</div>
         <div class="stat-lbl">Entreprises accompagnées</div>
       </div>
       <div class="stat-item fu d1">
-        <div class="stat-num grad-violet" data-target="5" data-suffix="M€+">0M€+</div>
+        <div class="stat-num" data-target="5" data-suffix="M€+">0M€+</div>
         <div class="stat-lbl">Chiffre d'affaires généré</div>
       </div>
       <div class="stat-item fu d2">
-        <div class="stat-num" style="background:linear-gradient(135deg,#3A80FF,#60B0FF);-webkit-background-clip:text;-webkit-text-fill-color:transparent;" data-target="100" data-suffix="+">0+</div>
+        <div class="stat-num" data-target="100" data-suffix="+">0+</div>
         <div class="stat-lbl">Projets traités avec succès</div>
       </div>
     </div>
@@ -1636,7 +1717,7 @@ body #contact > .orb { background: radial-gradient(circle, rgba(var(--aux-a-rgb)
 
 <!-- ══ CONTACT ══ -->
 <section id="contact">
-  <div class="orb" style="width:600px;height:500px;top:-100px;right:-100px;background:radial-gradient(circle,rgba(112,64,204,0.15) 0%,transparent 70%);"></div>
+  <div class="orb" style="width:600px;height:500px;top:-100px;right:-100px;background:radial-gradient(circle,rgba(201,168,76,0.13) 0%,transparent 70%);"></div>
   <div class="container">
     <div class="contact-grid">
       <div class="contact-left fu">
@@ -1645,15 +1726,15 @@ body #contact > .orb { background: radial-gradient(circle, rgba(var(--aux-a-rgb)
         <p>Remplissez le formulaire et notre équipe vous contactera dans les 24h pour discuter de votre projet et établir une stratégie sur mesure.</p>
         <div class="cinfo">
           <div class="cinfo-row">
-            <div class="cinfo-ico" style="color:var(--gold-lt);"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg></div>
+            <div class="cinfo-ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg></div>
             <span>agence.kingdomads@gmail.com</span>
           </div>
           <div class="cinfo-row">
-            <div class="cinfo-ico" style="color:var(--gold-lt);"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg></div>
+            <div class="cinfo-ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg></div>
             <span>France — Disponible à distance</span>
           </div>
           <div class="cinfo-row">
-            <div class="cinfo-ico" style="color:var(--gold-lt);"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+            <div class="cinfo-ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
             <span>Réponse sous 24h garantie</span>
           </div>
         </div>
@@ -1842,6 +1923,7 @@ document.querySelectorAll('[data-target]').forEach(el => {
   const pill     = document.getElementById('heroPill');
   const line1    = document.getElementById('heroLine1');
   const line2    = document.getElementById('heroLine2');
+  const sub      = document.getElementById('heroSub');
   const btns     = document.getElementById('heroBtns');
   const brand    = document.getElementById('heroBrand');
   const metrics  = document.getElementById('heroMetrics');
@@ -1886,6 +1968,7 @@ document.querySelectorAll('[data-target]').forEach(el => {
       const titleOp = Math.max(0, 1 - p * 1.25).toFixed(3);
       if (line1) line1.style.opacity = titleOp;
       if (line2) line2.style.opacity = titleOp;
+      if (sub)   sub.style.opacity   = titleOp;
 
       /* pill + boutons : cachés jusqu'à p=0.85, fade-in avec "kingdomads" */
       const pillOp = Math.max(0, Math.min(1, (p - 0.85) / 0.15)).toFixed(3);
@@ -2332,6 +2415,42 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
       }, i * 130);
     });
   }, { threshold: 0.1 }).observe(section);
+})();
+
+/* ProgressiveBlur (ibelick / 21st.dev) — port vanilla de la logique du composant.
+   Génère `blurLayers` couches par bord : chaque couche i applique blur(i × intensity)
+   et un masque dégradé "fenêtré" (4 arrêts, opaque entre le 2e et le 3e) décalé de i,
+   ce qui produit un flou réellement progressif vers l'extérieur. */
+(function () {
+  const GRADIENT_ANGLES = { top: 0, right: 90, bottom: 180, left: 270 };
+
+  function buildProgressiveBlur(el, { direction = 'bottom', blurLayers = 8, blurIntensity = 1 } = {}) {
+    const layers = Math.max(blurLayers, 2);
+    const segmentSize = 1 / (blurLayers + 1);
+    const angle = GRADIENT_ANGLES[direction];
+    const frag = document.createDocumentFragment();
+
+    for (let index = 0; index < layers; index++) {
+      const stops = [index, index + 1, index + 2, index + 3].map((m, posIndex) =>
+        `rgba(255, 255, 255, ${posIndex === 1 || posIndex === 2 ? 1 : 0}) ${m * segmentSize * 100}%`
+      );
+      const gradient = `linear-gradient(${angle}deg, ${stops.join(', ')})`;
+
+      const layer = document.createElement('div');
+      layer.style.maskImage = gradient;
+      layer.style.webkitMaskImage = gradient;
+      layer.style.backdropFilter = `blur(${index * blurIntensity}px)`;
+      layer.style.webkitBackdropFilter = `blur(${index * blurIntensity}px)`;
+      frag.appendChild(layer);
+    }
+    el.appendChild(frag);
+  }
+
+  /* coupé sur mobile (backdrop-filter coûteux) : .tk-blur y est en display:none */
+  if (window.matchMedia('(max-width: 768px)').matches) return;
+  document.querySelectorAll('.tk-blur').forEach(el =>
+    buildProgressiveBlur(el, { direction: el.dataset.dir, blurLayers: 8, blurIntensity: 1 })
+  );
 })();
 </script>
 <script>
