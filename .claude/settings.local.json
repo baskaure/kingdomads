@@ -11,7 +11,20 @@
       "Bash(sed -n '1598p;1693p' index.html)",
       "Bash(sed -n '497,503p' index.html)",
       "Bash(sed -n '555,562p' index.html)",
-      "Bash(sed -n '104,113p' index.html)"
+      "Bash(sed -n '104,113p' index.html)",
+      "Bash(awk '{print $5, $9}')",
+      "Bash(command -v ffmpeg)",
+      "Bash(command -v node)",
+      "Bash(command -v npx)",
+      "Bash(timeout 300 npx --yes @gltf-transform/cli@latest inspect input/game_bar_target_arrow.glb)",
+      "Bash(timeout 420 npx --yes @gltf-transform/cli@latest optimize game_bar_target_arrow.glb game_bar_target_arrow.opt.glb --compress draco --texture-compress webp)",
+      "Bash(awk '{print $5,$9}')",
+      "Bash(ffmpeg -hide_banner -encoders)",
+      "Bash(ffprobe -v error -show_entries format=duration,bit_rate -of default=noprint_wrappers=1 hero.mp4.orig)",
+      "Bash(timeout 420 ffmpeg -y -i hero.mp4.orig -c:v libopenh264 -b:v 1700k -pix_fmt yuv420p -an -movflags +faststart -vf \"scale='min\\(1280,iw\\)':-2\" hero.opt.mp4)",
+      "Bash(ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 hero.opt.mp4)",
+      "Bash(ffmpeg -hide_banner -decoders)",
+      "Bash(ffmpeg -hide_banner -y -c:v h264 -i hero.mp4.orig -t 0.1 -f null -)"
     ]
   }
 }

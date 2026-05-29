@@ -48,13 +48,7 @@
 
 html { scroll-behavior: smooth; overflow-x: hidden; }
 body {
-  background:
-    radial-gradient(1100px 760px at 12% -8%,  rgba(201,168,76,0.18), transparent 60%),
-    radial-gradient(1000px 720px at 92% 2%,   rgba(232,201,106,0.10), transparent 58%),
-    radial-gradient(900px 640px at 50% 110%,  rgba(115,92,0,0.16),  transparent 60%),
-    radial-gradient(700px 600px at 80% 90%,   rgba(190,195,225,0.05), transparent 60%),
-    var(--bg);
-  background-attachment: fixed;
+  background: var(--bg);
   color: var(--white);
   font-family: var(--font);
   font-size: 16px;
@@ -62,26 +56,29 @@ body {
   overflow-x: hidden;
 }
 
-/* ── mesh glow + dot grid ── */
-body::after {
-  content: '';
-  position: fixed; inset: 0;
+/* ── décor de fond : mesh + grille + grain regroupés dans UNE couche fixe
+   compositée (transform:translateZ(0)). Peinte une seule fois → aucun repaint
+   au scroll, et plus de mix-blend-mode (recomposition par frame supprimée). ── */
+#bgfx {
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  transform: translateZ(0);
+  background:
+    radial-gradient(1100px 760px at 12% -8%,  rgba(201,168,76,0.18), transparent 60%),
+    radial-gradient(1000px 720px at 92% 2%,   rgba(232,201,106,0.10), transparent 58%),
+    radial-gradient(900px 640px at 50% 110%,  rgba(115,92,0,0.16),  transparent 60%),
+    radial-gradient(700px 600px at 80% 90%,   rgba(190,195,225,0.05), transparent 60%);
+}
+/* grille de points (haut, fondue) */
+#bgfx::before {
+  content: ''; position: absolute; inset: 0;
   background-image: radial-gradient(rgba(255,255,255,0.05) 1px, transparent 1px);
   background-size: 30px 30px;
-  pointer-events: none;
-  z-index: 0;
-  mask-image: radial-gradient(ellipse 100% 100% at 50% 0%, #000 35%, transparent 80%);
   -webkit-mask-image: radial-gradient(ellipse 100% 100% at 50% 0%, #000 35%, transparent 80%);
+          mask-image: radial-gradient(ellipse 100% 100% at 50% 0%, #000 35%, transparent 80%);
 }
-
-/* ── grain overlay : profondeur premium ── */
-body::before {
-  content: '';
-  position: fixed; inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  opacity: 0.5;
-  mix-blend-mode: overlay;
+/* grain (sans blend → pas de recomposition au scroll) */
+#bgfx::after {
+  content: ''; position: absolute; inset: 0; opacity: 0.06;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.6'/%3E%3C/svg%3E");
 }
 
@@ -1191,11 +1188,10 @@ footer {
 
 /* ── perf mobile : skip layout/paint des sections hors écran + coupe les effets coûteux ── */
 @media (max-width: 768px) {
-  /* le dot-grid + grain full-screen sont repeints à chaque scroll : on les retire sur mobile.
-     le mesh fixe (background-attachment:fixed) est mal géré par iOS : on repasse en scroll. */
-  body::after { display: none; }
-  body::before { display: none; }
-  body { background-attachment: scroll; }
+  /* on allège le décor de fond sur mobile : grille de points + grain retirés
+     (repeints coûteux). Le mesh (#bgfx) reste : c'est une couche compositée, pas
+     un background-attachment, donc sans surcoût de scroll sur iOS. */
+  #bgfx::before, #bgfx::after { display: none; }
 
   /* backdrop-filter est très coûteux sur GPU mobile : on le coupe et on opacifie le fond
      pour garder un rendu lisible */
@@ -1270,6 +1266,9 @@ footer {
 </style>
 </head>
 <body>
+
+<!-- décor de fond (mesh + grille + grain) — couche fixe compositée -->
+<div id="bgfx" aria-hidden="true"></div>
 
 <!-- ══ NAV ══ -->
 <nav id="navbar">
@@ -2159,50 +2158,65 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
   });
 });
 
-/* model-viewer — cursor tracking (axes alignés sur la souris, drag manuel prioritaire) */
+/* model-viewer — cursor tracking (axes alignés sur la souris, drag manuel prioritaire).
+   Perf : les <model-viewer> existent dès le départ dans le DOM → on les récupère UNE
+   fois (plus de querySelectorAll par frame). La boucle rAF ne tourne que lorsque la
+   section #features est visible (IntersectionObserver) et s'arrête quand l'orbite a
+   convergé sans mouvement souris → zéro re-render 3D inutile au repos / hors-écran. */
 (function () {
-  function lerp(a, b, t) { return a + (b - a) * t; }
+  const features = document.getElementById('features');
+  if (!features) return;
+  const lerp = (a, b, t) => a + (b - a) * t;
 
-  const viewers = [];
-  const state   = [];
+  const viewers = Array.from(document.querySelectorAll('model-viewer'));
+  if (!viewers.length) return;
+  const state = viewers.map(() => ({ theta: 90, phi: 75, tTheta: 90, tPhi: 75, dragging: false }));
 
-  function initViewers() {
-    document.querySelectorAll('model-viewer').forEach(v => {
-      if (viewers.includes(v)) return;
-      viewers.push(v);
-      state.push({ theta: 90, phi: 75, tTheta: 90, tPhi: 75, dragging: false });
-      v.addEventListener('mousedown',  () => state[viewers.indexOf(v)].dragging = true);
-      v.addEventListener('touchstart', () => state[viewers.indexOf(v)].dragging = true, { passive: true });
-    });
-  }
-
+  viewers.forEach((v, i) => {
+    v.addEventListener('mousedown',  () => state[i].dragging = true);
+    v.addEventListener('touchstart', () => state[i].dragging = true, { passive: true });
+  });
   document.addEventListener('mouseup',  () => state.forEach(s => s.dragging = false));
   document.addEventListener('touchend', () => state.forEach(s => s.dragging = false));
+
+  let running = false, rafId = 0;
 
   document.addEventListener('mousemove', e => {
     const nx = (e.clientX / window.innerWidth)  * 2 - 1; // -1 → +1
     const ny = (e.clientY / window.innerHeight) * 2 - 1;
     state.forEach(s => {
-      if (!s.dragging) {
-        s.tTheta = 90 - nx * 28;
-        s.tPhi   = 72 - ny * 14;
-      }
+      if (!s.dragging) { s.tTheta = 90 - nx * 28; s.tPhi = 72 - ny * 14; }
     });
-  });
+    if (visible) start(); // réveille la boucle si elle s'était endormie
+  }, { passive: true });
 
   function tick() {
-    initViewers();
+    let moved = false;
     viewers.forEach((v, i) => {
       const s = state[i];
-      if (!s.dragging) {
-        s.theta = lerp(s.theta, s.tTheta, 0.05);
-        s.phi   = lerp(s.phi,   s.tPhi,   0.05);
-        v.cameraOrbit = `${s.theta}deg ${s.phi}deg auto`;
-      }
+      if (s.dragging) return;
+      const dTheta = s.tTheta - s.theta, dPhi = s.tPhi - s.phi;
+      if (Math.abs(dTheta) < 0.05 && Math.abs(dPhi) < 0.05) return; // convergé → on ne touche pas
+      s.theta = lerp(s.theta, s.tTheta, 0.05);
+      s.phi   = lerp(s.phi,   s.tPhi,   0.05);
+      v.cameraOrbit = `${s.theta}deg ${s.phi}deg auto`;
+      moved = true;
     });
-    requestAnimationFrame(tick);
+    if (moved) { rafId = requestAnimationFrame(tick); }
+    else { running = false; rafId = 0; } // rien ne bouge → on coupe la boucle
   }
-  tick();
+  function start() {
+    if (running || !visible) return;
+    running = true;
+    rafId = requestAnimationFrame(tick);
+  }
+
+  let visible = false;
+  new IntersectionObserver(es => {
+    visible = es[0].isIntersecting;
+    if (visible) start();
+    else if (rafId) { cancelAnimationFrame(rafId); running = false; rafId = 0; }
+  }, { rootMargin: '100px' }).observe(features);
 })();
 
 /* team — hard scroll-lock : quand la section atteint le haut du viewport,
