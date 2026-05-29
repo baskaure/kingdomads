@@ -1072,15 +1072,11 @@ footer {
   .pillar:hover { transform: none; }
   .values-left .btn { width: 100%; justify-content: center; }
 
-  /* team mobile : cartes resserrées pour que tout (2 rangées + titre) tienne en 100vh */
-  #team { height: 100vh; }
-  .team-content { gap: 14px; }
+  /* team mobile : animation pilotée par le scroll naturel (zéro interception) */
+  #team { height: auto; padding: 72px 0; }
+  .team-content { height: auto; min-height: auto; transform: none !important; gap: 22px; }
   .team-title-anim { font-size: clamp(1.3rem, 5.5vw, 1.9rem); max-width: 94vw; }
-  .thc { width: 38vw; }
-  .thc-info { padding: 11px 13px 13px; }
-  .thc-info .thc-name { font-size: 0.9rem; margin-bottom: 2px; }
-  .thc-role { font-size: 0.7rem; }
-  .team-track { gap: 12px; padding: 0 12px; }
+  .thc { width: 56vw; }
 
   /* stats */
   #stats { padding: 48px 0; }
@@ -2143,6 +2139,51 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
   if (!section || !trackTop || !trackBot || !title) return;
 
   const clamp01 = x => x < 0 ? 0 : x > 1 ? 1 : x;
+
+  /* ── mobile : scroll-driven, zéro interception ── */
+  if (window.innerWidth <= 640) {
+    trackTop.style.willChange = 'transform';
+    trackBot.style.willChange = 'transform';
+    title.style.willChange    = 'transform';
+
+    var mSectionH = section.offsetHeight;
+    var mSectionY = section.getBoundingClientRect().top + window.scrollY;
+    window.addEventListener('resize', function () {
+      mSectionH = section.offsetHeight;
+      mSectionY = section.getBoundingClientRect().top + window.scrollY;
+    }, { passive: true });
+
+    function getX() {
+      var sp = (window.innerHeight - (mSectionY - window.scrollY)) / (mSectionH + window.innerHeight);
+      return sp < 0.1 ? 0 : sp > 0.75 ? 1 : (sp - 0.1) / 0.65;
+    }
+
+    var mLastT1 = null;
+    function paintM(x) {
+      var t1 = (-200 + 200 * x) | 0;
+      if (t1 === mLastT1) return;
+      mLastT1 = t1;
+      var t2 = (100 - 150 * x) | 0;
+      var sc = x < 0.5 ? (1.2 - 0.4 * x) : 1;
+      trackTop.style.transform = 'translate3d(' + t1 + '%,0,0)';
+      trackBot.style.transform = 'translate3d(' + t2 + '%,0,0)';
+      title.style.transform    = 'scale(' + sc.toFixed(3) + ')';
+    }
+
+    var mInView = false;
+    new IntersectionObserver(function (es) { mInView = es[0].isIntersecting; },
+      { rootMargin: '200px 0px' }).observe(section);
+
+    var mRaf = 0;
+    function onScrollM() {
+      if (!mInView || mRaf) return;
+      mRaf = requestAnimationFrame(function () { mRaf = 0; paintM(getX()); });
+    }
+
+    paintM(getX());
+    window.addEventListener('scroll', onScrollM, { passive: true });
+    return;
+  }
 
   let progress = 0;
   let locked   = false;
