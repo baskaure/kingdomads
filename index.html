@@ -3,14 +3,49 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Kingdom Ads — Agence de Marketing Digital</title>
-<meta name="description" content="Kingdom Ads, agence de marketing digital spécialisée en publicité Meta Ads, Google Ads et TikTok Ads. Nous aidons les entreprises à booster leur visibilité et leur ROI grâce à des campagnes publicitaires sur mesure.">
+<title>Kingdom Ads — Agence Publicité Meta, Google & TikTok Ads</title>
+<meta name="description" content="Kingdom Ads, agence de marketing digital : campagnes Meta Ads, Google Ads & TikTok Ads, sites web et création de contenu. +30 entreprises accompagnées, 5 M€+ de CA généré.">
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
+<meta name="theme-color" content="#050310">
+<meta name="color-scheme" content="dark">
+<link rel="canonical" href="https://kingdomads.fr/">
+
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Kingdom Ads">
+<meta property="og:locale" content="fr_FR">
+<meta property="og:url" content="https://kingdomads.fr/">
+<meta property="og:title" content="Kingdom Ads — Agence Publicité Meta, Google & TikTok Ads">
+<meta property="og:description" content="Agence de marketing digital : campagnes publicitaires sur mesure, sites web et création de contenu. +30 entreprises accompagnées, 5 M€+ de CA généré.">
+<meta property="og:image" content="https://kingdomads.fr/input/og-image.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Kingdom Ads — Agence de marketing digital">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Kingdom Ads — Agence Publicité Meta, Google & TikTok Ads">
+<meta name="twitter:description" content="Campagnes Meta, Google & TikTok Ads, sites web et création de contenu. +30 entreprises accompagnées.">
+<meta name="twitter:image" content="https://kingdomads.fr/input/og-image.jpg">
+
 <link rel="icon" href="input/favicon.ico" sizes="any">
 <link rel="icon" type="image/png" sizes="32x32" href="input/favicon-32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="input/favicon-16.png">
 <link rel="apple-touch-icon" href="input/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" as="font" type="font/woff2" href="https://fonts.gstatic.com/s/spacegrotesk/v22/V8mDoQDjQSkFtoMM3T6r8E7mPbF4Cw.woff2" crossorigin>
+<link rel="preload" as="image" href="input/hero-poster.webp" fetchpriority="high">
+<link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
+<link rel="dns-prefetch" href="https://www.instagram.com">
+
+<!-- Données structurées -->
+<script type="application/ld+json">
+{"@context":"https://schema.org","@graph":[
+{"@type":["Organization","ProfessionalService"],"@id":"https://kingdomads.fr/#org","name":"Kingdom Ads","url":"https://kingdomads.fr/","logo":{"@type":"ImageObject","url":"https://kingdomads.fr/input/apple-touch-icon.png"},"image":"https://kingdomads.fr/input/og-image.jpg","description":"Agence de marketing digital spécialisée en publicité Meta Ads, Google Ads et TikTok Ads, création de sites web et de contenu vidéo.","email":"agence.kingdomads@gmail.com","areaServed":{"@type":"Country","name":"France"},"sameAs":["https://www.instagram.com/kingdomads/"],"founder":[{"@type":"Person","name":"William Adamsha"},{"@type":"Person","name":"Alexandre Adamsha"}],"hasOfferCatalog":{"@type":"OfferCatalog","name":"Services Kingdom Ads","itemListElement":[{"@type":"Offer","itemOffered":{"@type":"Service","name":"Publicité en ligne","description":"Campagnes Meta Ads, Google Ads et TikTok Ads optimisées pour la conversion et le ROI."}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Création de site internet","description":"Sites web modernes, rapides et optimisés SEO, tunnels de vente haute conversion."}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Création de contenu","description":"Production vidéo professionnelle, interviews et personal branding."}}]}},
+{"@type":"WebSite","@id":"https://kingdomads.fr/#website","url":"https://kingdomads.fr/","name":"Kingdom Ads","inLanguage":"fr-FR","publisher":{"@id":"https://kingdomads.fr/#org"}},
+{"@type":"WebPage","@id":"https://kingdomads.fr/#webpage","url":"https://kingdomads.fr/","name":"Kingdom Ads — Agence Publicité Meta, Google & TikTok Ads","isPartOf":{"@id":"https://kingdomads.fr/#website"},"about":{"@id":"https://kingdomads.fr/#org"},"inLanguage":"fr-FR","primaryImageOfPage":"https://kingdomads.fr/input/og-image.jpg"}
+]}
+</script>
 
 <style>
 /* ── Space Grotesk inliné (latin) + fallback métrique pour éviter CLS swap ── */
@@ -1267,6 +1302,90 @@ footer {
   .nav-hamburger { display: none !important; }
 }
 
+/* ── perf desktop : skip layout/paint des sections hors écran (même stratégie
+   que mobile, estimations adaptées). #team exclu (scroll-lock JS). ── */
+@media (min-width: 769px) {
+  #values  { content-visibility: auto; contain-intrinsic-size: 0 800px; }
+  #blog    { content-visibility: auto; contain-intrinsic-size: 0 950px; }
+  #stats   { content-visibility: auto; contain-intrinsic-size: 0 400px; }
+  #contact { content-visibility: auto; contain-intrinsic-size: 0 1000px; }
+  footer   { content-visibility: auto; contain-intrinsic-size: 0 200px; }
+}
+
+/* ══════════════════════════════════
+   POLISH — glassmorphism moderne
+══════════════════════════════════ */
+
+/* sélection de texte or */
+::selection { background: rgba(201,168,76,0.35); color: #fff; }
+
+/* scrollbar custom (desktop) */
+html { scrollbar-width: thin; scrollbar-color: rgba(184,146,30,0.55) #07051a; }
+::-webkit-scrollbar { width: 10px; }
+::-webkit-scrollbar-track { background: #07051a; }
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, rgba(201,168,76,0.55), rgba(115,92,0,0.55));
+  border-radius: 99px; border: 2px solid #07051a;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, rgba(201,168,76,0.8), rgba(115,92,0,0.8));
+}
+
+/* focus clavier visible (a11y) */
+:focus-visible { outline: 2px solid var(--gold-lt); outline-offset: 3px; border-radius: 4px; }
+
+/* lumière qui suit le curseur sur les cartes verre (desktop pointeur précis).
+   --mx/--my posés par JS ; veil composité, pointer-events:none, z auto →
+   sous les enfants positionnés (fgc-ico, srv-bounce-bg…) : effet de fond pur. */
+@media (hover: hover) and (pointer: fine) {
+  .glass::after {
+    content: '';
+    position: absolute; inset: 0;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    background: radial-gradient(420px circle at var(--mx, 50%) var(--my, 50%),
+                rgba(232,201,106,0.10), rgba(232,201,106,0.04) 40%, transparent 65%);
+  }
+  .glass:hover::after { opacity: 1; }
+}
+
+/* shine sweep sur les boutons gold */
+.btn-gold { position: relative; overflow: hidden; }
+.btn-gold::after {
+  content: '';
+  position: absolute; top: 0; left: -80%;
+  width: 50%; height: 100%;
+  background: linear-gradient(105deg, transparent, rgba(255,255,255,0.32), transparent);
+  transform: skewX(-20deg);
+  transition: left 0.65s ease;
+  pointer-events: none;
+}
+.btn-gold:hover::after { left: 135%; }
+
+/* orbes hero : dérive lente (composité, desktop uniquement) */
+@media (min-width: 769px) and (prefers-reduced-motion: no-preference) {
+  .hero-orb1 { animation: orbDrift1 18s ease-in-out infinite alternate; }
+  .hero-orb2 { animation: orbDrift2 23s ease-in-out infinite alternate; }
+  .hero-orb3 { animation: orbDrift3 27s ease-in-out infinite alternate; }
+}
+@keyframes orbDrift1 { to { transform: translate3d(60px, 45px, 0) scale(1.08); } }
+@keyframes orbDrift2 { to { transform: translate3d(-55px, 30px, 0) scale(0.94); } }
+@keyframes orbDrift3 { to { transform: translate3d(45px, -35px, 0) scale(1.06); } }
+
+/* ── accessibilité & fluidité : reduced motion ── */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .ticker-track, .hc-scroll-hint,
+  .hero-orb1, .hero-orb2, .hero-orb3 { animation: none !important; }
+  .fu { opacity: 1; transform: none; transition: none; }
+  *, *::before, *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -1275,7 +1394,7 @@ footer {
 <div id="bgfx" aria-hidden="true"></div>
 
 <!-- ══ NAV ══ -->
-<nav id="navbar">
+<nav id="navbar" aria-label="Navigation principale">
   <div class="container">
     <div class="nav-inner">
       <a class="nav-logo" href="#">
@@ -1308,6 +1427,8 @@ footer {
   <a href="#contact"  class="nm-link nm-cta" data-nm>Demander une interview</a>
 </div>
 
+<main id="content">
+
 <!-- ══ HERO ══ -->
 <section id="hero">
   <div class="hero-sticky">
@@ -1322,8 +1443,9 @@ footer {
     <div class="hero-stage">
       <!-- carte vidéo (z=2, grandit au scroll) -->
       <div class="hero-expand-card" id="heroCard">
-        <video class="hc-video" autoplay loop muted playsinline webkit-playsinline x5-playsinline disablepictureinpicture preload="metadata" id="heroVideo" data-mp4="input/hero.mp4">
-          <source src="input/hero.mp4" type="video/mp4">
+        <video class="hc-video" autoplay loop muted playsinline webkit-playsinline x5-playsinline disablepictureinpicture preload="metadata" poster="input/hero-poster.webp" width="1920" height="1184" id="heroVideo" data-mp4="input/hero-1920.mp4" aria-hidden="true">
+          <source src="input/hero-1920.webm" type="video/webm">
+          <source src="input/hero-1920.mp4" type="video/mp4">
         </video>
         <div class="hc-overlay"></div>
       </div>
@@ -1335,16 +1457,16 @@ footer {
           <span class="hp-d">Experts en publicité sur les réseaux sociaux</span>
           <span class="hp-m">Experts en publicité digitale</span>
         </div>
-        <div class="hero-title-split">
-          <h1 class="hero-title-line" id="heroLine1">
+        <h1 class="hero-title-split">
+          <span class="hero-title-line" id="heroLine1">
             <span class="hl-d">Améliorez votre <span class="grad-gold">notoriété</span> et <span class="grad-gold">rentabilité</span></span>
             <span class="hl-m">Plus <span class="grad-gold">visible</span>,</span>
-          </h1>
-          <h1 class="hero-title-line" id="heroLine2">
+          </span>
+          <span class="hero-title-line" id="heroLine2">
             <span class="hl-d">grâce à la publicité en ligne</span>
             <span class="hl-m">plus <span class="grad-gold">rentable</span></span>
-          </h1>
-        </div>
+          </span>
+        </h1>
         <p class="hero-sub" id="heroSub">Meta, Google &amp; TikTok Ads — la pub qui convertit.</p>
         <div class="hero-btns" id="heroBtns">
           <a href="#services" class="btn btn-flow">
@@ -1621,16 +1743,16 @@ footer {
     <!-- top row : slides from left to right -->
     <div class="team-row">
       <div class="team-track" id="teamTrackTop">
-        <div class="thc"><div class="thc-photo"><img src="input/optim/satiana-300.webp" srcset="input/optim/satiana-300.webp 1x, input/optim/satiana-600.webp 2x" alt="Satiana" width="300" height="300" loading="lazy" decoding="async"></div><div class="thc-info"><p class="thc-name">Satiana</p><div class="thc-role">Content & Vidéo</div></div></div>
-        <div class="thc"><div class="thc-photo"><img src="input/optim/aurel-300.webp" srcset="input/optim/aurel-300.webp 1x, input/optim/aurel-600.webp 2x" alt="Aurélien" width="300" height="300" loading="lazy" decoding="async"></div><div class="thc-info"><p class="thc-name">Aurélien</p><div class="thc-role">Développeur</div></div></div>
-        <div class="thc"><div class="thc-photo"><img src="input/optim/ket-300.webp" srcset="input/optim/ket-300.webp 1x, input/optim/ket-600.webp 2x" alt="Ketline" width="300" height="300" loading="lazy" decoding="async"></div><div class="thc-info"><p class="thc-name">Ketline</p><div class="thc-role">Vidéaste</div></div></div>
-        <div class="thc"><div class="thc-photo"><img src="input/optim/will-300.webp" srcset="input/optim/will-300.webp 1x, input/optim/will-600.webp 2x" alt="William" width="300" height="300" loading="lazy" decoding="async" style="object-position:center 25%"></div><div class="thc-info"><p class="thc-name">William Adamsha</p><div class="thc-role">Co-fondateur & CEO</div></div></div>
-        <div class="thc"><div class="thc-photo"><img src="input/optim/Alex-300.webp" srcset="input/optim/Alex-300.webp 1x, input/optim/Alex-600.webp 2x" alt="Alexandre" width="300" height="300" loading="lazy" decoding="async" style="object-position:center 25%"></div><div class="thc-info"><p class="thc-name">Alexandre Adamsha</p><div class="thc-role">Co-fondateur & CEO</div></div></div>
-        <div class="thc"><div class="thc-photo"><img src="input/optim/satiana-300.webp" srcset="input/optim/satiana-300.webp 1x, input/optim/satiana-600.webp 2x" alt="Satiana" width="300" height="300" loading="lazy" decoding="async"></div><div class="thc-info"><p class="thc-name">Satiana</p><div class="thc-role">Content & Vidéo</div></div></div>
-        <div class="thc"><div class="thc-photo"><img src="input/optim/aurel-300.webp" srcset="input/optim/aurel-300.webp 1x, input/optim/aurel-600.webp 2x" alt="Aurélien" width="300" height="300" loading="lazy" decoding="async"></div><div class="thc-info"><p class="thc-name">Aurélien</p><div class="thc-role">Développeur</div></div></div>
-        <div class="thc"><div class="thc-photo"><img src="input/optim/ket-300.webp" srcset="input/optim/ket-300.webp 1x, input/optim/ket-600.webp 2x" alt="Ketline" width="300" height="300" loading="lazy" decoding="async"></div><div class="thc-info"><p class="thc-name">Ketline</p><div class="thc-role">Vidéaste</div></div></div>
-        <div class="thc"><div class="thc-photo"><img src="input/optim/will-300.webp" srcset="input/optim/will-300.webp 1x, input/optim/will-600.webp 2x" alt="William" width="300" height="300" loading="lazy" decoding="async" style="object-position:center 5%"></div><div class="thc-info"><p class="thc-name">William Adamsha</p><div class="thc-role">Co-fondateur & CEO</div></div></div>
-        <div class="thc"><div class="thc-photo"><img src="input/optim/Alex-300.webp" srcset="input/optim/Alex-300.webp 1x, input/optim/Alex-600.webp 2x" alt="Alexandre" width="300" height="300" loading="lazy" decoding="async" style="object-position:center 25%"></div><div class="thc-info"><p class="thc-name">Alexandre Adamsha</p><div class="thc-role">Co-fondateur & CEO</div></div></div>
+        <div class="thc"><div class="thc-photo"><img src="input/optim/satiana-300.webp" srcset="input/optim/satiana-300.webp 1x, input/optim/satiana-600.webp 2x" alt="Satiana, Content &amp; Vidéo — équipe Kingdom Ads" width="300" height="300" loading="lazy" decoding="async"></div><div class="thc-info"><p class="thc-name">Satiana</p><div class="thc-role">Content & Vidéo</div></div></div>
+        <div class="thc"><div class="thc-photo"><img src="input/optim/aurel-300.webp" srcset="input/optim/aurel-300.webp 1x, input/optim/aurel-600.webp 2x" alt="Aurélien, Développeur Web — équipe Kingdom Ads" width="300" height="300" loading="lazy" decoding="async"></div><div class="thc-info"><p class="thc-name">Aurélien</p><div class="thc-role">Développeur</div></div></div>
+        <div class="thc"><div class="thc-photo"><img src="input/optim/ket-300.webp" srcset="input/optim/ket-300.webp 1x, input/optim/ket-600.webp 2x" alt="Ketline Elisa Lola, Directrice Créative — équipe Kingdom Ads" width="300" height="300" loading="lazy" decoding="async"></div><div class="thc-info"><p class="thc-name">Ketline</p><div class="thc-role">Vidéaste</div></div></div>
+        <div class="thc"><div class="thc-photo"><img src="input/optim/will-300.webp" srcset="input/optim/will-300.webp 1x, input/optim/will-600.webp 2x" alt="William Adamsha, Co-fondateur &amp; CEO — Kingdom Ads" width="300" height="300" loading="lazy" decoding="async" style="object-position:center 25%"></div><div class="thc-info"><p class="thc-name">William Adamsha</p><div class="thc-role">Co-fondateur & CEO</div></div></div>
+        <div class="thc"><div class="thc-photo"><img src="input/optim/Alex-300.webp" srcset="input/optim/Alex-300.webp 1x, input/optim/Alex-600.webp 2x" alt="Alexandre Adamsha, Co-fondateur &amp; CEO — Kingdom Ads" width="300" height="300" loading="lazy" decoding="async" style="object-position:center 25%"></div><div class="thc-info"><p class="thc-name">Alexandre Adamsha</p><div class="thc-role">Co-fondateur & CEO</div></div></div>
+        <div class="thc"><div class="thc-photo"><img src="input/optim/satiana-300.webp" srcset="input/optim/satiana-300.webp 1x, input/optim/satiana-600.webp 2x" alt="Satiana, Content &amp; Vidéo — équipe Kingdom Ads" width="300" height="300" loading="lazy" decoding="async"></div><div class="thc-info"><p class="thc-name">Satiana</p><div class="thc-role">Content & Vidéo</div></div></div>
+        <div class="thc"><div class="thc-photo"><img src="input/optim/aurel-300.webp" srcset="input/optim/aurel-300.webp 1x, input/optim/aurel-600.webp 2x" alt="Aurélien, Développeur Web — équipe Kingdom Ads" width="300" height="300" loading="lazy" decoding="async"></div><div class="thc-info"><p class="thc-name">Aurélien</p><div class="thc-role">Développeur</div></div></div>
+        <div class="thc"><div class="thc-photo"><img src="input/optim/ket-300.webp" srcset="input/optim/ket-300.webp 1x, input/optim/ket-600.webp 2x" alt="Ketline Elisa Lola, Directrice Créative — équipe Kingdom Ads" width="300" height="300" loading="lazy" decoding="async"></div><div class="thc-info"><p class="thc-name">Ketline</p><div class="thc-role">Vidéaste</div></div></div>
+        <div class="thc"><div class="thc-photo"><img src="input/optim/will-300.webp" srcset="input/optim/will-300.webp 1x, input/optim/will-600.webp 2x" alt="William Adamsha, Co-fondateur &amp; CEO — Kingdom Ads" width="300" height="300" loading="lazy" decoding="async" style="object-position:center 5%"></div><div class="thc-info"><p class="thc-name">William Adamsha</p><div class="thc-role">Co-fondateur & CEO</div></div></div>
+        <div class="thc"><div class="thc-photo"><img src="input/optim/Alex-300.webp" srcset="input/optim/Alex-300.webp 1x, input/optim/Alex-600.webp 2x" alt="Alexandre Adamsha, Co-fondateur &amp; CEO — Kingdom Ads" width="300" height="300" loading="lazy" decoding="async" style="object-position:center 25%"></div><div class="thc-info"><p class="thc-name">Alexandre Adamsha</p><div class="thc-role">Co-fondateur & CEO</div></div></div>
       </div>
     </div>
 
@@ -1642,16 +1764,16 @@ footer {
     <!-- bottom row : slides from right to left -->
     <div class="team-row">
       <div class="team-track" id="teamTrackBot">
-        <div class="thc"><div class="thc-photo"><img src="input/optim/Alex-300.webp" srcset="input/optim/Alex-300.webp 1x, input/optim/Alex-600.webp 2x" alt="Alexandre" width="300" height="300" loading="lazy" decoding="async" style="object-position:center 25%"></div><div class="thc-info"><p class="thc-name">Alexandre Adamsha</p><div class="thc-role">Co-fondateur & CEO</div></div></div>
-        <div class="thc"><div class="thc-photo"><img src="input/optim/will-300.webp" srcset="input/optim/will-300.webp 1x, input/optim/will-600.webp 2x" alt="William" width="300" height="300" loading="lazy" decoding="async" style="object-position:center 5%"></div><div class="thc-info"><p class="thc-name">William Adamsha</p><div class="thc-role">Co-fondateur & CEO</div></div></div>
-        <div class="thc"><div class="thc-photo"><img src="input/optim/ket-300.webp" srcset="input/optim/ket-300.webp 1x, input/optim/ket-600.webp 2x" alt="Ketline" width="300" height="300" loading="lazy" decoding="async"></div><div class="thc-info"><p class="thc-name">Ketline Elisa Lola</p><div class="thc-role">Directrice Créative</div></div></div>
-        <div class="thc"><div class="thc-photo"><img src="input/optim/aurel-300.webp" srcset="input/optim/aurel-300.webp 1x, input/optim/aurel-600.webp 2x" alt="Aurélien" width="300" height="300" loading="lazy" decoding="async"></div><div class="thc-info"><p class="thc-name">Aurélien</p><div class="thc-role">Expert Web & Tunnels</div></div></div>
-        <div class="thc"><div class="thc-photo"><img src="input/optim/satiana-300.webp" srcset="input/optim/satiana-300.webp 1x, input/optim/satiana-600.webp 2x" alt="Satiana" width="300" height="300" loading="lazy" decoding="async"></div><div class="thc-info"><p class="thc-name">Satiana</p><div class="thc-role">Content & Vidéo</div></div></div>
-        <div class="thc"><div class="thc-photo"><img src="input/optim/Alex-300.webp" srcset="input/optim/Alex-300.webp 1x, input/optim/Alex-600.webp 2x" alt="Alexandre" width="300" height="300" loading="lazy" decoding="async" style="object-position:center 25%"></div><div class="thc-info"><p class="thc-name">Alexandre Adamsha</p><div class="thc-role">Co-fondateur & CEO</div></div></div>
-        <div class="thc"><div class="thc-photo"><img src="input/optim/will-300.webp" srcset="input/optim/will-300.webp 1x, input/optim/will-600.webp 2x" alt="William" width="300" height="300" loading="lazy" decoding="async" style="object-position:center 5%"></div><div class="thc-info"><p class="thc-name">William Adamsha</p><div class="thc-role">Co-fondateur & CEO</div></div></div>
-        <div class="thc"><div class="thc-photo"><img src="input/optim/ket-300.webp" srcset="input/optim/ket-300.webp 1x, input/optim/ket-600.webp 2x" alt="Ketline" width="300" height="300" loading="lazy" decoding="async"></div><div class="thc-info"><p class="thc-name">Ketline Elisa Lola</p><div class="thc-role">Directrice Créative</div></div></div>
-        <div class="thc"><div class="thc-photo"><img src="input/optim/aurel-300.webp" srcset="input/optim/aurel-300.webp 1x, input/optim/aurel-600.webp 2x" alt="Aurélien" width="300" height="300" loading="lazy" decoding="async"></div><div class="thc-info"><p class="thc-name">Aurélien</p><div class="thc-role">Expert Web & Tunnels</div></div></div>
-        <div class="thc"><div class="thc-photo"><img src="input/optim/satiana-300.webp" srcset="input/optim/satiana-300.webp 1x, input/optim/satiana-600.webp 2x" alt="Satiana" width="300" height="300" loading="lazy" decoding="async"></div><div class="thc-info"><p class="thc-name">Satiana</p><div class="thc-role">Content & Vidéo</div></div></div>
+        <div class="thc"><div class="thc-photo"><img src="input/optim/Alex-300.webp" srcset="input/optim/Alex-300.webp 1x, input/optim/Alex-600.webp 2x" alt="Alexandre Adamsha, Co-fondateur &amp; CEO — Kingdom Ads" width="300" height="300" loading="lazy" decoding="async" style="object-position:center 25%"></div><div class="thc-info"><p class="thc-name">Alexandre Adamsha</p><div class="thc-role">Co-fondateur & CEO</div></div></div>
+        <div class="thc"><div class="thc-photo"><img src="input/optim/will-300.webp" srcset="input/optim/will-300.webp 1x, input/optim/will-600.webp 2x" alt="William Adamsha, Co-fondateur &amp; CEO — Kingdom Ads" width="300" height="300" loading="lazy" decoding="async" style="object-position:center 5%"></div><div class="thc-info"><p class="thc-name">William Adamsha</p><div class="thc-role">Co-fondateur & CEO</div></div></div>
+        <div class="thc"><div class="thc-photo"><img src="input/optim/ket-300.webp" srcset="input/optim/ket-300.webp 1x, input/optim/ket-600.webp 2x" alt="Ketline Elisa Lola, Directrice Créative — équipe Kingdom Ads" width="300" height="300" loading="lazy" decoding="async"></div><div class="thc-info"><p class="thc-name">Ketline Elisa Lola</p><div class="thc-role">Directrice Créative</div></div></div>
+        <div class="thc"><div class="thc-photo"><img src="input/optim/aurel-300.webp" srcset="input/optim/aurel-300.webp 1x, input/optim/aurel-600.webp 2x" alt="Aurélien, Développeur Web — équipe Kingdom Ads" width="300" height="300" loading="lazy" decoding="async"></div><div class="thc-info"><p class="thc-name">Aurélien</p><div class="thc-role">Expert Web & Tunnels</div></div></div>
+        <div class="thc"><div class="thc-photo"><img src="input/optim/satiana-300.webp" srcset="input/optim/satiana-300.webp 1x, input/optim/satiana-600.webp 2x" alt="Satiana, Content &amp; Vidéo — équipe Kingdom Ads" width="300" height="300" loading="lazy" decoding="async"></div><div class="thc-info"><p class="thc-name">Satiana</p><div class="thc-role">Content & Vidéo</div></div></div>
+        <div class="thc"><div class="thc-photo"><img src="input/optim/Alex-300.webp" srcset="input/optim/Alex-300.webp 1x, input/optim/Alex-600.webp 2x" alt="Alexandre Adamsha, Co-fondateur &amp; CEO — Kingdom Ads" width="300" height="300" loading="lazy" decoding="async" style="object-position:center 25%"></div><div class="thc-info"><p class="thc-name">Alexandre Adamsha</p><div class="thc-role">Co-fondateur & CEO</div></div></div>
+        <div class="thc"><div class="thc-photo"><img src="input/optim/will-300.webp" srcset="input/optim/will-300.webp 1x, input/optim/will-600.webp 2x" alt="William Adamsha, Co-fondateur &amp; CEO — Kingdom Ads" width="300" height="300" loading="lazy" decoding="async" style="object-position:center 5%"></div><div class="thc-info"><p class="thc-name">William Adamsha</p><div class="thc-role">Co-fondateur & CEO</div></div></div>
+        <div class="thc"><div class="thc-photo"><img src="input/optim/ket-300.webp" srcset="input/optim/ket-300.webp 1x, input/optim/ket-600.webp 2x" alt="Ketline Elisa Lola, Directrice Créative — équipe Kingdom Ads" width="300" height="300" loading="lazy" decoding="async"></div><div class="thc-info"><p class="thc-name">Ketline Elisa Lola</p><div class="thc-role">Directrice Créative</div></div></div>
+        <div class="thc"><div class="thc-photo"><img src="input/optim/aurel-300.webp" srcset="input/optim/aurel-300.webp 1x, input/optim/aurel-600.webp 2x" alt="Aurélien, Développeur Web — équipe Kingdom Ads" width="300" height="300" loading="lazy" decoding="async"></div><div class="thc-info"><p class="thc-name">Aurélien</p><div class="thc-role">Expert Web & Tunnels</div></div></div>
+        <div class="thc"><div class="thc-photo"><img src="input/optim/satiana-300.webp" srcset="input/optim/satiana-300.webp 1x, input/optim/satiana-600.webp 2x" alt="Satiana, Content &amp; Vidéo — équipe Kingdom Ads" width="300" height="300" loading="lazy" decoding="async"></div><div class="thc-info"><p class="thc-name">Satiana</p><div class="thc-role">Content & Vidéo</div></div></div>
       </div>
     </div>
 
@@ -1798,6 +1920,8 @@ footer {
     </div>
   </div>
 </section>
+
+</main>
 
 <!-- ══ FOOTER ══ -->
 <footer>
@@ -2433,6 +2557,27 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
       }, i * 130);
     });
   }, { threshold: 0.1 }).observe(section);
+})();
+
+/* light-follow — lumière qui suit le curseur sur les cartes verre (desktop).
+   rAF-throttled : au plus une lecture de layout par frame, listener passif. */
+(function () {
+  if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+  let pending = false, last = null;
+  document.addEventListener('pointermove', function (e) {
+    last = e;
+    if (pending) return;
+    pending = true;
+    requestAnimationFrame(function () {
+      pending = false;
+      const t = last.target;
+      const g = t && t.closest ? t.closest('.glass') : null;
+      if (!g) return;
+      const r = g.getBoundingClientRect();
+      g.style.setProperty('--mx', (((last.clientX - r.left) / r.width) * 100).toFixed(2) + '%');
+      g.style.setProperty('--my', (((last.clientY - r.top) / r.height) * 100).toFixed(2) + '%');
+    });
+  }, { passive: true });
 })();
 
 /* ProgressiveBlur (ibelick / 21st.dev) — port vanilla de la logique du composant.
