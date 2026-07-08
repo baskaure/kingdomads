@@ -68,7 +68,12 @@
       "Bash(magick /tmp/claude-1000/-home-aurelien-Documents-sites-kingdomads-kingdomads/735ed1d8-d24e-47a0-b81d-bdfdb2d225c3/scratchpad/full.png -crop 1440x2100+0+900 +repage /tmp/claude-1000/-home-aurelien-Documents-sites-kingdomads-kingdomads/735ed1d8-d24e-47a0-b81d-bdfdb2d225c3/scratchpad/full-a.png)",
       "Bash(magick /tmp/claude-1000/-home-aurelien-Documents-sites-kingdomads-kingdomads/735ed1d8-d24e-47a0-b81d-bdfdb2d225c3/scratchpad/full.png -crop 1440x1200+0+3000 +repage /tmp/claude-1000/-home-aurelien-Documents-sites-kingdomads-kingdomads/735ed1d8-d24e-47a0-b81d-bdfdb2d225c3/scratchpad/full-b.png)",
       "Bash(python3 -)",
-      "Bash(pkill -f \"http.server 8741\")"
+      "Bash(pkill -f \"http.server 8741\")",
+      "Bash(python3 /home/aurelien/.claude/skills/ui-ux-pro-max/scripts/search.py \"marketing agency premium dark glassmorphism aurora landing\" --design-system -p \"Kingdom Ads\")",
+      "Bash(firefox --headless --profile /tmp/claude-1000/-home-aurelien-Documents-sites-kingdomads-kingdomads/735ed1d8-d24e-47a0-b81d-bdfdb2d225c3/scratchpad/ffprofile --screenshot /tmp/claude-1000/-home-aurelien-Documents-sites-kingdomads-kingdomads/735ed1d8-d24e-47a0-b81d-bdfdb2d225c3/scratchpad/v2-full.png --window-size=1440,6000 http://localhost:8742/flat.html)",
+      "Bash(firefox --headless --profile /tmp/claude-1000/-home-aurelien-Documents-sites-kingdomads-kingdomads/735ed1d8-d24e-47a0-b81d-bdfdb2d225c3/scratchpad/ffprofile --screenshot /tmp/claude-1000/-home-aurelien-Documents-sites-kingdomads-kingdomads/735ed1d8-d24e-47a0-b81d-bdfdb2d225c3/scratchpad/v2-tall.png --window-size=1440,7800 http://localhost:8742/flat.html)",
+      "Bash(magick /tmp/claude-1000/-home-aurelien-Documents-sites-kingdomads-kingdomads/735ed1d8-d24e-47a0-b81d-bdfdb2d225c3/scratchpad/v2-tall.png -crop 1440x1750+0+6050 +repage /tmp/claude-1000/-home-aurelien-Documents-sites-kingdomads-kingdomads/735ed1d8-d24e-47a0-b81d-bdfdb2d225c3/scratchpad/v2-contact.png)",
+      "Bash(pkill -f \"http.server 8742\")"
     ]
   }
 }

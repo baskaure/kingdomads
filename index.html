@@ -101,12 +101,55 @@ body {
 #bgfx {
   position: fixed; inset: 0; z-index: 0; pointer-events: none;
   transform: translateZ(0);
+  overflow: hidden;
   background:
-    radial-gradient(1100px 760px at 12% -8%,  rgba(201,168,76,0.18), transparent 60%),
-    radial-gradient(1000px 720px at 92% 2%,   rgba(232,201,106,0.10), transparent 58%),
-    radial-gradient(900px 640px at 50% 110%,  rgba(115,92,0,0.16),  transparent 60%),
-    radial-gradient(700px 600px at 80% 90%,   rgba(190,195,225,0.05), transparent 60%);
+    /* spotlight haut-centre façon Linear */
+    radial-gradient(56% 44% at 50% -8%, rgba(232,220,255,0.075), transparent 62%),
+    radial-gradient(1100px 760px at 12% -8%,  rgba(201,168,76,0.14), transparent 60%),
+    radial-gradient(1000px 720px at 92% 2%,   rgba(232,201,106,0.08), transparent 58%),
+    radial-gradient(900px 640px at 50% 112%,  rgba(115,92,0,0.14),  transparent 60%),
+    radial-gradient(760px 620px at 82% 88%,   rgba(96,78,180,0.07), transparent 60%),
+    linear-gradient(180deg, #060312 0%, #050310 40%, #070419 100%);
 }
+
+/* ── AURORA — nappes de dégradés coniques floutés, en rotation/dérive très lente.
+   transform-only (composité) : zéro repaint pendant l'animation. ── */
+.aur {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(90px);
+  will-change: transform;
+  transform: translateZ(0);
+}
+.aur1 {
+  width: 1150px; height: 820px; top: -340px; left: -220px;
+  opacity: 0.50;
+  background: conic-gradient(from 210deg at 50% 50%,
+    rgba(201,168,76,0.42), rgba(122,96,10,0.14) 25%,
+    rgba(96,78,180,0.20) 50%, rgba(232,201,106,0.25) 75%,
+    rgba(201,168,76,0.42));
+  animation: aurA 30s ease-in-out infinite alternate;
+}
+.aur2 {
+  width: 1000px; height: 760px; top: -280px; right: -260px;
+  opacity: 0.38;
+  background: conic-gradient(from 40deg at 50% 50%,
+    rgba(232,201,106,0.30), rgba(90,70,160,0.16) 30%,
+    rgba(201,168,76,0.10) 55%, rgba(240,220,150,0.22) 80%,
+    rgba(232,201,106,0.30));
+  animation: aurB 38s ease-in-out infinite alternate;
+}
+.aur3 {
+  width: 900px; height: 680px; bottom: -320px; left: 28%;
+  opacity: 0.30;
+  background: conic-gradient(from 120deg at 50% 50%,
+    rgba(115,92,0,0.38), rgba(96,78,180,0.14) 40%,
+    rgba(201,168,76,0.22) 70%, rgba(115,92,0,0.38));
+  animation: aurC 34s ease-in-out infinite alternate;
+}
+@keyframes aurA { to { transform: translate3d(140px, 70px, 0)  rotate(50deg)  scale(1.14); } }
+@keyframes aurB { to { transform: translate3d(-120px, 90px, 0) rotate(-40deg) scale(1.10); } }
+@keyframes aurC { to { transform: translate3d(90px, -60px, 0)  rotate(35deg)  scale(1.08); } }
 /* grille de points (haut, fondue) */
 #bgfx::before {
   content: ''; position: absolute; inset: 0;
@@ -129,6 +172,14 @@ h1,h2,h3,h4 { font-family: var(--font); line-height: 1.05; }
 h1 { font-size: clamp(3rem,5.5vw,5.4rem); font-weight: 700; letter-spacing: -0.05em; }
 h2 { font-size: clamp(2.1rem,4vw,3.4rem); font-weight: 700; letter-spacing: -0.045em; }
 h3 { font-size: 1.25rem; font-weight: 600; }
+
+/* titres de section : fondu lumineux blanc → lavande (façon Linear).
+   Les spans .grad-gold internes redéfinissent leur propre clip → intacts. */
+h2 {
+  background: linear-gradient(180deg, #FFFFFF 28%, rgba(237,235,255,0.66));
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
 
 .grad-gold {
   background: linear-gradient(180deg, #F2D687 0%, #DBBA63 52%, #C9A84C 100%);
@@ -258,21 +309,23 @@ h3 { font-size: 1.25rem; font-weight: 600; }
 .sec-header.center p { margin: 0 auto; }
 .sec-header.split { display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 24px; }
 
-/* glass card */
+/* glass card — bordure dégradée or (padding-box / border-box) + sheen haut */
 .glass {
+  border: 1px solid transparent;
   background:
-    linear-gradient(160deg, rgba(255,255,255,0.06), rgba(255,255,255,0.015) 55%),
-    var(--bg-card);
-  border: 1px solid var(--border);
+    linear-gradient(160deg, rgba(255,255,255,0.07), rgba(255,255,255,0.015) 55%) padding-box,
+    linear-gradient(rgba(255,255,255,0.04), rgba(255,255,255,0.04)) padding-box,
+    linear-gradient(150deg,
+      rgba(232,201,106,0.38), rgba(255,255,255,0.14) 28%,
+      rgba(255,255,255,0.06) 55%, rgba(201,168,76,0.30)) border-box;
   border-radius: var(--radius);
   backdrop-filter: blur(22px) saturate(1.5);
   -webkit-backdrop-filter: blur(22px) saturate(1.5);
   box-shadow:
     inset 0 1px 0 rgba(255,255,255,0.10),
-    inset 0 0 0 1px rgba(255,255,255,0.015),
     0 18px 50px rgba(0,0,0,0.35);
   position: relative; overflow: hidden;
-  transition: border-color 0.3s, box-shadow 0.3s, transform 0.3s;
+  transition: box-shadow 0.3s, transform 0.3s;
 }
 .glass-line::before {
   content: '';
@@ -284,11 +337,10 @@ h3 { font-size: 1.25rem; font-weight: 600; }
 }
 .glass-line:hover::before { opacity: 1; }
 .glass:hover {
-  border-color: rgba(255,255,255,0.18);
   box-shadow:
     inset 0 1px 0 rgba(255,255,255,0.14),
-    inset 0 0 0 1px rgba(255,255,255,0.02),
-    0 28px 70px rgba(0,0,0,0.5);
+    0 28px 70px rgba(0,0,0,0.5),
+    0 0 44px rgba(201,168,76,0.12);
 }
 
 /* glow orb helper */
@@ -659,8 +711,7 @@ body .hc-metrics .metric-card .num {
 }
 .feat-gcard:hover {
   transform: translateY(-10px) scale(1.02);
-  box-shadow: 0 28px 70px rgba(0,0,0,0.55);
-  border-color: rgba(255,255,255,0.14);
+  box-shadow: 0 28px 70px rgba(0,0,0,0.55), 0 0 50px rgba(201,168,76,0.12);
 }
 .fgc-visual {
   position: relative; height: 200px;
@@ -716,11 +767,14 @@ body .hc-metrics .metric-card .num {
   will-change: transform;
   backdrop-filter: none;
   -webkit-backdrop-filter: none;
-  background: rgba(255,255,255,0.05);
+  background:
+    linear-gradient(rgba(255,255,255,0.05), rgba(255,255,255,0.05)) padding-box,
+    linear-gradient(150deg,
+      rgba(232,201,106,0.38), rgba(255,255,255,0.14) 28%,
+      rgba(255,255,255,0.06) 55%, rgba(201,168,76,0.30)) border-box;
 }
 .srv-card:hover {
-  border-color: rgba(255,255,255,0.13);
-  box-shadow: 0 24px 60px rgba(0,0,0,0.4);
+  box-shadow: 0 24px 60px rgba(0,0,0,0.4), 0 0 44px rgba(201,168,76,0.10);
 }
 .srv-row .srv-card:hover { transform: translateZ(0) scale(0.96) rotate(-1deg); }
 .srv-wide:hover         { transform: translateZ(0) scale(0.98) rotate(-0.5deg); }
@@ -792,7 +846,7 @@ body .hc-metrics .metric-card .num {
   padding: 22px 26px;
   transition: border-color 0.25s, transform 0.25s;
 }
-.pillar:hover { border-color: rgba(255,255,255,0.13); transform: translateX(4px); }
+.pillar:hover { transform: translateX(4px); }
 .pillar-ico {
   width: 42px; height: 42px; border-radius: 10px;
   display: flex; align-items: center; justify-content: center;
@@ -847,8 +901,12 @@ body .hc-metrics .metric-card .num {
 .thc {
   flex: 0 0 auto;
   width: 15vw;
-  background: var(--bg-card);
-  border: 1px solid var(--border);
+  border: 1px solid transparent;
+  background:
+    linear-gradient(rgba(255,255,255,0.04), rgba(255,255,255,0.04)) padding-box,
+    linear-gradient(150deg,
+      rgba(232,201,106,0.32), rgba(255,255,255,0.12) 32%,
+      rgba(255,255,255,0.05) 62%, rgba(201,168,76,0.24)) border-box;
   border-radius: 16px;
   overflow: hidden;
   backdrop-filter: blur(16px);
@@ -899,7 +957,7 @@ body .hc-metrics .metric-card .num {
 #blog { background: rgba(7,5,26,0.55); }
 .blog-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; }
 .blog-card { overflow: hidden; transition: transform 0.3s, border-color 0.3s; cursor: pointer; }
-.blog-card:hover { transform: translateY(-5px); border-color: rgba(255,255,255,0.13); }
+.blog-card:hover { transform: translateY(-5px); }
 .blog-thumb {
   aspect-ratio: 16/9;
   background: repeating-linear-gradient(-45deg, #0A0818 0, #0A0818 8px, #0D0B1E 8px, #0D0B1E 16px);
@@ -1254,16 +1312,30 @@ footer {
   .insta-card,
   .cform,
   .nav-mobile {
-    background: rgba(15, 12, 32, 0.78);
+    background:
+      linear-gradient(rgba(15,12,32,0.82), rgba(15,12,32,0.82)) padding-box,
+      linear-gradient(150deg,
+        rgba(232,201,106,0.30), rgba(255,255,255,0.10) 30%,
+        rgba(255,255,255,0.05) 60%, rgba(201,168,76,0.22)) border-box;
   }
   #navbar { background: rgba(6, 4, 18, 0.92); }
+
+  /* aurora : une seule nappe, statique (peinte une fois, zéro coût au scroll) */
+  .aur2, .aur3 { display: none; }
+  .aur1 { animation: none; opacity: 0.35; }
 
   /* ticker : on coupe le progressive blur (backdrop-filter coûteux) — le fondu
      des bords via mask-image sur .ticker-viewport reste, lui, gratuit */
   .tk-blur { display: none; }
 
   /* la metric-card hero garde sa transparence pour laisser voir la vidéo */
-  .metric-card { background: rgba(10, 7, 22, 0.55); }
+  .metric-card {
+    background:
+      linear-gradient(rgba(10,7,22,0.55), rgba(10,7,22,0.55)) padding-box,
+      linear-gradient(150deg,
+        rgba(232,201,106,0.30), rgba(255,255,255,0.10) 30%,
+        rgba(255,255,255,0.05) 60%, rgba(201,168,76,0.22)) border-box;
+  }
 
   /* team-track : will-change géré par JS pendant l'animation, pas de reset CSS ici */
   /* hero-expand-card : géré par JS (clip-path sur mobile) — pas de reset CSS ici */
@@ -1363,6 +1435,69 @@ html { scrollbar-width: thin; scrollbar-color: rgba(184,146,30,0.55) #07051a; }
 }
 .btn-gold:hover::after { left: 135%; }
 
+/* dot des pills : pulsation douce */
+.pill-dot { animation: pulseDot 2.6s ease-in-out infinite; }
+@keyframes pulseDot {
+  0%, 100% { box-shadow: 0 0 8px var(--gold-lt); }
+  50%      { box-shadow: 0 0 14px var(--gold-lt), 0 0 26px rgba(201,168,76,0.55); }
+}
+
+/* séparateurs de sections : hairline dégradée or */
+#features::before, #values::before, #blog::before {
+  content: '';
+  position: absolute; top: 0; left: 12%; right: 12%; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(201,168,76,0.35), transparent);
+}
+
+/* ticker : points or entre les items */
+.ticker-item::after {
+  content: '';
+  display: inline-block;
+  width: 4px; height: 4px; border-radius: 50%;
+  background: var(--gold-lt); opacity: 0.45;
+  margin-left: 64px;
+}
+
+/* navbar : hairline or qui s'allume au scroll */
+#navbar::after {
+  content: '';
+  position: absolute; left: 14px; right: 14px; bottom: -1px; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(201,168,76,0.55), transparent);
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+#navbar.scrolled::after { opacity: 1; }
+
+/* carte vidéo hero : fin liseré or */
+.hero-expand-card::after {
+  content: '';
+  position: absolute; inset: 0;
+  border-radius: inherit;
+  border: 1px solid rgba(232,201,106,0.28);
+  pointer-events: none; z-index: 3;
+}
+
+/* stats : chiffres en dégradé blanc → or */
+.stat-num {
+  background: linear-gradient(180deg, #FFFFFF 18%, #E8C96A);
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* reveal "kingdomAds" : shimmer or une fois visible */
+.hero-brand.visible .hb-gold {
+  background: linear-gradient(110deg,
+    #F2D687 0%, #DBBA63 38%, #FFF6DC 50%, #DBBA63 62%, #C9A84C 100%);
+  background-size: 220% 100%;
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: goldShimmer 3.8s ease-in-out infinite;
+}
+@keyframes goldShimmer {
+  0%   { background-position: 120% 0; }
+  100% { background-position: -120% 0; }
+}
+
 /* orbes hero : dérive lente (composité, desktop uniquement) */
 @media (min-width: 769px) and (prefers-reduced-motion: no-preference) {
   .hero-orb1 { animation: orbDrift1 18s ease-in-out infinite alternate; }
@@ -1376,7 +1511,8 @@ html { scrollbar-width: thin; scrollbar-color: rgba(184,146,30,0.55) #07051a; }
 /* ── accessibilité & fluidité : reduced motion ── */
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  .ticker-track, .hc-scroll-hint,
+  .ticker-track, .hc-scroll-hint, .aur, .pill-dot,
+  .hero-brand.visible .hb-gold,
   .hero-orb1, .hero-orb2, .hero-orb3 { animation: none !important; }
   .fu { opacity: 1; transform: none; transition: none; }
   *, *::before, *::after {
@@ -1390,8 +1526,12 @@ html { scrollbar-width: thin; scrollbar-color: rgba(184,146,30,0.55) #07051a; }
 </head>
 <body>
 
-<!-- décor de fond (mesh + grille + grain) — couche fixe compositée -->
-<div id="bgfx" aria-hidden="true"></div>
+<!-- décor de fond (aurora + mesh + grille + grain) — couche fixe compositée -->
+<div id="bgfx" aria-hidden="true">
+  <div class="aur aur1"></div>
+  <div class="aur aur2"></div>
+  <div class="aur aur3"></div>
+</div>
 
 <!-- ══ NAV ══ -->
 <nav id="navbar" aria-label="Navigation principale">
