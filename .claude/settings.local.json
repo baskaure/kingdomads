@@ -80,7 +80,8 @@
       "Bash(curl -sI -o /dev/null -w \"sitemap.xml: HTTP %{http_code}\\\\n\" --max-time 10 https://kingdomads.fr/sitemap.xml)",
       "Bash(curl -sI -o /dev/null -w \"hero-1920.webm: HTTP %{http_code} \\(%header{content-length} octets\\)\\\\n\" --max-time 10 https://kingdomads.fr/input/hero-1920.webm)",
       "Bash(curl -s -A \"facebookexternalhit/1.1 \\(+http://www.facebook.com/externalhit_uatext.php\\)\" --max-time 15 https://kingdomads.fr/ -o /dev/null -w \"HTTP %{http_code}\\\\n\")",
-      "Bash(curl -sI --max-time 10 https://kingdomads.fr/input/og-image.jpg)"
+      "Bash(curl -sI --max-time 10 https://kingdomads.fr/input/og-image.jpg)",
+      "Bash(npm install *)"
     ]
   }
 }
