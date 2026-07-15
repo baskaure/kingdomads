@@ -12,3 +12,16 @@
 # Dossier input partagé entre kingdomads et pub-kads :
 # 200 (sans !) -> fichier local servi en priorité, fallback vers pub-kads s'il manque
 /input/*                   https://pub-kads.netlify.app/input/:splat     200
+
+# Fichiers référencés en chemin racine par la page marketwins et absents
+# de kingdomads (200 sans ! : un fichier local futur prendrait la priorité)
+/favicon.svg               https://pub-kads.netlify.app/favicon.svg              200
+/site.webmanifest          https://pub-kads.netlify.app/site.webmanifest         200
+/icon-192.png              https://pub-kads.netlify.app/icon-192.png             200
+/icon-512.png              https://pub-kads.netlify.app/icon-512.png             200
+/icon-maskable-512.png     https://pub-kads.netlify.app/icon-maskable-512.png    200
+
+# Alias URLs propres vers les pages légales (le footer marketwins pointe
+# vers /mentions-legales et /politique-confidentialite)
+/mentions-legales          /mentions-legales.html                301
+/politique-confidentialite /politique-de-confidentialite.html    301
