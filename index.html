@@ -1542,18 +1542,23 @@ html { scrollbar-width: thin; scrollbar-color: rgba(201,155,46,0.55) #0F0D0A; }
   -webkit-text-fill-color: transparent;
 }
 
-/* reveal "kingdomAds" : shimmer or une fois visible */
+/* reveal "kingdomAds" : shimmer or une fois visible.
+   Gradient symétrique (mêmes couleurs aux extrémités) + position bornée [0,100%]
+   → pas de couture de répétition ; alternate → pas de saut au rebouclage.
+   filter:none : annule le drop-shadow de .grad-gold (re-rasterisation par frame). */
 .hero-brand.visible .hb-gold {
   background: linear-gradient(110deg,
-    #F6DFA0 0%, #E8C468 38%, #FFF8E6 50%, #E8C468 62%, #E3B84F 100%);
+    #E3B84F 0%, #E8C468 35%, #FFF8E6 50%, #E8C468 65%, #E3B84F 100%);
   background-size: 220% 100%;
+  background-position: 100% 0;
   -webkit-background-clip: text; background-clip: text;
   -webkit-text-fill-color: transparent;
-  animation: goldShimmer 3.8s ease-in-out infinite;
+  filter: none;
+  animation: goldShimmer 3.2s ease-in-out infinite alternate;
 }
 @keyframes goldShimmer {
-  0%   { background-position: 120% 0; }
-  100% { background-position: -120% 0; }
+  0%   { background-position: 100% 0; }
+  100% { background-position: 0% 0; }
 }
 
 /* orbes hero : dérive lente (composité, desktop uniquement) */
@@ -2357,8 +2362,8 @@ document.querySelectorAll('[data-target]').forEach(el => {
 
       /* pill + boutons : cachés jusqu'à p=0.85, fade-in avec "kingdomads" */
       const pillOp = Math.max(0, Math.min(1, (p - 0.85) / 0.15)).toFixed(3);
-      if (pill) { pill.style.opacity = pillOp; pill.style.pointerEvents = +pillOp > 0 ? '' : 'none'; }
-      if (btns) { btns.style.opacity = pillOp; btns.style.pointerEvents = +pillOp > 0 ? '' : 'none'; }
+      if (pill) { pill.style.opacity = pillOp; pill.style.pointerEvents = +pillOp > 0 ? 'auto' : 'none'; }
+      if (btns) { btns.style.opacity = pillOp; btns.style.pointerEvents = +pillOp > 0 ? 'auto' : 'none'; }
 
       /* scroll-hint */
       if (hint) hint.style.opacity = Math.max(0, 1 - p * 7).toFixed(3);
