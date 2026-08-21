@@ -2118,6 +2118,11 @@ html { scrollbar-width: thin; scrollbar-color: rgba(201,155,46,0.55) #0F0D0A; }
             <span class="field-err">Email invalide</span>
           </div>
           <div class="fg">
+            <label for="f-tel">Téléphone</label>
+            <input id="f-tel" name="telephone" type="tel" placeholder="06 12 34 56 78" autocomplete="tel" inputmode="tel">
+            <span class="field-err">Numéro invalide</span>
+          </div>
+          <div class="fg">
             <label for="f-entreprise">Entreprise</label>
             <input id="f-entreprise" name="entreprise" type="text" placeholder="Nom de votre entreprise" autocomplete="organization">
           </div>
@@ -2483,6 +2488,11 @@ const WEBHOOK_URL = 'https://hook.eu2.make.com/whtpiyy11mrnrgkfd0x65l7u82kr5off'
     const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value.trim());
     toggle(email, !emailOk);
     if (!emailOk) ok = false;
+    const tel = form.querySelector('[name="telephone"]');
+    const telVal = tel.value.trim();
+    const telOk = !telVal || /^\+?[0-9 .\-()]{9,20}$/.test(telVal);
+    toggle(tel, !telOk);
+    if (!telOk) ok = false;
     const msg = form.querySelector('[name="message"]');
     toggle(msg, !msg.value.trim());
     if (!msg.value.trim()) ok = false;
@@ -2509,6 +2519,7 @@ const WEBHOOK_URL = 'https://hook.eu2.make.com/whtpiyy11mrnrgkfd0x65l7u82kr5off'
       prenom:     form.querySelector('[name="prenom"]').value.trim(),
       nom:        form.querySelector('[name="nom"]').value.trim(),
       email:      form.querySelector('[name="email"]').value.trim(),
+      telephone:  form.querySelector('[name="telephone"]').value.trim(),
       entreprise: form.querySelector('[name="entreprise"]').value.trim(),
       service:    form.querySelector('[name="service"]').value,
       message:    form.querySelector('[name="message"]').value.trim(),
