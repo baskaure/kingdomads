@@ -2,6 +2,9 @@ User-agent: *
 Allow: /
 
 # Crawlers IA (GEO) — accès explicitement autorisé
+# Résumés pour assistants IA : /llms.txt et /llms-full.txt
+
+# OpenAI (ChatGPT, SearchGPT)
 User-agent: GPTBot
 Allow: /
 
@@ -11,25 +14,73 @@ Allow: /
 User-agent: ChatGPT-User
 Allow: /
 
+# Anthropic (Claude)
 User-agent: ClaudeBot
 Allow: /
 
 User-agent: Claude-User
 Allow: /
 
+User-agent: Claude-SearchBot
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+# Perplexity
 User-agent: PerplexityBot
 Allow: /
 
 User-agent: Perplexity-User
 Allow: /
 
+# Google (Gemini, AI Overviews)
 User-agent: Google-Extended
+Allow: /
+
+User-agent: Google-CloudVertexBot
+Allow: /
+
+# Apple (Siri, Apple Intelligence)
+User-agent: Applebot
 Allow: /
 
 User-agent: Applebot-Extended
 Allow: /
 
+# Microsoft (Bing, Copilot)
 User-agent: Bingbot
+Allow: /
+
+# Meta AI
+User-agent: Meta-ExternalAgent
+Allow: /
+
+User-agent: Meta-ExternalFetcher
+Allow: /
+
+# Mistral
+User-agent: MistralAI-User
+Allow: /
+
+# Amazon (Alexa)
+User-agent: Amazonbot
+Allow: /
+
+# DuckDuckGo AI
+User-agent: DuckAssistBot
+Allow: /
+
+# You.com
+User-agent: YouBot
+Allow: /
+
+# Cohere
+User-agent: cohere-ai
+Allow: /
+
+# Common Crawl (jeux de données d'entraînement)
+User-agent: CCBot
 Allow: /
 
 Sitemap: https://kingdomads.fr/sitemap.xml

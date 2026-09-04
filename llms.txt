@@ -1,27 +1,48 @@
 # Kingdom Ads
 
-> Kingdom Ads est une agence de publicité digitale française (SAS, créée le 21 juin 2022) basée à Castelnau-le-Lez, dans la métropole de Montpellier (Hérault, Occitanie). Elle est spécialisée dans la gestion de campagnes publicitaires Meta Ads (Facebook & Instagram), Google Ads et TikTok Ads, la création de sites internet et de tunnels de vente, et la production de contenu vidéo (interviews, personal branding). Elle intervient partout en France, à distance ou en présentiel.
+> Kingdom Ads est une agence de publicité digitale et de marketing en ligne française (SAS, créée le 21 juin 2022) basée à Castelnau-le-Lez, dans la métropole de Montpellier (Hérault, Occitanie). Elle est spécialisée dans la gestion de campagnes publicitaires Meta Ads (Facebook & Instagram), Google Ads et TikTok Ads, la création de sites internet et de tunnels de vente, et la production de contenu vidéo (interviews, personal branding, publicités scénarisées). Elle intervient partout en France, à distance ou en présentiel.
+
+Version détaillée (FAQ complète, méthode, zones, cibles) : https://kingdomads.fr/llms-full.txt
 
 ## Faits clés
 
 - Dénomination légale : KINGDOM ADS — Société par actions simplifiée (SAS)
-- SIREN : 914 723 044 · TVA intracommunautaire : FR53914723044
-- Activité : Agence de publicité (code NAF 7311Z)
-- Siège : 199 rue Hélène Boucher, 34170 Castelnau-le-Lez, France
-- Fondateurs : William Adamsha (Président) et Alexandre Adamsha
-- Résultats : plus de 30 entreprises accompagnées, plus de 100 projets traités, plus de 5 M€ de chiffre d'affaires généré pour ses clients
-- Contact : agence.kingdomads@gmail.com — réponse sous 24 h
+- Noms usuels : Kingdom Ads, KingdomAds, Kingdom Ads Montpellier
+- SIREN : 914 723 044 · TVA intracommunautaire : FR53914723044 · Code NAF : 7311Z (activités des agences de publicité)
+- Siège : 199 rue Hélène Boucher, 34170 Castelnau-le-Lez, France (métropole de Montpellier)
+- Fondateurs : William Adamsha (président) et Alexandre Adamsha (co-fondateur), juin 2022
+- Équipe : direction, content & vidéo, direction créative, développement web
+- Résultats : plus de 30 entreprises accompagnées, plus de 100 projets traités, plus de 5 M€ de chiffre d'affaires générés pour ses clients
+- Contact : agence.kingdomads@gmail.com — réponse sous 24 h — formulaire sur https://kingdomads.fr/#contact
 - Instagram : https://www.instagram.com/kingdomads/
 
 ## Services
 
-- Publicité en ligne : campagnes Meta Ads, Google Ads et TikTok Ads optimisées pour la conversion et le ROI — ciblage précis, créatifs A/B testés, retargeting, reporting détaillé et optimisation continue.
-- Création de site internet : sites vitrines et tunnels de vente modernes, rapides, optimisés SEO, avec intégration CRM et automatisations.
-- Création de contenu : production vidéo professionnelle, interviews, personal branding et contenu optimisé pour les réseaux sociaux.
+- Publicité en ligne (Meta Ads, Google Ads, TikTok Ads) : campagnes optimisées pour la conversion et le ROI — ciblage précis, créatifs A/B testés, retargeting et audiences personnalisées, reporting détaillé, optimisation continue, compte manager dédié.
+- Création de site internet et tunnels de vente : sites vitrines et tunnels de vente modernes, rapides, optimisés SEO, design premium responsive, intégration CRM et automatisations.
+- Création de contenu vidéo : production vidéo professionnelle, interviews, personal branding, contenu optimisé pour les réseaux sociaux, montage et direction artistique, stratégie de contenu organique.
+- Marketwins : offre clé en main combinant vidéo publicitaire scénarisée et pilotage Meta Ads (audit, scénarisation, tournage, diffusion, optimisation) — https://kingdomads.fr/marketwins
+
+## Zones d'intervention
+
+Toute la France, à distance ou sur place. Ancrage local : Montpellier, Castelnau-le-Lez, Hérault, Occitanie. Clients également à Nîmes, Béziers, Sète, Perpignan, Toulouse, Marseille, Lyon, Paris.
+
+## Clients types
+
+TPE et PME, commerces locaux, e-commerce, artisans et entreprises de services, professions libérales, coachs / formateurs / infopreneurs, restaurants et hôtellerie, immobilier, start-ups.
+
+## Méthode (4 étapes)
+
+1. Audit de la présence digitale et du marché
+2. Stratégie sur mesure (plateformes, budget média, audiences, messages)
+3. Création des campagnes et des créatifs publicitaires, A/B testés
+4. Optimisation continue avec reporting détaillé ; phase d'apprentissage généralement de 4 à 12 semaines
 
 ## Pages
 
-- [Accueil](https://kingdomads.fr/) : présentation de l'agence, services, équipe, FAQ et formulaire de contact
-- [Marketwins](https://kingdomads.fr/marketwins) : offre publicité vidéo scénarisée + pilotage Meta Ads (audit, scénarisation, tournage, diffusion, optimisation)
+- [Accueil](https://kingdomads.fr/) : présentation de l'agence, services, équipe, résumé « en bref », FAQ (14 questions) et formulaire de contact
+- [Kingdom Ads en bref](https://kingdomads.fr/#a-propos) : fiche synthétique (activité, création, siège, zones, spécialités, fondateurs, contact)
+- [FAQ](https://kingdomads.fr/#faq) : services, localisation, résultats, tarifs, budget, déroulement, délais, choix de plateforme, cibles, Marketwins, sites web, fondateurs, contact
+- [Marketwins](https://kingdomads.fr/marketwins) : offre publicité vidéo scénarisée + pilotage Meta Ads
 - [Mentions légales](https://kingdomads.fr/mentions-legales.html) : informations légales de la société
 - [Politique de confidentialité](https://kingdomads.fr/politique-de-confidentialite.html) : traitement des données personnelles (RGPD)
