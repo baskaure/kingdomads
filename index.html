@@ -96,14 +96,16 @@
   --font:      'Space Grotesk', 'SG Fallback', sans-serif;
 }
 
-html { scroll-behavior: smooth; overflow-x: hidden; }
+/* overflow-x uniquement sur <html> (clip = pas de scroll container) : un
+   overflow-x:hidden sur <body> transforme body en conteneur de scroll et casse
+   position:sticky (hero / team), en particulier sur Safari. */
+html { scroll-behavior: smooth; overflow-x: hidden; overflow-x: clip; }
 body {
   background: var(--bg);
   color: var(--white);
   font-family: var(--font);
   font-size: 16px;
   line-height: 1.6;
-  overflow-x: hidden;
 }
 
 /* ── décor de fond : mesh + grille + grain regroupés dans UNE couche fixe
@@ -128,34 +130,34 @@ body {
 .aur {
   position: absolute;
   border-radius: 50%;
-  filter: blur(90px);
+  /* pas de filter:blur() : un flou de 90px re-calculé à chaque frame d'animation
+     est très lourd sur Firefox et Safari. Le flou est "cuit" dans les dégradés
+     radiaux ci-dessous (bord → transparent), rendu 100 % composité. */
   will-change: transform;
   transform: translateZ(0);
 }
 .aur1 {
   width: 1150px; height: 820px; top: -340px; left: -220px;
   opacity: 0.50;
-  background: conic-gradient(from 210deg at 50% 50%,
-    rgba(227,184,79,0.42), rgba(138,106,20,0.14) 25%,
-    rgba(153,113,48,0.20) 50%, rgba(240,208,128,0.25) 75%,
-    rgba(227,184,79,0.42));
+  background: radial-gradient(closest-side at 42% 46%,
+    rgba(227,184,79,0.36), rgba(240,208,128,0.20) 38%,
+    rgba(138,106,20,0.08) 70%, transparent 100%);
   animation: aurA 30s ease-in-out infinite alternate;
 }
 .aur2 {
   width: 1000px; height: 760px; top: -280px; right: -260px;
   opacity: 0.38;
-  background: conic-gradient(from 40deg at 50% 50%,
-    rgba(240,208,128,0.30), rgba(143,106,46,0.16) 30%,
-    rgba(227,184,79,0.10) 55%, rgba(246,223,160,0.22) 80%,
-    rgba(240,208,128,0.30));
+  background: radial-gradient(closest-side at 56% 48%,
+    rgba(240,208,128,0.28), rgba(227,184,79,0.14) 40%,
+    rgba(143,106,46,0.06) 72%, transparent 100%);
   animation: aurB 38s ease-in-out infinite alternate;
 }
 .aur3 {
   width: 900px; height: 680px; bottom: -320px; left: 28%;
   opacity: 0.30;
-  background: conic-gradient(from 120deg at 50% 50%,
-    rgba(138,106,20,0.38), rgba(153,113,48,0.14) 40%,
-    rgba(227,184,79,0.22) 70%, rgba(138,106,20,0.38));
+  background: radial-gradient(closest-side at 50% 50%,
+    rgba(138,106,20,0.34), rgba(227,184,79,0.16) 42%,
+    rgba(153,113,48,0.06) 72%, transparent 100%);
   animation: aurC 34s ease-in-out infinite alternate;
 }
 @keyframes aurA { to { transform: translate3d(140px, 70px, 0)  rotate(50deg)  scale(1.14); } }
@@ -330,8 +332,9 @@ h2 {
       rgba(240,208,128,0.38), rgba(255,255,255,0.14) 28%,
       rgba(255,255,255,0.06) 55%, rgba(227,184,79,0.30)) border-box;
   border-radius: var(--radius);
-  backdrop-filter: blur(22px) saturate(1.5);
-  -webkit-backdrop-filter: blur(22px) saturate(1.5);
+  /* pas de backdrop-filter : le fond derrière les cartes est quasi uni, le flou
+     est invisible mais recalculé à chaque frame de scroll (Firefox/Safari rament).
+     Il est conservé uniquement là où il se voit (navbar, métriques sur la vidéo). */
   box-shadow:
     inset 0 1px 0 rgba(255,255,255,0.10),
     0 18px 50px rgba(0,0,0,0.35);
@@ -357,7 +360,8 @@ h2 {
 /* glow orb helper */
 .orb {
   position: absolute; border-radius: 50%;
-  pointer-events: none; filter: blur(70px);
+  pointer-events: none;
+  /* pas de filter:blur() : les radial-gradient sont déjà doux (transparent à 70 %) */
 }
 
 /* fade-up animation */
@@ -383,8 +387,8 @@ h2 {
   padding: 0 20px;
   border-radius: 16px;
   background: rgba(14,12,8,0.55);
-  backdrop-filter: blur(22px) saturate(1.6);
-  -webkit-backdrop-filter: blur(22px) saturate(1.6);
+  backdrop-filter: blur(16px) saturate(1.4);
+  -webkit-backdrop-filter: blur(16px) saturate(1.4);
   border: 1px solid rgba(255,255,255,0.1);
   box-shadow: inset 0 1px 0 rgba(255,255,255,0.1), 0 4px 24px rgba(0,0,0,0.3);
   transition: background 0.3s, border-color 0.3s, box-shadow 0.3s;
@@ -471,14 +475,18 @@ h2 {
    HERO — scroll-expansion (21st.dev style)
 ══════════════════════════════════ */
 #hero {
-  /* Un seul écran. Scroll-jacking : la molette/touch est interceptée tant que p<1. */
-  height: 100vh;
+  /* Scroll-driven (aucune interception molette/touch → fluide sur tous les
+     navigateurs, molette Firefox, trackpad, clavier, barre de scroll…).
+     La section fait 2 écrans : .hero-sticky reste collé pendant le 1er écran
+     de défilement, c'est la course de l'expansion (progress 0 → 1).
+     Pas d'overflow:hidden ici : ça casserait position:sticky. */
+  height: 200vh;
   padding: 0;
-  overflow: hidden;
 }
 
 .hero-sticky {
-  position: relative; top: 0; height: 100vh;
+  position: -webkit-sticky; position: sticky; top: 0;
+  height: 100vh; height: 100svh;
   display: flex; align-items: center; justify-content: center;
   overflow: hidden;
 }
@@ -505,9 +513,18 @@ h2 {
   max-width: 100vw; max-height: 100vh;
   border-radius: 24px;
   background: #12100B;
-  will-change: width, height, border-radius;
-  box-shadow: 0 0 80px rgba(227,184,79,0.16), 0 32px 80px rgba(0,0,0,0.55);
+  /* l'ombre est portée par .hc-shadow (élément séparé, animé en transform) :
+     une box-shadow floutée de 80px re-peinte à chaque frame de resize coûtait cher */
   z-index: 2;
+}
+/* ombre de la carte vidéo : élément composité (scale + opacity), zéro repaint */
+.hc-shadow {
+  position: absolute; top: 50%; left: 50%;
+  width: 380px; height: 500px; border-radius: 24px;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 0 80px rgba(227,184,79,0.16), 0 32px 80px rgba(0,0,0,0.55);
+  will-change: transform, opacity;
+  pointer-events: none; z-index: 1;
 }
 .hc-video {
   position: absolute; inset: 0;
@@ -545,9 +562,10 @@ h2 {
   letter-spacing: -0.045em;
   line-height: 1;
   display: inline-block;
-  filter: drop-shadow(0 8px 40px rgba(0,0,0,0.55));
+  /* pas de filter ici : le shimmer du span or (animation infinie) forcerait
+     la re-rasterisation du drop-shadow parent à chaque frame */
 }
-.hb-white { color: #fff; }
+.hb-white { color: #fff; text-shadow: 0 8px 40px rgba(0,0,0,0.55); }
 .hb-gold { /* couleur gérée par .grad-gold (background-clip:text) */ }
 
 /* overlay : pill + titre split + boutons devant la vidéo */
@@ -584,7 +602,9 @@ h2 {
   color: #fff;
   white-space: nowrap;
   will-change: transform, opacity;
-  filter: drop-shadow(0 4px 24px rgba(0,0,0,0.6));
+  /* text-shadow (pas filter:drop-shadow) : le filtre serait re-rasterisé à
+     chaque frame du translate piloté par le scroll */
+  text-shadow: 0 4px 24px rgba(0,0,0,0.6);
 }
 .hero-title-line .grad-gold {
   background: none !important;
@@ -612,8 +632,13 @@ h2 {
   opacity: 0; transform: translateY(18px); pointer-events: none;
   transition: opacity 0.45s ease, transform 0.45s ease;
 }
-.hc-metrics.visible { opacity: 1; transform: translateY(0); pointer-events: all; }
-.hc-metrics .metric-card { width: 180px; padding: 18px 16px; }
+.hc-metrics.visible { opacity: 1; transform: translateY(0); pointer-events: auto; }
+.hc-metrics .metric-card {
+  width: 180px; padding: 18px 16px;
+  /* seules cartes verre réellement posées sur un visuel (la vidéo) → blur conservé */
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
 
 /* scroll hint en bas */
 .hc-scroll-hint {
@@ -729,7 +754,7 @@ body .hc-metrics .metric-card .num {
   display: flex; align-items: flex-end; justify-content: center;
   padding-bottom: 26px; overflow: hidden;
 }
-.fgc-visual:has(model-viewer) {
+.fgc-visual.has-mv {
   height: 260px;
   padding-bottom: 0;
   align-items: stretch;
@@ -874,12 +899,16 @@ body .hc-metrics .metric-card .num {
   background: transparent;
   padding: 0;
   position: relative;
-  height: 100vh;
-  overflow: hidden;
+  /* scroll-driven : 1 écran collé (sticky) + 1,2 écran de course pour l'animation.
+     Plus de lock overflow:hidden (saut de la barre de scroll, molette Firefox,
+     clavier…). Pas d'overflow:hidden ici : ça casserait position:sticky. */
+  height: 220vh;
 }
 .team-content {
+  position: -webkit-sticky; position: sticky; top: 0;
   width: 100%;
-  height: 100%;
+  height: 100vh;
+  overflow: hidden;
   display: flex; flex-direction: column;
   align-items: center; justify-content: center;
   gap: 28px;
@@ -920,7 +949,7 @@ body .hc-metrics .metric-card .num {
       rgba(255,255,255,0.05) 62%, rgba(227,184,79,0.24)) border-box;
   border-radius: 16px;
   overflow: hidden;
-  backdrop-filter: blur(16px);
+  /* pas de backdrop-filter : ces cartes bougent à chaque frame (translate) */
 }
 .thc-photo {
   aspect-ratio: 1 / 1;
@@ -1202,7 +1231,7 @@ footer {
   visibility: hidden;
 }
 .nav-mobile.open {
-  opacity: 1; transform: none; pointer-events: all; visibility: visible;
+  opacity: 1; transform: none; pointer-events: auto; visibility: visible;
 }
 .nm-link {
   color: rgba(240,236,224,0.7); font-size: 1.35rem; font-weight: 600;
@@ -1245,8 +1274,8 @@ footer {
   .nav-cta { display: none; }
 
   /* hero mobile : carte plus petite, titre plus impactant */
-  #hero { height: 100svh; height: 100vh; }
-  .hero-sticky { height: 100svh; height: 100vh; }
+  /* course d'expansion plus courte sur mobile (≈ 0,8 écran de swipe) */
+  #hero { height: 180vh; height: calc(100svh + 80vh); }
   .hero-expand-card { width: 82vw; height: 56vh; border-radius: 20px; }
   .hero-overlay-content { gap: 16px; padding: 0 14px; }
 
@@ -1262,7 +1291,7 @@ footer {
     max-width: 86vw;
     margin: 0 auto;
     text-wrap: balance;
-    filter: drop-shadow(0 2px 14px rgba(0,0,0,0.6));
+    text-shadow: 0 2px 14px rgba(0,0,0,0.6);
     will-change: opacity, transform;
   }
 
@@ -1293,7 +1322,7 @@ footer {
   .feat-gcard:hover { transform: none; box-shadow: none; }
   .feat-gcard:hover .fgc-avatar { transform: none; }
   .fgc-visual { height: 120px !important; padding-bottom: 0 !important; align-items: center !important; }
-  .fgc-visual:has(model-viewer) { height: 200px !important; padding-bottom: 0 !important; align-items: stretch !important; }
+  .fgc-visual.has-mv { height: 200px !important; padding-bottom: 0 !important; align-items: stretch !important; }
   .fgc-body { padding: 16px 18px 22px; }
 
   /* services */
@@ -1314,7 +1343,7 @@ footer {
 
   /* team mobile : animation pilotée par le scroll naturel (zéro interception) */
   #team { height: auto; padding: 72px 0; }
-  .team-content { height: auto; min-height: auto; transform: none !important; gap: 22px; }
+  .team-content { position: relative; height: auto; min-height: auto; overflow: visible; transform: none !important; gap: 22px; }
   .team-title-anim { font-size: clamp(1.3rem, 5.5vw, 1.9rem); max-width: 94vw; }
   .thc { width: 56vw; }
 
@@ -1393,20 +1422,9 @@ footer {
         rgba(255,255,255,0.05) 60%, rgba(227,184,79,0.22)) border-box;
   }
 
-  /* team-track : will-change géré par JS pendant l'animation, pas de reset CSS ici */
-  /* hero-expand-card : géré par JS (clip-path sur mobile) — pas de reset CSS ici */
-
-  /* skip rendering des sections hors écran — gros gain SI / TBT.
-     contain-intrinsic-size réserve la place verticale pour éviter les sauts. */
-  #features  { content-visibility: auto; contain-intrinsic-size: 0 1100px; }
-  #services  { content-visibility: auto; contain-intrinsic-size: 0 2400px; }
-  #values    { content-visibility: auto; contain-intrinsic-size: 0 1300px; }
-  /* #team : pas de content-visibility — interfère avec position:sticky */
-  #blog      { content-visibility: auto; contain-intrinsic-size: 0 1200px; }
-  #stats     { content-visibility: auto; contain-intrinsic-size: 0 700px; }
-  #faq       { content-visibility: auto; contain-intrinsic-size: 0 900px; }
-  #contact   { content-visibility: auto; contain-intrinsic-size: 0 1500px; }
-  footer     { content-visibility: auto; contain-intrinsic-size: 0 750px; }
+  /* pas de content-visibility:auto : les hauteurs estimées des sections
+     non rendues faussaient les positions (ancres, animation team) et
+     provoquaient des sauts de page au défilement. */
 }
 
 /* ── very small screens ── */
@@ -1429,17 +1447,6 @@ footer {
 @media (min-width: 961px) {
   .nav-mobile { display: none !important; }
   .nav-hamburger { display: none !important; }
-}
-
-/* ── perf desktop : skip layout/paint des sections hors écran (même stratégie
-   que mobile, estimations adaptées). #team exclu (scroll-lock JS). ── */
-@media (min-width: 769px) {
-  #values  { content-visibility: auto; contain-intrinsic-size: 0 800px; }
-  #blog    { content-visibility: auto; contain-intrinsic-size: 0 950px; }
-  #stats   { content-visibility: auto; contain-intrinsic-size: 0 400px; }
-  #faq     { content-visibility: auto; contain-intrinsic-size: 0 750px; }
-  #contact { content-visibility: auto; contain-intrinsic-size: 0 1000px; }
-  footer   { content-visibility: auto; contain-intrinsic-size: 0 480px; }
 }
 
 /* ══════════════════════════════════
@@ -1644,6 +1651,8 @@ html { scrollbar-width: thin; scrollbar-color: rgba(201,155,46,0.55) #0F0D0A; }
 
     <!-- scène centrée -->
     <div class="hero-stage">
+      <!-- ombre de la carte (élément séparé, animé en transform) -->
+      <div class="hc-shadow" id="heroShadow" aria-hidden="true"></div>
       <!-- carte vidéo (z=2, grandit au scroll) -->
       <div class="hero-expand-card" id="heroCard">
         <video class="hc-video" autoplay loop muted playsinline webkit-playsinline x5-playsinline disablepictureinpicture preload="metadata" poster="input/hero-poster.webp" width="1920" height="1184" id="heroVideo" data-mp4="input/hero-1920.mp4" aria-hidden="true">
@@ -1754,7 +1763,7 @@ html { scrollbar-width: thin; scrollbar-color: rgba(201,155,46,0.55) #0F0D0A; }
 
       <!-- Card 1 — Handshake · Équipe -->
       <div class="glass glass-line feat-gcard fu d1">
-        <div class="fgc-visual" style="height:260px;padding-bottom:0;align-items:stretch;">
+        <div class="fgc-visual has-mv">
           <div class="fgc-grad"></div>
           <div class="fgc-ico">
             <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
@@ -1781,7 +1790,7 @@ html { scrollbar-width: thin; scrollbar-color: rgba(201,155,46,0.55) #0F0D0A; }
 
       <!-- Card 2 — Cible 3D · Solutions -->
       <div class="glass glass-line feat-gcard fu d2">
-        <div class="fgc-visual">
+        <div class="fgc-visual has-mv">
           <div class="fgc-grad"></div>
           <div class="fgc-ico">
             <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
@@ -1808,7 +1817,7 @@ html { scrollbar-width: thin; scrollbar-color: rgba(201,155,46,0.55) #0F0D0A; }
 
       <!-- Card 3 — Headphones · Support 24/7 -->
       <div class="glass glass-line feat-gcard fu d3">
-        <div class="fgc-visual" style="height:260px;padding-bottom:0;align-items:stretch;">
+        <div class="fgc-visual has-mv">
           <div class="fgc-grad"></div>
           <div class="fgc-ico">
             <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
@@ -1985,7 +1994,7 @@ html { scrollbar-width: thin; scrollbar-color: rgba(201,155,46,0.55) #0F0D0A; }
 
 <!-- ══ STATS ══ -->
 <section id="stats">
-  <div class="orb" style="width:800px;height:400px;top:50%;left:50%;transform:translate(-50%,-50%);background:radial-gradient(circle,rgba(138,106,20,0.22) 0%,transparent 70%);filter:blur(80px);"></div>
+  <div class="orb" style="width:800px;height:400px;top:50%;left:50%;transform:translate(-50%,-50%);background:radial-gradient(circle,rgba(138,106,20,0.22) 0%,transparent 70%);"></div>
   <div class="container">
     <div class="stats-grid">
       <div class="stat-item fu">
@@ -2304,11 +2313,15 @@ document.querySelectorAll('[data-target]').forEach(el => {
   if (!el.closest('#heroMetrics')) cio.observe(el);
 });
 
-/* scroll-expand hero — scroll-jacking façon 21st.dev :
-   carte vidéo qui grandit + titre qui se sépare horizontalement +
-   pill/boutons qui fade-out + metrics qui fade-in à la fin */
+/* scroll-expand hero — piloté par le scroll natif (section 2 écrans, .hero-sticky
+   collé pendant le 1er écran). Aucune interception wheel/touch : fluide et
+   identique sur Chrome, Firefox, Safari, mobile, clavier, barre de scroll.
+   progress p = distance scrollée dans la course / longueur de la course. */
 (function () {
+  const hero     = document.getElementById('hero');
+  const sticky   = hero && hero.querySelector('.hero-sticky');
   const card     = document.getElementById('heroCard');
+  const shadow   = document.getElementById('heroShadow');
   const bg       = document.getElementById('heroBg');
   const pill     = document.getElementById('heroPill');
   const line1    = document.getElementById('heroLine1');
@@ -2318,126 +2331,105 @@ document.querySelectorAll('[data-target]').forEach(el => {
   const brand    = document.getElementById('heroBrand');
   const metrics  = document.getElementById('heroMetrics');
   const hint     = document.getElementById('heroScrollHint');
-  if (!card) return;
+  if (!hero || !sticky || !card) return;
 
-  const isMobile = window.innerWidth < 768;
-  /* dimensions : à p=1 la carte couvre exactement le viewport (pleine immersion) */
-  const initW = isMobile ? Math.round(window.innerWidth * 0.78) : 380;
-  const initH = isMobile ? Math.round(window.innerHeight * 0.5) : 500;
-  const dW    = Math.max(0, window.innerWidth  - initW);
-  const dH    = Math.max(0, window.innerHeight - initH);
-  const titleShift = isMobile ? 100 : 90;   /* vw */
+  let initW = 380, initH = 500, dW = 0, dH = 0, dist = 1, titleShift = 90;
+  let lastP = -1;
+  let metricsShown = false, brandShown = false, counted = false;
+  let rafPending = false, inView = true;
 
-  let progress = 0;
-  let locked = true;
-  let metricsShown = false;
-  let brandShown = false;
-  let counted = false;
-  let rafPending = false;
-  let touchStartY = 0;
+  /* dimensions : à p=1 la carte couvre exactement la zone sticky (pleine immersion) */
+  function measure() {
+    const vw = sticky.clientWidth, vh = sticky.clientHeight;
+    const isMobile = vw < 768;
+    initW = isMobile ? Math.round(vw * 0.78) : 380;
+    initH = isMobile ? Math.round(vh * 0.5)  : 500;
+    dW    = Math.max(0, vw - initW);
+    dH    = Math.max(0, vh - initH);
+    dist  = Math.max(1, hero.offsetHeight - vh);
+    titleShift = isMobile ? 100 : 90;   /* vw */
+    if (shadow) { shadow.style.width = initW + 'px'; shadow.style.height = initH + 'px'; }
+    lastP = -1;
+  }
 
-  function applyProgress() {
-    if (rafPending) return;
+  function paint(p) {
+    if (p === lastP) return;
+    lastP = p;
+
+    /* carte vidéo : grandit jusqu'à plein écran */
+    const w = initW + dW * p, h = initH + dH * p;
+    card.style.width        = w + 'px';
+    card.style.height       = h + 'px';
+    card.style.borderRadius = (24 - 24 * p) + 'px';
+    if (shadow) {
+      shadow.style.transform = 'translate(-50%, -50%) scale(' + (w / initW).toFixed(4) + ', ' + (h / initH).toFixed(4) + ')';
+      shadow.style.opacity   = (1 - p).toFixed(3);
+    }
+
+    /* orbes : fade léger */
+    if (bg) bg.style.opacity = (1 - p * 0.6).toFixed(3);
+
+    /* titre split : ligne 1 vers la gauche, ligne 2 vers la droite */
+    const titleTx = (titleShift * p).toFixed(2);
+    if (line1) line1.style.transform = 'translateX(-' + titleTx + 'vw)';
+    if (line2) line2.style.transform = 'translateX(' + titleTx + 'vw)';
+    const titleOp = Math.max(0, 1 - p * 1.25).toFixed(3);
+    if (line1) line1.style.opacity = titleOp;
+    if (line2) line2.style.opacity = titleOp;
+    if (sub)   sub.style.opacity   = titleOp;
+
+    /* pill + boutons : cachés jusqu'à p=0.85, fade-in avec "kingdomads" */
+    const pillOp = Math.max(0, Math.min(1, (p - 0.85) / 0.15)).toFixed(3);
+    if (pill) { pill.style.opacity = pillOp; pill.style.pointerEvents = +pillOp > 0 ? 'auto' : 'none'; }
+    if (btns) { btns.style.opacity = pillOp; btns.style.pointerEvents = +pillOp > 0 ? 'auto' : 'none'; }
+
+    /* scroll-hint */
+    if (hint) hint.style.opacity = Math.max(0, 1 - p * 7).toFixed(3);
+
+    /* reveal "kingdomads" : apparaît une fois le titre parti (p >= 0.85) */
+    const brandOn = p >= 0.85;
+    if (brandOn !== brandShown) {
+      brandShown = brandOn;
+      if (brand) brand.classList.toggle('visible', brandOn);
+    }
+
+    /* metrics : fade-in à 75 % */
+    const show = p >= 0.75;
+    if (show !== metricsShown) {
+      metricsShown = show;
+      if (metrics) metrics.classList.toggle('visible', show);
+      if (show && !counted && metrics) {
+        counted = true;
+        metrics.querySelectorAll('[data-target]').forEach(animateCounter);
+      }
+    }
+  }
+
+  function update() {
+    rafPending = false;
+    /* une seule lecture de layout par frame ; robuste aux décalages de mise en page */
+    const top = hero.getBoundingClientRect().top;
+    const p = Math.max(0, Math.min(1, -top / dist));
+    paint(Math.round(p * 1000) / 1000);
+  }
+  function schedule() {
+    if (rafPending || !inView) return;
     rafPending = true;
-    requestAnimationFrame(() => {
-      rafPending = false;
-      const p = progress;
-
-      /* carte vidéo : grandit jusqu'à plein écran */
-      card.style.width        = (initW + dW * p) + 'px';
-      card.style.height       = (initH + dH * p) + 'px';
-      card.style.borderRadius = (24 - 24 * p) + 'px';
-
-      /* orbes : fade léger */
-      if (bg) bg.style.opacity = (1 - p * 0.6).toFixed(3);
-
-      /* titre split : ligne 1 vers la gauche, ligne 2 vers la droite */
-      const titleTx = (titleShift * p).toFixed(2);
-      if (line1) line1.style.transform = `translateX(-${titleTx}vw)`;
-      if (line2) line2.style.transform = `translateX(${titleTx}vw)`;
-      const titleOp = Math.max(0, 1 - p * 1.25).toFixed(3);
-      if (line1) line1.style.opacity = titleOp;
-      if (line2) line2.style.opacity = titleOp;
-      if (sub)   sub.style.opacity   = titleOp;
-
-      /* pill + boutons : cachés jusqu'à p=0.85, fade-in avec "kingdomads" */
-      const pillOp = Math.max(0, Math.min(1, (p - 0.85) / 0.15)).toFixed(3);
-      if (pill) { pill.style.opacity = pillOp; pill.style.pointerEvents = +pillOp > 0 ? 'auto' : 'none'; }
-      if (btns) { btns.style.opacity = pillOp; btns.style.pointerEvents = +pillOp > 0 ? 'auto' : 'none'; }
-
-      /* scroll-hint */
-      if (hint) hint.style.opacity = Math.max(0, 1 - p * 7).toFixed(3);
-
-      /* reveal "kingdomads" : apparaît une fois le titre parti (p >= 0.85) */
-      const brandOn = p >= 0.85;
-      if (brandOn !== brandShown) {
-        brandShown = brandOn;
-        if (brand) brand.classList.toggle('visible', brandOn);
-      }
-
-      /* metrics : fade-in à 75 % */
-      const show = p >= 0.75;
-      if (show !== metricsShown) {
-        metricsShown = show;
-        if (metrics) metrics.classList.toggle('visible', show);
-        if (show && !counted && metrics) {
-          counted = true;
-          metrics.querySelectorAll('[data-target]').forEach(animateCounter);
-        }
-      }
-    });
-  }
-  /* on applique une fois pour figer les dimensions inline et éviter le flash CSS→inline */
-  applyProgress();
-
-  function setProgress(next) {
-    progress = Math.max(0, Math.min(1, next));
-    applyProgress();
+    requestAnimationFrame(update);
   }
 
-  function onWheel(e) {
-    if (locked) {
-      e.preventDefault();
-      setProgress(progress + e.deltaY * 0.001);
-      if (progress >= 1) locked = false;
-    } else if (e.deltaY < 0 && window.scrollY <= 1) {
-      e.preventDefault();
-      locked = true;
-      setProgress(progress + e.deltaY * 0.001);
-    }
+  measure();
+  update();
+
+  window.addEventListener('scroll', schedule, { passive: true });
+  window.addEventListener('resize', function () { measure(); schedule(); }, { passive: true });
+  window.addEventListener('load', function () { measure(); schedule(); });
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(function (es) {
+      inView = es[0].isIntersecting;
+      if (inView) schedule();
+    }, { rootMargin: '50px 0px' }).observe(hero);
   }
-
-  function onTouchStart(e) { touchStartY = e.touches[0].clientY; }
-
-  function onTouchMove(e) {
-    const dy = touchStartY - e.touches[0].clientY;
-    touchStartY = e.touches[0].clientY;
-    if (locked) {
-      e.preventDefault();
-      setProgress(progress + dy * 0.005);
-      if (progress >= 1) locked = false;
-    } else if (dy < 0 && window.scrollY <= 1) {
-      e.preventDefault();
-      locked = true;
-      setProgress(progress + dy * 0.005);
-    }
-  }
-
-  /* clic sur un lien d'ancre → débloque la hero pour laisser passer le smooth scroll */
-  document.querySelectorAll('a[href^="#"], [data-nm]').forEach(a => {
-    a.addEventListener('click', () => {
-      const href = a.getAttribute('href');
-      if (href && href !== '#hero' && href !== '#') {
-        progress = 1;
-        applyProgress();
-        locked = false;
-      }
-    });
-  });
-
-  window.addEventListener('wheel',      onWheel,      { passive: false });
-  window.addEventListener('touchstart', onTouchStart, { passive: true  });
-  window.addEventListener('touchmove',  onTouchMove,  { passive: false });
 })();
 
 /* hamburger toggle */
@@ -2458,9 +2450,6 @@ document.querySelectorAll('[data-target]').forEach(el => {
     btn.setAttribute('aria-expanded', 'false');
     menu.classList.remove('open');
     menu.setAttribute('aria-hidden', 'true');
-    /* libère tout scroll-lock (team, etc.) pour que la navigation fonctionne */
-    document.documentElement.style.overflow = '';
-    document.body.style.overflow = '';
   }
   btn.addEventListener('click', () => {
     btn.classList.contains('open') ? closeMenu() : openMenu();
@@ -2616,183 +2605,77 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
   }, { rootMargin: '100px' }).observe(features);
 })();
 
-/* team — hard scroll-lock : quand la section atteint le haut du viewport,
-   on bloque physiquement le scroll (overflow:hidden sur html+body) et on
-   drive la progression de l'animation via wheel/touch.
-   • engage dans les 2 directions : descente → progress 0, remontée → progress 1
-     (le user peut re-déclencher l'anim en scrollant vers le haut)
-   • snap à section.top = 0 à l'engage pour un cadrage net
-   • à la release, scrollBy de 100px hors de la zone d'engage pour éviter que
-     le wheel event suivant ne re-arme immédiatement le lock
-   • anchor links relâchent immédiatement (navigation propre) */
+/* team — piloté par le scroll natif.
+   • desktop : #team fait 2,2 écrans, .team-content est sticky (1 écran) ;
+     progress = distance scrollée dans la section / course (hauteur − 1 écran).
+     Plus de lock overflow:hidden (saut de barre de scroll, molette Firefox,
+     clavier, barre de défilement…) : le navigateur garde la main.
+   • mobile : section en flux normal, progress selon la position dans le viewport.
+   Une seule lecture de layout par frame (getBoundingClientRect dans le rAF). */
 (function () {
   const section  = document.getElementById('team');
+  const content  = document.getElementById('teamContent');
   const trackTop = document.getElementById('teamTrackTop');
   const trackBot = document.getElementById('teamTrackBot');
   const title    = document.getElementById('teamTitle');
-  if (!section || !trackTop || !trackBot || !title) return;
+  if (!section || !content || !trackTop || !trackBot || !title) return;
 
   const clamp01 = x => x < 0 ? 0 : x > 1 ? 1 : x;
+  const isMobile = () => window.innerWidth <= 640;
 
-  /* ── mobile : scroll-driven, zéro interception ── */
-  if (window.innerWidth <= 640) {
-    trackTop.style.willChange = 'transform';
-    trackBot.style.willChange = 'transform';
-    title.style.willChange    = 'transform';
+  let lastKey = null;
+  function paint(p) {
+    const key = Math.round(p * 1000);
+    if (key === lastKey) return;
+    lastKey = key;
+    if (isMobile()) {
+      /* mobile : cartes en entier + titre léger */
+      const sc = p < 0.5 ? (1.2 - 0.4 * p) : 1;
+      trackTop.style.transform = 'translate3d(' + (-200 + 200 * p).toFixed(2) + '%, 0, 0)';
+      trackBot.style.transform = 'translate3d(' + ( 100 - 150 * p).toFixed(2) + '%, 0, 0)';
+      title.style.transform    = 'scale(' + sc.toFixed(3) + ')';
+    } else {
+      const tp = clamp01(p / 0.5);
+      title.style.transform = 'scale(' + (1.4 - 0.4 * tp).toFixed(3) + ')';
+      const xp = clamp01((p - 0.1) / 0.85);
+      trackTop.style.transform = 'translate3d(' + (-200 + 200 * xp).toFixed(2) + '%, 0, 0)';
+      trackBot.style.transform = 'translate3d(' + ( 100 - 150 * xp).toFixed(2) + '%, 0, 0)';
+    }
+  }
 
-    var mSectionH = section.offsetHeight;
-    var mSectionY = section.getBoundingClientRect().top + window.scrollY;
-    window.addEventListener('resize', function () {
-      mSectionH = section.offsetHeight;
-      mSectionY = section.getBoundingClientRect().top + window.scrollY;
-    }, { passive: true });
+  let dist = 1;
+  function measure() {
+    dist = Math.max(1, section.offsetHeight - content.offsetHeight);
+    lastKey = null;
+  }
 
-    function getX() {
-      var sp = (window.innerHeight - (mSectionY - window.scrollY)) / (mSectionH + window.innerHeight);
+  function progress() {
+    const r = section.getBoundingClientRect();
+    if (isMobile()) {
+      /* 0 quand la section entre par le bas, 1 aux 3/4 de sa traversée */
+      const sp = (window.innerHeight - r.top) / (r.height + window.innerHeight);
       return sp < 0.1 ? 0 : sp > 0.75 ? 1 : (sp - 0.1) / 0.65;
     }
-
-    var mLastT1 = null;
-    function paintM(x) {
-      var t1 = (-200 + 200 * x) | 0;
-      if (t1 === mLastT1) return;
-      mLastT1 = t1;
-      var t2 = (100 - 150 * x) | 0;
-      var sc = x < 0.5 ? (1.2 - 0.4 * x) : 1;
-      trackTop.style.transform = 'translate3d(' + t1 + '%,0,0)';
-      trackBot.style.transform = 'translate3d(' + t2 + '%,0,0)';
-      title.style.transform    = 'scale(' + sc.toFixed(3) + ')';
-    }
-
-    var mInView = false;
-    new IntersectionObserver(function (es) { mInView = es[0].isIntersecting; },
-      { rootMargin: '200px 0px' }).observe(section);
-
-    var mRaf = 0;
-    function onScrollM() {
-      if (!mInView || mRaf) return;
-      mRaf = requestAnimationFrame(function () { mRaf = 0; paintM(getX()); });
-    }
-
-    paintM(getX());
-    window.addEventListener('scroll', onScrollM, { passive: true });
-    return;
+    return clamp01(-r.top / dist);
   }
 
-  let progress = 0;
-  let locked   = false;
-  let touchY   = 0;
-  let suppress = false;
-  let suppressTimer = 0;
-
-  function paint(p) {
-    const tp = clamp01(p / 0.5);
-    title.style.transform = `scale(${(1.4 - 0.4 * tp).toFixed(3)})`;
-    const xp = clamp01((p - 0.1) / 0.85);
-    trackTop.style.transform = `translate3d(${(-200 + 200 * xp).toFixed(2)}%, 0, 0)`;
-    trackBot.style.transform = `translate3d(${( 100 - 150 * xp).toFixed(2)}%, 0, 0)`;
-  }
-  paint(0);
-
-  /* lock dur : on fige l'overflow ; le navigateur ne peut plus scroller du tout,
-     quelle que soit la source (molette, touch, clavier, scrollbar, smooth-scroll). */
-  function engage(initial) {
-    if (locked) return;
-    locked = true;
-    progress = initial;
-    paint(progress);
-    /* snap instantané : la section colle pile au haut du viewport
-       (on override scroll-behavior:smooth du CSS pour éviter l'easing). */
-    const top = section.getBoundingClientRect().top + window.scrollY;
-    const html = document.documentElement;
-    const prevBehavior = html.style.scrollBehavior;
-    html.style.scrollBehavior = 'auto';
-    window.scrollTo({ top: top, left: 0, behavior: 'instant' });
-    html.style.scrollBehavior = prevBehavior;
-    html.style.overflow = 'hidden';
-    document.body.style.overflow = 'hidden';
-  }
-  function release() {
-    if (!locked) return;
-    locked = false;
-    document.documentElement.style.overflow = '';
-    document.body.style.overflow = '';
+  let raf = 0, inView = false;
+  function update() { raf = 0; paint(progress()); }
+  function schedule() {
+    if (raf || !inView) return;
+    raf = requestAnimationFrame(update);
   }
 
-  /* engage quand le haut de la section est près du haut du viewport, dans
-     les deux directions : en descendant on part de 0, en remontant de 1
-     (l'utilisateur revient par le bas → re-trigger possible) */
-  function tryEngage(deltaY) {
-    if (locked || suppress || deltaY === 0) return;
-    const top = section.getBoundingClientRect().top;
-    if (top > 50 || top < -50) return;
-    engage(deltaY > 0 ? 0 : 1);
-  }
+  measure();
+  paint(progress());
 
-  const WHEEL_F  = 0.0009;
-  const TOUCH_F  = 0.0035;
-  const STEP_CAP = 0.04;
-
-  function step(raw) {
-    const d = Math.max(-STEP_CAP, Math.min(STEP_CAP, raw));
-    progress = clamp01(progress + d);
-    paint(progress);
-    if (progress >= 1 && d > 0) finish(1);
-    else if (progress <= 0 && d < 0) finish(-1);
-  }
-
-  /* Sortie propre du lock :
-     1. release : on retire overflow:hidden
-     2. suppress 700ms : aucun nouvel engage le temps que la page bouge
-     3. scrollBy instantané (behavior:'instant' + override de scroll-behavior:smooth
-        sur html) : sans ça, scroll-behavior:smooth du CSS easait le bump sur
-        ~400ms et les wheel events suivants retombaient dans la zone d'engage
-        avec section.top toujours à 0 → re-lock en boucle. */
-  function finish(dir) {
-    release();
-    suppress = true;
-    clearTimeout(suppressTimer);
-    suppressTimer = setTimeout(() => { suppress = false; }, 700);
-    const html = document.documentElement;
-    const prevBehavior = html.style.scrollBehavior;
-    html.style.scrollBehavior = 'auto';
-    window.scrollBy({ top: dir * 200, left: 0, behavior: 'instant' });
-    html.style.scrollBehavior = prevBehavior;
-  }
-
-  function onWheel(e) {
-    if (!locked) tryEngage(e.deltaY);
-    if (!locked) return;
-    e.preventDefault();
-    step(e.deltaY * WHEEL_F);
-  }
-
-  function onTouchStart(e) { touchY = e.touches[0].clientY; }
-  function onTouchMove(e) {
-    const dy = touchY - e.touches[0].clientY;
-    touchY = e.touches[0].clientY;
-    if (!locked) tryEngage(dy);
-    if (!locked) return;
-    e.preventDefault();
-    step(dy * TOUCH_F);
-  }
-
-  /* clic sur lien d'ancre → libère et désactive l'engage pendant la nav */
-  document.querySelectorAll('a[href^="#"], [data-nm]').forEach(a => {
-    a.addEventListener('click', () => {
-      release();
-      suppress = true;
-      clearTimeout(suppressTimer);
-      suppressTimer = setTimeout(() => { suppress = false; }, 1500);
-    });
-  });
-
-  /* filet : si la fenêtre perd le focus pendant le lock, on libère */
-  window.addEventListener('blur', release);
-
-  window.addEventListener('wheel',      onWheel,      { passive: false });
-  window.addEventListener('touchstart', onTouchStart, { passive: true  });
-  window.addEventListener('touchmove',  onTouchMove,  { passive: false });
+  window.addEventListener('scroll', schedule, { passive: true });
+  window.addEventListener('resize', function () { measure(); schedule(); }, { passive: true });
+  window.addEventListener('load', function () { measure(); schedule(); });
+  new IntersectionObserver(function (es) {
+    inView = es[0].isIntersecting;
+    if (inView) schedule();
+  }, { rootMargin: '200px 0px' }).observe(section);
 })();
 
 /* services — reveal au scroll : les cartes glissent depuis les côtés sans toucher au scroll */
@@ -2880,8 +2763,10 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
 
   /* coupé sur mobile (backdrop-filter coûteux) : .tk-blur y est en display:none */
   if (window.matchMedia('(max-width: 768px)').matches) return;
+  /* 4 couches (et non 8) : chaque couche est un backdrop-filter recalculé à
+     chaque frame du ticker — 8 passes/bord pesaient lourd sur Safari/Firefox */
   document.querySelectorAll('.tk-blur').forEach(el =>
-    buildProgressiveBlur(el, { direction: el.dataset.dir, blurLayers: 8, blurIntensity: 1 })
+    buildProgressiveBlur(el, { direction: el.dataset.dir, blurLayers: 4, blurIntensity: 1.8 })
   );
 })();
 </script>
